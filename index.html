@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Biology laboratory web tools by Amr Ahmed WalyEldeen for CMBRL, including protein concentration calculators for Bradford, BCA, and ELISA assays." />
+  <title>Biology Tools | CMBRL</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --surface-soft: #f1f5f9;
+      --text: #102033;
+      --muted: #64748b;
+      --border: #dbe3ef;
+      --primary: #0369a1;
+      --primary-dark: #075985;
+      --primary-soft: #e0f2fe;
+      --accent: #0f766e;
+      --success: #047857;
+      --warning: #b45309;
+      --danger: #b91c1c;
+      --shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+      --radius: 22px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.14), transparent 30rem),
+        radial-gradient(circle at top right, rgba(20, 184, 166, 0.14), transparent 32rem),
+        var(--bg);
+    }
+
+    a { color: inherit; }
+
+    button, input, select { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .site-shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(219, 227, 239, 0.8);
+      border-radius: 999px;
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05);
+      position: sticky;
+      top: 12px;
+      z-index: 30;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, #075985, #14b8a6);
+      box-shadow: 0 8px 18px rgba(3, 105, 161, 0.24);
+      flex: 0 0 auto;
+      font-size: 22px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-link, .ghost-button, .primary-button, .success-button, .danger-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .nav-link, .ghost-button {
+      background: #fff;
+      color: #334155;
+      border: 1px solid var(--border);
+    }
+
+    .nav-link:hover, .ghost-button:hover {
+      border-color: #bae6fd;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+
+    .primary-button {
+      color: #fff;
+      background: var(--primary);
+      box-shadow: 0 8px 18px rgba(3, 105, 161, 0.22);
+    }
+
+    .primary-button:hover { background: var(--primary-dark); }
+
+    .success-button {
+      color: #fff;
+      background: var(--success);
+      box-shadow: 0 8px 18px rgba(4, 120, 87, 0.18);
+    }
+
+    .success-button:hover { background: #065f46; }
+
+    .danger-button {
+      color: #fff;
+      background: var(--danger);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      padding: 52px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(7, 89, 133, 0.98), rgba(15, 118, 110, 0.93)),
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.24), transparent 24rem);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -8rem -12rem auto;
+      width: 28rem;
+      height: 28rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 28px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #cffafe;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      max-width: 820px;
+      font-size: clamp(34px, 6vw, 66px);
+      line-height: 0.95;
+      letter-spacing: -0.065em;
+    }
+
+    .hero-description {
+      max-width: 820px;
+      margin: 22px 0 0;
+      color: #e0f2fe;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .credit-card {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .credit-card p { margin: 0; color: #dff7ff; font-size: 13px; line-height: 1.7; }
+    .credit-card strong { display: block; color: #fff; font-size: 18px; margin-bottom: 6px; }
+    .credit-card a { color: #fff; font-weight: 800; }
+
+    .section-title {
+      margin: 34px 0 16px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .section-title h2, .panel-title h2 {
+      margin: 0;
+      letter-spacing: -0.04em;
+      font-size: 28px;
+    }
+
+    .section-title p, .panel-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.04);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      border-color: #bae6fd;
+    }
+
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      margin-bottom: 18px;
+      font-size: 24px;
+      background: var(--primary-soft);
+    }
+
+    .tool-card h3 { margin: 0 0 8px; font-size: 20px; letter-spacing: -0.03em; }
+    .tool-card p { margin: 0 0 18px; color: var(--muted); line-height: 1.6; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: #475569;
+    }
+
+    .badge.live { color: #047857; background: #ecfdf5; border-color: #bbf7d0; }
+    .badge.soon { color: #7c2d12; background: #fff7ed; border-color: #fed7aa; }
+
+    .tool-view { display: none; margin-top: 28px; }
+    .tool-view.active { display: block; }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.04);
+    }
+
+    .protein-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    label.input-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    input, select {
+      width: 100%;
+      margin-top: 7px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 13px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+      transition: 0.15s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.14);
+    }
+
+    .helper-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .stack { display: grid; gap: 18px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--surface-soft);
+      color: #475569;
+      text-align: left;
+      padding: 13px 12px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    td {
+      border-top: 1px solid var(--border);
+      padding: 10px 12px;
+      vertical-align: middle;
+    }
+
+    td input {
+      margin: 0;
+      min-width: 110px;
+    }
+
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+    .row-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .icon-button {
+      border-radius: 12px;
+      padding: 9px 10px;
+      background: #fff;
+      color: #64748b;
+      border: 1px solid var(--border);
+    }
+
+    .icon-button:hover { color: var(--danger); background: #fff1f2; border-color: #fecdd3; }
+
+    .chart-box {
+      height: 360px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 14px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .metric {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .metric span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+    .metric strong { display: block; margin-top: 5px; font-size: 20px; }
+
+    .equation {
+      margin-top: 14px;
+      padding: 14px;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 16px;
+      overflow-wrap: anywhere;
+      line-height: 1.65;
+    }
+
+    .diagnostic-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .diagnostic {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .diagnostic.ok { background: #ecfdf5; color: #065f46; border-color: #bbf7d0; }
+    .diagnostic.warn { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+    .diagnostic.error { background: #fff1f2; color: #991b1b; border-color: #fecdd3; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+
+    .status-ok { color: #065f46; background: #ecfdf5; border-color: #bbf7d0; }
+    .status-warn, .status-high { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+    .status-low, .status-error { color: #991b1b; background: #fff1f2; border-color: #fecdd3; }
+
+    .calculation-check {
+      margin-top: 14px;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 16px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .footer {
+      margin: 34px 0 8px;
+      color: var(--muted);
+      line-height: 1.7;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .footer a { color: var(--primary-dark); font-weight: 800; text-decoration: none; }
+
+    .hidden { display: none; }
+
+    @media (max-width: 1060px) {
+      .hero-content, .calculator-layout { grid-template-columns: 1fr; }
+      .control-grid, .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .site-shell { padding: 14px; }
+      .topbar { align-items: flex-start; border-radius: 24px; flex-direction: column; position: static; }
+      .nav-actions { justify-content: flex-start; }
+      .hero { padding: 30px 22px; border-radius: 26px; }
+      .control-grid, .tool-grid, .metric-grid { grid-template-columns: 1fr; }
+      .protein-header { grid-template-columns: 1fr; }
+      .section-title { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <nav class="topbar" aria-label="Main navigation">
+      <a class="brand" href="#home" data-nav="home" aria-label="Biology Tools home">
+        <span class="brand-mark">🧬</span>
+        <span>
+          <h1>Biology Tools</h1>
+          <p>CMBRL laboratory calculators and utilities</p>
+        </span>
+      </a>
+      <div class="nav-actions">
+        <a class="nav-link" href="#home" data-nav="home">Tools</a>
+        <a class="nav-link" href="#protein-calculator" data-nav="protein-calculator">Protein Calculator</a>
+        <a class="nav-link" href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Amr Ahmed WalyEldeen</a>
+        <a class="primary-button" href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL</a>
+      </div>
+    </nav>
+
+    <section class="hero" id="home-hero">
+      <div class="hero-content">
+        <div>
+          <p class="eyebrow">Laboratory web tools</p>
+          <h2>Fast, browser-based biology calculators for routine bench work.</h2>
+          <p class="hero-description">
+            This site is prepared as a GitHub Pages-ready tools hub. The first working tool is a protein concentration calculator for Bradford, BCA, and ELISA-based workflows.
+          </p>
+        </div>
+        <aside class="credit-card">
+          <strong>Made by Amr Ahmed WalyEldeen</strong>
+          <p>
+            Biology tools by <a href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">amrwalyeldeen.github.io</a>.
+            Part of <a href="https://cmbrl.github.io" target="_blank" rel="noopener">cmbrl.github.io</a> laboratory resources.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="tools-home">
+      <div class="section-title">
+        <div>
+          <h2>Choose a tool</h2>
+          <p>More tools can be added later as cards that open their own calculator pages or sections.</p>
+        </div>
+      </div>
+      <div class="tool-grid">
+        <article class="tool-card">
+          <div class="tool-icon">🧪</div>
+          <span class="badge live">Live tool</span>
+          <h3>Protein Concentration Calculator</h3>
+          <p>Build standard curves, interpolate unknown absorbance, apply dilution factors, validate curve quality, and export results.</p>
+          <button class="primary-button" type="button" data-open-tool="protein-calculator">Open calculator</button>
+        </article>
+        <article class="tool-card">
+          <div class="tool-icon">🧫</div>
+          <span class="badge soon">Coming later</span>
+          <h3>Cell Culture Calculator</h3>
+          <p>Reserved card for seeding density, dilution, media preparation, or cell viability workflows.</p>
+          <button class="ghost-button" type="button" disabled>Not added yet</button>
+        </article>
+        <article class="tool-card">
+          <div class="tool-icon">🧬</div>
+          <span class="badge soon">Coming later</span>
+          <h3>Molecular Biology Calculator</h3>
+          <p>Reserved card for DNA/RNA concentration, primer dilution, molarity, or PCR setup tools.</p>
+          <button class="ghost-button" type="button" disabled>Not added yet</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="protein-calculator" class="tool-view" aria-labelledby="protein-title">
+      <div class="panel protein-header">
+        <div class="panel-title">
+          <h2 id="protein-title">Protein Concentration Calculator</h2>
+          <p>
+            Manual entry or Excel template upload for Bradford, BCA, and ELISA-style protein concentration calculations.
+            Replicate absorbance values can be separated by comma, semicolon, space, or entered in Excel replicate columns.
+          </p>
+        </div>
+        <div class="row-actions" style="margin-top:0">
+          <button class="ghost-button" type="button" data-nav="home">← Back to tools</button>
+          <button class="primary-button" type="button" id="download-template-button">Download Excel template</button>
+          <button class="ghost-button" type="button" id="upload-workbook-button">Upload workbook</button>
+          <input id="workbook-input" class="hidden" type="file" accept=".xlsx,.xls,.csv" />
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="control-grid">
+          <label class="input-label">
+            Assay type
+            <select id="assay-select">
+              <option value="bradford">Bradford</option>
+              <option value="bca">BCA</option>
+              <option value="elisa">ELISA-based protein concentration</option>
+            </select>
+          </label>
+          <label class="input-label">
+            Curve model
+            <select id="fit-select">
+              <option value="linear">Linear regression</option>
+              <option value="quadratic">Quadratic regression</option>
+              <option value="fourPL">4-parameter logistic / 4PL</option>
+            </select>
+          </label>
+          <label class="input-label">
+            Concentration unit
+            <input id="unit-input" value="µg/mL" />
+          </label>
+          <label class="input-label">
+            Assay wavelength
+            <input id="wavelength-input" value="595 nm" />
+          </label>
+        </div>
+        <p class="helper-note" id="assay-note"></p>
+      </div>
+
+      <div class="calculator-layout">
+        <div class="stack">
+          <section class="panel">
+            <div class="protein-header">
+              <div class="panel-title">
+                <h2>1. Standard curve</h2>
+                <p>Enter standard concentration and raw absorbance/OD values. Corrected absorbance = mean raw absorbance − standard blank.</p>
+              </div>
+              <label class="input-label" style="min-width:190px">
+                Standard blank OD
+                <input id="standard-blank-input" value="0.050" inputmode="decimal" />
+              </label>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Concentration</th>
+                    <th>Absorbance replicates</th>
+                    <th>Corrected mean</th>
+                    <th>CV%</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="standards-body"></tbody>
+              </table>
+            </div>
+            <div class="row-actions">
+              <button class="ghost-button" type="button" id="add-standard-button">+ Add standard</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="protein-header">
+              <div class="panel-title">
+                <h2>2. Unknown samples</h2>
+                <p>Calculated concentration is multiplied by dilution factor to report the original sample concentration.</p>
+              </div>
+              <label class="input-label" style="min-width:190px">
+                Sample blank OD
+                <input id="sample-blank-input" value="0.050" inputmode="decimal" />
+              </label>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sample name</th>
+                    <th>Absorbance replicates</th>
+                    <th>Dilution factor</th>
+                    <th>Original concentration</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="samples-body"></tbody>
+              </table>
+            </div>
+            <div class="row-actions">
+              <button class="ghost-button" type="button" id="add-sample-button">+ Add sample</button>
+            </div>
+          </section>
+        </div>
+
+        <aside class="stack">
+          <section class="panel">
+            <div class="panel-title">
+              <h2>Curve visualization</h2>
+              <p>Corrected absorbance plotted against concentration.</p>
+            </div>
+            <div class="chart-box">
+              <canvas id="curve-chart"></canvas>
+            </div>
+            <div class="metric-grid">
+              <div class="metric"><span>R²</span><strong id="r2-display">—</strong></div>
+              <div class="metric"><span>RMSE</span><strong id="rmse-display">—</strong></div>
+            </div>
+            <div class="equation mono" id="equation-display">Awaiting valid standard curve.</div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">
+              <h2>Diagnostics</h2>
+              <p>Automatic flags for common curve and sample issues.</p>
+            </div>
+            <div class="diagnostic-list" id="diagnostics-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">
+              <h2>Calculation check</h2>
+              <p>Shows the first valid sample calculation for review.</p>
+            </div>
+            <div class="calculation-check mono" id="calculation-check">No valid sample result yet.</div>
+          </section>
+        </aside>
+      </div>
+
+      <section class="panel" style="margin-top:18px">
+        <div class="protein-header">
+          <div class="panel-title">
+            <h2>Results table</h2>
+            <p>Export includes curve metadata, standards, and sample results.</p>
+          </div>
+          <button class="success-button" type="button" id="export-results-button">Export results</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Sample</th>
+                <th>Raw mean</th>
+                <th>Corrected OD</th>
+                <th>Calculated</th>
+                <th>Dilution</th>
+                <th>Original</th>
+                <th>CV%</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <footer class="footer">
+      <p>
+        Biology tools made by <a href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Amr Ahmed WalyEldeen</a>.
+        Part of <a href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL</a> laboratory resources.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    const ASSAYS = {
+      bradford: {
+        label: "Bradford",
+        wavelength: "595 nm",
+        unit: "µg/mL",
+        fit: "linear",
+        note: "Bradford is usually handled with a linear standard curve within the validated assay range. Dilute samples above the highest standard."
+      },
+      bca: {
+        label: "BCA",
+        wavelength: "562 nm",
+        unit: "µg/mL",
+        fit: "linear",
+        note: "BCA is commonly calculated by linear regression over the kit range. Quadratic can be useful if your protocol validates a wider curved range."
+      },
+      elisa: {
+        label: "ELISA-based protein concentration",
+        wavelength: "450 / 405 nm",
+        unit: "ng/mL",
+        fit: "fourPL",
+        note: "ELISA standard curves are commonly sigmoidal, so 4PL interpolation is selected by default. Use linear only for a validated narrow linear range."
+      }
+    };
+
+    let standards = [
+      { id: uid(), concentration: "0", absorbance: "0.050, 0.052" },
+      { id: uid(), concentration: "125", absorbance: "0.160, 0.158" },
+      { id: uid(), concentration: "250", absorbance: "0.282, 0.286" },
+      { id: uid(), concentration: "500", absorbance: "0.522, 0.515" },
+      { id: uid(), concentration: "1000", absorbance: "0.990, 0.998" },
+      { id: uid(), concentration: "1500", absorbance: "1.420, 1.410" }
+    ];
+
+    let samples = [
+      { id: uid(), name: "Sample A", absorbance: "0.610, 0.604", dilution: "5" },
+      { id: uid(), name: "Sample B", absorbance: "1.120, 1.107", dilution: "10" },
+      { id: uid(), name: "Sample C", absorbance: "0.090, 0.094", dilution: "1" }
+    ];
+
+    let curveChart = null;
+    let currentFit = null;
+    let processedStandards = [];
+    let sampleResults = [];
+
+    function uid() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2);
+    }
+
+    function byId(id) { return document.getElementById(id); }
+
+    function parseNumber(value) {
+      if (value === null || value === undefined || value === "") return NaN;
+      return Number(String(value).trim().replace(",", "."));
+    }
+
+    function parseReplicates(value) {
+      if (Array.isArray(value)) return value.map(parseNumber).filter(Number.isFinite);
+      return String(value || "")
+        .split(/[;,\s]+/)
+        .map(parseNumber)
+        .filter(Number.isFinite);
+    }
+
+    function mean(values) {
+      return values.length ? values.reduce((a, b) => a + b, 0) / values.length : NaN;
+    }
+
+    function sd(values) {
+      if (values.length < 2) return 0;
+      const m = mean(values);
+      return Math.sqrt(values.reduce((sum, v) => sum + Math.pow(v - m, 2), 0) / (values.length - 1));
+    }
+
+    function cv(values) {
+      const m = mean(values);
+      if (!values.length || values.length < 2 || !Number.isFinite(m) || m === 0) return 0;
+      return Math.abs(sd(values) / m) * 100;
+    }
+
+    function fmt(value, digits = 3) {
+      return Number.isFinite(value) ? Number(value).toFixed(digits) : "—";
+    }
+
+    function rSquared(points, predict) {
+      const yMean = mean(points.map(p => p.y));
+      const ssTot = points.reduce((sum, p) => sum + Math.pow(p.y - yMean, 2), 0);
+      const ssRes = points.reduce((sum, p) => sum + Math.pow(p.y - predict(p.x), 2), 0);
+      return ssTot === 0 ? 1 : 1 - ssRes / ssTot;
+    }
+
+    function rmse(points, predict) {
+      const mse = points.reduce((sum, p) => sum + Math.pow(p.y - predict(p.x), 2), 0) / points.length;
+      return Math.sqrt(mse);
+    }
+
+    function fitLinear(points) {
+      const n = points.length;
+      const sumX = points.reduce((s, p) => s + p.x, 0);
+      const sumY = points.reduce((s, p) => s + p.y, 0);
+      const sumXY = points.reduce((s, p) => s + p.x * p.y, 0);
+      const sumX2 = points.reduce((s, p) => s + p.x * p.x, 0);
+      const denom = n * sumX2 - sumX * sumX;
+      if (Math.abs(denom) < 1e-12) throw new Error("Linear fit failed because standard concentrations are not variable.");
+      const slope = (n * sumXY - sumX * sumY) / denom;
+      const intercept = (sumY - slope * sumX) / n;
+      const predict = x => slope * x + intercept;
+      const inverse = y => Math.abs(slope) < 1e-12 ? NaN : (y - intercept) / slope;
+      return {
+        type: "linear",
+        name: "Linear regression",
+        params: { slope, intercept },
+        equation: `y = ${slope.toPrecision(5)}x ${intercept >= 0 ? "+" : "−"} ${Math.abs(intercept).toPrecision(5)}`,
+        predict,
+        inverse,
+        r2: rSquared(points, predict),
+        rmse: rmse(points, predict)
+      };
+    }
+
+    function solveLinearSystem(matrix, vector) {
+      const n = vector.length;
+      const a = matrix.map((row, i) => row.concat(vector[i]));
+      for (let i = 0; i < n; i++) {
+        let maxRow = i;
+        for (let k = i + 1; k < n; k++) {
+          if (Math.abs(a[k][i]) > Math.abs(a[maxRow][i])) maxRow = k;
+        }
+        const temp = a[i]; a[i] = a[maxRow]; a[maxRow] = temp;
+        if (Math.abs(a[i][i]) < 1e-12) return null;
+        for (let k = i + 1; k < n; k++) {
+          const factor = a[k][i] / a[i][i];
+          for (let j = i; j <= n; j++) a[k][j] -= factor * a[i][j];
+        }
+      }
+      const x = Array(n).fill(0);
+      for (let i = n - 1; i >= 0; i--) {
+        let sum = a[i][n];
+        for (let j = i + 1; j < n; j++) sum -= a[i][j] * x[j];
+        x[i] = sum / a[i][i];
+      }
+      return x;
+    }
+
+    function fitQuadratic(points) {
+      if (points.length < 3) throw new Error("Quadratic regression needs at least 3 standard points.");
+      const sx = power => points.reduce((s, p) => s + Math.pow(p.x, power), 0);
+      const sy = points.reduce((s, p) => s + p.y, 0);
+      const sxy = power => points.reduce((s, p) => s + p.y * Math.pow(p.x, power), 0);
+      const solution = solveLinearSystem(
+        [[sx(4), sx(3), sx(2)], [sx(3), sx(2), sx(1)], [sx(2), sx(1), points.length]],
+        [sxy(2), sxy(1), sy]
+      );
+      if (!solution) throw new Error("Quadratic fit failed. Check duplicated or degenerate standards.");
+      const [a, b, c] = solution;
+      const minX = Math.min(...points.map(p => p.x));
+      const maxX = Math.max(...points.map(p => p.x));
+      const predict = x => a * x * x + b * x + c;
+      const inverse = y => {
+        if (Math.abs(a) < 1e-12) return Math.abs(b) < 1e-12 ? NaN : (y - c) / b;
+        const disc = b * b - 4 * a * (c - y);
+        if (disc < 0) return NaN;
+        const roots = [(-b + Math.sqrt(disc)) / (2 * a), (-b - Math.sqrt(disc)) / (2 * a)].filter(Number.isFinite);
+        const inRange = roots.find(x => x >= minX - 1e-9 && x <= maxX + 1e-9);
+        return inRange !== undefined ? inRange : roots[0];
+      };
+      return {
+        type: "quadratic",
+        name: "Quadratic regression",
+        params: { a, b, c },
+        equation: `y = ${a.toPrecision(4)}x² ${b >= 0 ? "+" : "−"} ${Math.abs(b).toPrecision(4)}x ${c >= 0 ? "+" : "−"} ${Math.abs(c).toPrecision(4)}`,
+        predict,
+        inverse,
+        r2: rSquared(points, predict),
+        rmse: rmse(points, predict)
+      };
+    }
+
+    function fitFourPL(points) {
+      if (points.length < 5) throw new Error("4PL fitting is more stable with at least 5 standard points.");
+      const positiveX = points.map(p => p.x).filter(x => x > 0).sort((a, b) => a - b);
+      if (positiveX.length < 4) throw new Error("4PL needs at least 4 positive non-zero standard concentrations.");
+      const ys = points.map(p => p.y);
+      const yMin = Math.min(...ys);
+      const yMax = Math.max(...ys);
+      const span = Math.max(yMax - yMin, 1e-6);
+      const xMin = Math.min(...positiveX);
+      const xMax = Math.max(...positiveX);
+      const medianX = positiveX[Math.floor(positiveX.length / 2)];
+      const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
+      const model = (x, params) => {
+        const [bottom, top, logEc50, hill] = params;
+        const ec50 = Math.exp(logEc50);
+        const safeX = Math.max(x, 1e-12);
+        const ratio = Math.pow(ec50 / safeX, hill);
+        return bottom + (top - bottom) / (1 + ratio);
+      };
+      const sse = params => points.reduce((sum, p) => sum + Math.pow(p.y - model(p.x, params), 2), 0);
+      let params = [yMin, yMax, Math.log(medianX), 1];
+      let steps = [span * 0.2, span * 0.2, 0.6, 0.25];
+      let best = sse(params);
+      for (let iter = 0; iter < 600; iter++) {
+        let improved = false;
+        for (let i = 0; i < params.length; i++) {
+          for (const direction of [-1, 1]) {
+            const trial = params.slice();
+            trial[i] += direction * steps[i];
+            trial[0] = clamp(trial[0], yMin - span * 2, yMax + span);
+            trial[1] = clamp(trial[1], yMin - span, yMax + span * 2);
+            trial[2] = clamp(trial[2], Math.log(xMin / 100), Math.log(xMax * 100));
+            trial[3] = clamp(trial[3], 0.05, 8);
+            if (trial[1] <= trial[0]) continue;
+            const score = sse(trial);
+            if (score < best) {
+              params = trial;
+              best = score;
+              improved = true;
+            }
+          }
+        }
+        if (!improved) steps = steps.map(s => s * 0.82);
+        if (Math.max(...steps) < 1e-8) break;
+      }
+      const [bottom, top, logEc50, hill] = params;
+      const ec50 = Math.exp(logEc50);
+      const predict = x => model(x, params);
+      const inverse = y => {
+        const normalized = (top - bottom) / (y - bottom) - 1;
+        if (!Number.isFinite(normalized) || normalized <= 0 || y <= bottom || y >= top) return NaN;
+        return ec50 / Math.pow(normalized, 1 / hill);
+      };
+      return {
+        type: "fourPL",
+        name: "4-parameter logistic / 4PL",
+        params: { bottom, top, ec50, hill },
+        equation: `y = ${bottom.toPrecision(4)} + (${top.toPrecision(4)} − ${bottom.toPrecision(4)}) / (1 + (${ec50.toPrecision(4)} / x)^${hill.toPrecision(4)})`,
+        predict,
+        inverse,
+        r2: rSquared(points, predict),
+        rmse: rmse(points, predict)
+      };
+    }
+
+    function routeTo(target) {
+      if (target === "protein-calculator") {
+        byId("tools-home").style.display = "none";
+        byId("home-hero").style.display = "none";
+        byId("protein-calculator").classList.add("active");
+        if (location.hash !== "#protein-calculator") location.hash = "protein-calculator";
+        renderAll();
+      } else {
+        byId("tools-home").style.display = "block";
+        byId("home-hero").style.display = "block";
+        byId("protein-calculator").classList.remove("active");
+        if (location.hash !== "#home") location.hash = "home";
+      }
+    }
+
+    function updateAssayDefaults() {
+      const assayKey = byId("assay-select").value;
+      const assay = ASSAYS[assayKey];
+      byId("fit-select").value = assay.fit;
+      byId("unit-input").value = assay.unit;
+      byId("wavelength-input").value = assay.wavelength;
+      byId("assay-note").textContent = assay.note;
+      renderAll();
+    }
+
+    function buildStandards() {
+      const blank = parseNumber(byId("standard-blank-input").value) || 0;
+      return standards.map(row => {
+        const x = parseNumber(row.concentration);
+        const reps = parseReplicates(row.absorbance);
+        const rawMean = mean(reps);
+        return {
+          ...row,
+          x,
+          reps,
+          rawMean,
+          y: rawMean - blank,
+          sd: sd(reps),
+          cv: cv(reps)
+        };
+      }).filter(row => Number.isFinite(row.x) && Number.isFinite(row.y)).sort((a, b) => a.x - b.x);
+    }
+
+    function buildFit(points) {
+      if (points.length < 3) throw new Error("Add at least 3 valid standard points.");
+      const fitType = byId("fit-select").value;
+      if (fitType === "linear") return fitLinear(points);
+      if (fitType === "quadratic") return fitQuadratic(points);
+      return fitFourPL(points);
+    }
+
+    function buildSampleResults(fit, points) {
+      if (!fit || !fit.predict || !points.length) return [];
+      const blank = parseNumber(byId("sample-blank-input").value) || 0;
+      const minY = Math.min(...points.map(p => p.y));
+      const maxY = Math.max(...points.map(p => p.y));
+      const minX = Math.min(...points.map(p => p.x));
+      const maxX = Math.max(...points.map(p => p.x));
+      return samples.map(row => {
+        const reps = parseReplicates(row.absorbance);
+        const rawMean = mean(reps);
+        const corrected = rawMean - blank;
+        const dilution = parseNumber(row.dilution) || 1;
+        const calculated = Number.isFinite(corrected) ? fit.inverse(corrected) : NaN;
+        const original = calculated * dilution;
+        let status = "ok";
+        let note = "Within standard range";
+        if (!reps.length) { status = "error"; note = "Missing absorbance"; }
+        else if (!Number.isFinite(calculated) || calculated < 0) { status = "error"; note = fit.type === "fourPL" ? "Outside 4PL interpolation limits" : "Unable to interpolate valid concentration"; }
+        else if (corrected < minY) { status = "low"; note = "Below lowest standard; reduce dilution or report with caution"; }
+        else if (corrected > maxY) { status = "high"; note = "Above highest standard; dilute and re-run"; }
+        else if (calculated < minX || calculated > maxX) { status = "warn"; note = "Interpolated near curve boundary"; }
+        else if (cv(reps) > 15) { status = "warn"; note = "Replicate CV > 15%; inspect pipetting/plate reading"; }
+        return {
+          ...row,
+          reps,
+          rawMean,
+          corrected,
+          dilution,
+          calculated,
+          original,
+          sd: sd(reps),
+          cv: cv(reps),
+          status,
+          note
+        };
+      });
+    }
+
+    function renderAll() {
+      byId("assay-note").textContent = ASSAYS[byId("assay-select").value].note;
+      renderStandardsTable();
+      processedStandards = buildStandards();
+      try {
+        currentFit = buildFit(processedStandards);
+      } catch (error) {
+        currentFit = { error: error.message };
+      }
+      sampleResults = currentFit.error ? [] : buildSampleResults(currentFit, processedStandards);
+      renderSamplesTable();
+      renderCurve();
+      renderDiagnostics();
+      renderResults();
+      renderCalculationCheck();
+    }
+
+    function renderStandardsTable() {
+      const body = byId("standards-body");
+      const blank = parseNumber(byId("standard-blank-input").value) || 0;
+      body.innerHTML = "";
+      standards.forEach(row => {
+        const reps = parseReplicates(row.absorbance);
+        const corrected = mean(reps) - blank;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input value="${escapeAttr(row.concentration)}" data-standard-id="${row.id}" data-field="concentration" placeholder="e.g. 500" /></td>
+          <td><input value="${escapeAttr(row.absorbance)}" data-standard-id="${row.id}" data-field="absorbance" placeholder="0.123, 0.126" /></td>
+          <td class="mono">${fmt(corrected)}</td>
+          <td class="mono">${fmt(cv(reps), 1)}</td>
+          <td><button class="icon-button" type="button" data-remove-standard="${row.id}" title="Remove standard">×</button></td>
+        `;
+        body.appendChild(tr);
+      });
+      body.querySelectorAll("input[data-standard-id]").forEach(input => {
+        input.addEventListener("input", event => {
+          const row = standards.find(item => item.id === event.target.dataset.standardId);
+          if (row) row[event.target.dataset.field] = event.target.value;
+          renderAllDebounced();
+        });
+      });
+      body.querySelectorAll("button[data-remove-standard]").forEach(button => {
+        button.addEventListener("click", event => {
+          standards = standards.filter(row => row.id !== event.currentTarget.dataset.removeStandard);
+          renderAll();
+        });
+      });
+    }
+
+    function renderSamplesTable() {
+      const body = byId("samples-body");
+      body.innerHTML = "";
+      samples.forEach(row => {
+        const result = sampleResults.find(item => item.id === row.id);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input value="${escapeAttr(row.name)}" data-sample-id="${row.id}" data-field="name" placeholder="Sample name" /></td>
+          <td><input value="${escapeAttr(row.absorbance)}" data-sample-id="${row.id}" data-field="absorbance" placeholder="0.450, 0.455" /></td>
+          <td><input value="${escapeAttr(row.dilution)}" data-sample-id="${row.id}" data-field="dilution" placeholder="1" /></td>
+          <td class="mono"><strong>${result ? fmt(result.original, 2) + " " + escapeHtml(byId("unit-input").value) : "—"}</strong></td>
+          <td>${result ? statusPill(result.status, result.note) : "—"}</td>
+          <td><button class="icon-button" type="button" data-remove-sample="${row.id}" title="Remove sample">×</button></td>
+        `;
+        body.appendChild(tr);
+      });
+      body.querySelectorAll("input[data-sample-id]").forEach(input => {
+        input.addEventListener("input", event => {
+          const row = samples.find(item => item.id === event.target.dataset.sampleId);
+          if (row) row[event.target.dataset.field] = event.target.value;
+          renderAllDebounced();
+        });
+      });
+      body.querySelectorAll("button[data-remove-sample]").forEach(button => {
+        button.addEventListener("click", event => {
+          samples = samples.filter(row => row.id !== event.currentTarget.dataset.removeSample);
+          renderAll();
+        });
+      });
+    }
+
+    let renderTimer = null;
+    function renderAllDebounced() {
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(renderAll, 120);
+    }
+
+    function renderCurve() {
+      const ctx = byId("curve-chart");
+      const unit = byId("unit-input").value;
+      const standardPoints = processedStandards.map(p => ({ x: p.x, y: p.y }));
+      const fitPoints = [];
+      if (currentFit && currentFit.predict && processedStandards.length >= 2) {
+        const minX = Math.min(...processedStandards.map(p => p.x));
+        const maxX = Math.max(...processedStandards.map(p => p.x));
+        const start = Math.max(0, minX);
+        const span = Math.max(maxX - start, 1);
+        for (let i = 0; i < 100; i++) {
+          const x = start + span * i / 99;
+          fitPoints.push({ x, y: currentFit.predict(x) });
+        }
+      }
+      if (curveChart) curveChart.destroy();
+      curveChart = new Chart(ctx, {
+        type: "scatter",
+        data: {
+          datasets: [
+            { label: "Standards", data: standardPoints, pointRadius: 5, pointHoverRadius: 7 },
+            { label: "Curve fit", data: fitPoints, type: "line", pointRadius: 0, borderWidth: 3, tension: currentFit && currentFit.type === "fourPL" ? 0.25 : 0 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          parsing: false,
+          plugins: { legend: { position: "bottom" } },
+          scales: {
+            x: { type: "linear", title: { display: true, text: `Concentration (${unit})` } },
+            y: { title: { display: true, text: "Corrected absorbance" } }
+          }
+        }
+      });
+      byId("r2-display").textContent = currentFit && !currentFit.error ? fmt(currentFit.r2, 4) : "—";
+      byId("rmse-display").textContent = currentFit && !currentFit.error ? fmt(currentFit.rmse, 4) : "—";
+      byId("equation-display").textContent = currentFit && !currentFit.error ? currentFit.equation : currentFit.error || "Awaiting valid standard curve.";
+    }
+
+    function renderDiagnostics() {
+      const list = byId("diagnostics-list");
+      const assay = byId("assay-select").value;
+      const fitType = byId("fit-select").value;
+      const notes = [];
+      if (currentFit && currentFit.error) notes.push({ level: "error", text: currentFit.error });
+      if (currentFit && !currentFit.error && currentFit.r2 < 0.98) notes.push({ level: "warn", text: "R² is below 0.98. Check standards, curve model, or assay range." });
+      const highCv = processedStandards.filter(p => p.cv > 15);
+      if (highCv.length) notes.push({ level: "warn", text: `${highCv.length} standard point(s) have replicate CV > 15%.` });
+      if (assay === "elisa" && fitType !== "fourPL") notes.push({ level: "warn", text: "ELISA workflows usually require 4PL interpolation unless a narrow linear range is validated." });
+      if ((assay === "bradford" || assay === "bca") && fitType === "fourPL") notes.push({ level: "warn", text: "4PL is uncommon for Bradford/BCA unless the kit protocol specifically validates it." });
+      if (!notes.length) notes.push({ level: "ok", text: "Curve diagnostics look acceptable for routine screening use." });
+      list.innerHTML = notes.map(note => `<div class="diagnostic ${note.level}"><strong>${note.level === "ok" ? "✓" : "!"}</strong><span>${escapeHtml(note.text)}</span></div>`).join("");
+    }
+
+    function renderResults() {
+      const body = byId("results-body");
+      const unit = byId("unit-input").value;
+      if (!sampleResults.length) {
+        body.innerHTML = `<tr><td colspan="8" style="color:#64748b">No valid sample results yet.</td></tr>`;
+        return;
+      }
+      body.innerHTML = sampleResults.map(result => `
+        <tr>
+          <td><strong>${escapeHtml(result.name || "Untitled sample")}</strong></td>
+          <td class="mono">${fmt(result.rawMean)}</td>
+          <td class="mono">${fmt(result.corrected)}</td>
+          <td class="mono">${fmt(result.calculated, 3)} ${escapeHtml(unit)}</td>
+          <td class="mono">${fmt(result.dilution, 2)}</td>
+          <td class="mono"><strong>${fmt(result.original, 3)} ${escapeHtml(unit)}</strong></td>
+          <td class="mono">${fmt(result.cv, 1)}</td>
+          <td>${statusPill(result.status, result.note)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderCalculationCheck() {
+      const box = byId("calculation-check");
+      const first = sampleResults.find(result => Number.isFinite(result.calculated));
+      const unit = byId("unit-input").value;
+      if (!first || !currentFit || currentFit.error) {
+        box.textContent = "No valid sample result yet.";
+        return;
+      }
+      if (currentFit.type === "linear") {
+        box.innerHTML = `
+          x = (y − intercept) / slope<br>
+          x = (${fmt(first.corrected, 4)} − ${fmt(currentFit.params.intercept, 4)}) / ${fmt(currentFit.params.slope, 4)}<br>
+          Calculated = ${fmt(first.calculated, 4)} ${escapeHtml(unit)}<br>
+          Original = ${fmt(first.calculated, 4)} × ${fmt(first.dilution, 2)} = ${fmt(first.original, 4)} ${escapeHtml(unit)}
+        `;
+      } else {
+        box.innerHTML = `
+          First valid sample: ${escapeHtml(first.name || "Untitled sample")}<br>
+          Corrected OD = ${fmt(first.corrected, 4)}<br>
+          Interpolated concentration = ${fmt(first.calculated, 4)} ${escapeHtml(unit)}<br>
+          Original concentration = ${fmt(first.original, 4)} ${escapeHtml(unit)}
+        `;
+      }
+    }
+
+    function statusPill(status, note) {
+      return `<span class="status-pill status-${status}">${escapeHtml(note)}</span>`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttr(value) { return escapeHtml(value); }
+
+    function readReplicateColumns(row) {
+      const reps = [];
+      Object.entries(row).forEach(([key, value]) => {
+        if (/replicate|absorbance|od/i.test(key)) reps.push(...parseReplicates(value));
+      });
+      return reps.join(", ");
+    }
+
+    function downloadTemplate() {
+      const assayKey = byId("assay-select").value;
+      const assay = ASSAYS[assayKey];
+      const wb = XLSX.utils.book_new();
+      const instructions = [
+        { Field: "Assay", Value: assay.label },
+        { Field: "Recommended wavelength", Value: byId("wavelength-input").value },
+        { Field: "Concentration unit", Value: byId("unit-input").value },
+        { Field: "Standards sheet", Value: "Use Concentration, Replicate 1, Replicate 2, Replicate 3 columns." },
+        { Field: "Samples sheet", Value: "Use Sample Name, Replicate columns, and Dilution Factor." },
+        { Field: "Blank correction", Value: "Enter blank absorbance in the website before calculating." }
+      ];
+      const standardRows = [
+        { Concentration: 0, "Replicate 1": 0.05, "Replicate 2": 0.052, "Replicate 3": "" },
+        { Concentration: 125, "Replicate 1": 0.16, "Replicate 2": 0.158, "Replicate 3": "" },
+        { Concentration: 250, "Replicate 1": 0.282, "Replicate 2": 0.286, "Replicate 3": "" },
+        { Concentration: 500, "Replicate 1": 0.522, "Replicate 2": 0.515, "Replicate 3": "" },
+        { Concentration: 1000, "Replicate 1": 0.99, "Replicate 2": 0.998, "Replicate 3": "" }
+      ];
+      const sampleRows = [
+        { "Sample Name": "Sample A", "Replicate 1": 0.61, "Replicate 2": 0.604, "Replicate 3": "", "Dilution Factor": 5 },
+        { "Sample Name": "Sample B", "Replicate 1": 1.12, "Replicate 2": 1.107, "Replicate 3": "", "Dilution Factor": 10 }
+      ];
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(instructions), "Instructions");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(standardRows), "Standards");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sampleRows), "Samples");
+      XLSX.writeFile(wb, `protein_assay_template_${assayKey}.xlsx`);
+    }
+
+    function uploadWorkbook(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const wb = XLSX.read(e.target.result, { type: "array" });
+          const standardsSheet = wb.Sheets.Standards || wb.Sheets[wb.SheetNames[0]];
+          const samplesSheet = wb.Sheets.Samples || wb.Sheets[wb.SheetNames[1]];
+          const stdRows = XLSX.utils.sheet_to_json(standardsSheet, { defval: "" });
+          const importedStandards = stdRows.map(row => ({
+            id: uid(),
+            concentration: row.Concentration ?? row.concentration ?? row["Standard Concentration"] ?? row["Concentration"] ?? "",
+            absorbance: readReplicateColumns(row)
+          })).filter(row => row.concentration !== "" || row.absorbance !== "");
+          if (importedStandards.length) standards = importedStandards;
+          if (samplesSheet) {
+            const sampleRows = XLSX.utils.sheet_to_json(samplesSheet, { defval: "" });
+            const importedSamples = sampleRows.map(row => ({
+              id: uid(),
+              name: row["Sample Name"] ?? row.Sample ?? row.Name ?? "",
+              absorbance: readReplicateColumns(row),
+              dilution: row["Dilution Factor"] ?? row.Dilution ?? 1
+            })).filter(row => row.name || row.absorbance);
+            if (importedSamples.length) samples = importedSamples;
+          }
+          renderAll();
+        } catch (error) {
+          alert("Could not read workbook: " + error.message);
+        } finally {
+          event.target.value = "";
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function exportResults() {
+      if (!currentFit || currentFit.error) {
+        alert("Generate a valid standard curve before exporting.");
+        return;
+      }
+      const unit = byId("unit-input").value;
+      const wb = XLSX.utils.book_new();
+      const summary = [
+        { Parameter: "Assay", Value: ASSAYS[byId("assay-select").value].label },
+        { Parameter: "Wavelength", Value: byId("wavelength-input").value },
+        { Parameter: "Curve model", Value: currentFit.name },
+        { Parameter: "Equation", Value: currentFit.equation },
+        { Parameter: "R²", Value: currentFit.r2 },
+        { Parameter: "RMSE", Value: currentFit.rmse },
+        { Parameter: "Concentration unit", Value: unit },
+        { Parameter: "Standard blank OD", Value: parseNumber(byId("standard-blank-input").value) || 0 },
+        { Parameter: "Sample blank OD", Value: parseNumber(byId("sample-blank-input").value) || 0 },
+        { Parameter: "Author", Value: "Amr Ahmed WalyEldeen" },
+        { Parameter: "Lab", Value: "CMBRL" }
+      ];
+      const standardRows = processedStandards.map(row => ({
+        Concentration: row.x,
+        "Raw Abs Mean": row.rawMean,
+        "Corrected Abs": row.y,
+        "Replicate SD": row.sd,
+        "Replicate CV %": row.cv,
+        Replicates: row.reps.join(", ")
+      }));
+      const resultRows = sampleResults.map(row => ({
+        "Sample Name": row.name,
+        "Raw Abs Mean": row.rawMean,
+        "Corrected OD": row.corrected,
+        [`Calculated Concentration (${unit})`]: row.calculated,
+        "Dilution Factor": row.dilution,
+        [`Original Concentration (${unit})`]: row.original,
+        "Replicate SD": row.sd,
+        "Replicate CV %": row.cv,
+        Note: row.note
+      }));
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(summary), "Curve Summary");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(standardRows), "Standards");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(resultRows), "Sample Results");
+      XLSX.writeFile(wb, `protein_assay_results_${byId("assay-select").value}.xlsx`);
+    }
+
+    function initEvents() {
+      document.querySelectorAll("[data-nav]").forEach(el => {
+        el.addEventListener("click", event => {
+          event.preventDefault();
+          routeTo(event.currentTarget.dataset.nav);
+        });
+      });
+      document.querySelectorAll("[data-open-tool]").forEach(el => {
+        el.addEventListener("click", event => routeTo(event.currentTarget.dataset.openTool));
+      });
+      window.addEventListener("hashchange", () => routeTo(location.hash.replace("#", "") || "home"));
+      byId("assay-select").addEventListener("change", updateAssayDefaults);
+      ["fit-select", "unit-input", "wavelength-input", "standard-blank-input", "sample-blank-input"].forEach(id => {
+        byId(id).addEventListener("input", renderAllDebounced);
+        byId(id).addEventListener("change", renderAll);
+      });
+      byId("add-standard-button").addEventListener("click", () => {
+        standards.push({ id: uid(), concentration: "", absorbance: "" });
+        renderAll();
+      });
+      byId("add-sample-button").addEventListener("click", () => {
+        samples.push({ id: uid(), name: "", absorbance: "", dilution: "1" });
+        renderAll();
+      });
+      byId("download-template-button").addEventListener("click", downloadTemplate);
+      byId("upload-workbook-button").addEventListener("click", () => byId("workbook-input").click());
+      byId("workbook-input").addEventListener("change", uploadWorkbook);
+      byId("export-results-button").addEventListener("click", exportResults);
+    }
+
+    initEvents();
+    byId("assay-note").textContent = ASSAYS[byId("assay-select").value].note;
+    routeTo(location.hash.replace("#", "") || "home");
+  </script>
+</body>
+</html>
