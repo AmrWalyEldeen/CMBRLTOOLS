@@ -733,8 +733,8 @@
             <input id="standard-blank-input" value="0.050" inputmode="decimal" />
           </label>
           <label class="input-label">
-            Sample blank OD
-            <input id="sample-blank-input" value="0.050" inputmode="decimal" />
+            Sample blank OD <span class="optional-label">optional</span>
+            <input id="sample-blank-input" value="" placeholder="blank = use standard blank" inputmode="decimal" />
           </label>
         </div>
         <p class="helper-note" id="assay-note"></p>
@@ -796,7 +796,7 @@
           <section class="panel">
             <div class="panel-title">
               <h2>Curve monitoring</h2>
-              <p>Standards, selected fit line, and interpolated sample positions are shown together for easier review.</p>
+              <p>The standard curve is built only from standard data and standard blank. Sample blank affects only the interpolated sample positions.</p>
             </div>
             <div class="chart-box" style="margin-top:18px">
               <canvas id="curve-chart"></canvas>
@@ -1211,10 +1211,22 @@
         }
       }
 
+      function getStandardBlankValue() {
+        const value = parseNumber(byId("standard-blank-input").value);
+        return Number.isFinite(value) ? value : 0;
+      }
+
+      function getSampleBlankValue() {
+        const raw = byId("sample-blank-input").value;
+        const parsed = parseNumber(raw);
+        if (String(raw || "").trim() === "" || !Number.isFinite(parsed)) return getStandardBlankValue();
+        return parsed;
+      }
+
       function buildSamples() {
         sampleResults = [];
         if (!currentFit || currentFit.error || !currentFit.inverse || !processedStandards.length) return;
-        const blank = parseNumber(byId("sample-blank-input").value) || 0;
+        const blank = getSampleBlankValue();
         const minY = Math.min(...processedStandards.map(p => p.y));
         const maxY = Math.max(...processedStandards.map(p => p.y));
         const minX = Math.min(...processedStandards.map(p => p.x));
@@ -1346,6 +1358,15 @@
           }
         }
 
+        const xValues = processedStandards.map(p => p.x).filter(Number.isFinite);
+        const yValues = processedStandards.map(p => p.y).filter(Number.isFinite);
+        const xMinData = Math.min(...xValues);
+        const xMaxData = Math.max(...xValues);
+        const yMinData = Math.min(...yValues);
+        const yMaxData = Math.max(...yValues);
+        const xPad = Math.max((xMaxData - xMinData) * 0.06, xMaxData ? Math.abs(xMaxData) * 0.02 : 1);
+        const yPad = Math.max((yMaxData - yMinData) * 0.10, yMaxData ? Math.abs(yMaxData) * 0.03 : 0.05);
+
         if (curveChart) curveChart.destroy();
         curveChart = new Chart(ctx, {
           type: "scatter",
@@ -1403,10 +1424,14 @@
             scales: {
               x: {
                 type: "linear",
+                min: Math.max(0, xMinData - xPad),
+                max: xMaxData + xPad,
                 title: { display: true, text: `Concentration (${unit})`, font: { weight: "bold" } },
                 grid: { color: "rgba(148, 163, 184, 0.25)" }
               },
               y: {
+                min: Math.min(0, yMinData - yPad),
+                max: yMaxData + yPad,
                 title: { display: true, text: "Corrected absorbance", font: { weight: "bold" } },
                 grid: { color: "rgba(148, 163, 184, 0.25)" }
               }
@@ -1630,7 +1655,8 @@
           { Parameter: "RMSE", Value: currentFit.rmse },
           { Parameter: "Concentration unit", Value: unit },
           { Parameter: "Standard blank OD", Value: parseNumber(byId("standard-blank-input").value) || 0 },
-          { Parameter: "Sample blank OD", Value: parseNumber(byId("sample-blank-input").value) || 0 },
+          { Parameter: "Sample blank OD used", Value: getSampleBlankValue() },
+          { Parameter: "Sample blank source", Value: String(byId("sample-blank-input").value || "").trim() === "" ? "Standard blank used because sample blank was empty" : "User-entered sample blank" },
           { Parameter: "Author", Value: "Amr Ahmed WalyEldeen" },
           { Parameter: "Lab", Value: "CMBRL" }
         ];
