@@ -599,10 +599,102 @@
        qPCR FOLD CHANGE TOOL STYLES
        Edit only this section when changing qPCR layout/visual style.
        ========================================================= */
+    #qpcr-calculator {
+      --qpcr-ink: #082f49;
+      --qpcr-muted: #5b6f82;
+      --qpcr-line: #cfe0ee;
+      --qpcr-soft: #eff8ff;
+      --qpcr-soft-2: #f7fbff;
+      --qpcr-cyan: #0ea5e9;
+      --qpcr-blue: #2563eb;
+      --qpcr-teal: #0f766e;
+      --qpcr-violet: #7c3aed;
+      --qpcr-rose: #be123c;
+      --qpcr-amber: #d97706;
+    }
+
+    #qpcr-calculator .panel {
+      border-color: rgba(207, 224, 238, 0.92);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,251,255,0.94));
+      box-shadow: 0 16px 42px rgba(8, 47, 73, 0.075);
+    }
+
+    #qpcr-calculator .protein-header {
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(14, 165, 233, 0.24);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.18), transparent 28rem),
+        radial-gradient(circle at 100% 12%, rgba(15, 118, 110, 0.14), transparent 26rem),
+        linear-gradient(135deg, #ffffff 0%, #f2fbff 52%, #ecfeff 100%);
+    }
+
+    #qpcr-calculator .protein-header::before {
+      content: "qPCR";
+      position: absolute;
+      right: 24px;
+      bottom: -18px;
+      color: rgba(14, 165, 233, 0.10);
+      font-size: 92px;
+      font-weight: 950;
+      letter-spacing: -0.08em;
+      pointer-events: none;
+    }
+
+    #qpcr-calculator .panel-title h2 {
+      color: var(--qpcr-ink);
+      letter-spacing: -0.055em;
+    }
+
+    #qpcr-calculator .panel-title p {
+      color: var(--qpcr-muted);
+      max-width: 920px;
+    }
+
+    #qpcr-calculator .primary-button,
+    #qpcr-calculator .success-button {
+      min-height: 44px;
+      padding-inline: 18px;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.15;
+      box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+    }
+
+    #qpcr-calculator .primary-button {
+      background: linear-gradient(135deg, var(--qpcr-blue), var(--qpcr-cyan));
+    }
+
+    #qpcr-calculator .success-button {
+      background: linear-gradient(135deg, var(--qpcr-teal), #14b8a6);
+      box-shadow: 0 14px 28px rgba(15, 118, 110, 0.18);
+    }
+
+    #qpcr-calculator .ghost-button {
+      min-height: 44px;
+      color: var(--qpcr-ink);
+      background: rgba(255, 255, 255, 0.88);
+      border-color: var(--qpcr-line);
+    }
+
+    #qpcr-calculator input,
+    #qpcr-calculator select {
+      min-height: 46px;
+      border-color: var(--qpcr-line);
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    #qpcr-calculator input:focus,
+    #qpcr-calculator select:focus {
+      border-color: var(--qpcr-cyan);
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+    }
+
     .qpcr-grid {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
-      gap: 26px;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.82fr);
+      gap: 24px;
       align-items: start;
       margin-top: 26px;
     }
@@ -610,50 +702,195 @@
     .qpcr-grid > * { min-width: 0; }
     .qpcr-stack { display: grid; gap: 24px; min-width: 0; }
 
-    .qpcr-controls {
+    .qpcr-step-panel {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .qpcr-step-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--qpcr-cyan), var(--qpcr-teal));
+      opacity: 0.78;
+    }
+
+    .qpcr-step-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .qpcr-setup-flow {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
       gap: 16px;
+      margin-top: 20px;
+    }
+
+    .qpcr-action-card {
+      min-width: 0;
+      border: 1px solid var(--qpcr-line);
+      border-radius: 24px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 24px rgba(8, 47, 73, 0.055);
+    }
+
+    .qpcr-action-card.primary {
+      color: #fff;
+      border: 0;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255,255,255,0.20), transparent 16rem),
+        linear-gradient(135deg, #075985, #0f766e);
+      box-shadow: 0 20px 46px rgba(7, 89, 133, 0.20);
+    }
+
+    .qpcr-action-card h3 {
+      margin: 12px 0 8px;
+      font-size: 20px;
+      letter-spacing: -0.04em;
+    }
+
+    .qpcr-action-card p {
+      margin: 0;
+      line-height: 1.65;
+      color: var(--qpcr-muted);
+      font-size: 14px;
+    }
+
+    .qpcr-action-card.primary p { color: #dff7ff; }
+
+    .qpcr-step-chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border-radius: 999px;
+      padding: 7px 11px;
+      background: rgba(255,255,255,0.18);
+      color: #ecfeff;
+      border: 1px solid rgba(255,255,255,0.22);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .qpcr-step-chip.muted {
+      color: var(--qpcr-teal);
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+    }
+
+    .qpcr-upload-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .qpcr-upload-actions .primary-button,
+    .qpcr-upload-actions .ghost-button {
+      flex: 1 1 180px;
+    }
+
+    .qpcr-manual-controls {
+      display: grid;
+      grid-template-columns: minmax(110px, 0.7fr) minmax(170px, 1fr);
+      gap: 12px;
       align-items: end;
+      margin-top: 16px;
+    }
+
+    .qpcr-privacy-note {
+      margin: 16px 0 0;
+      padding: 14px 16px;
+      border: 1px solid rgba(14, 165, 233, 0.24);
+      border-radius: 20px;
+      background: #f0f9ff;
+      color: #075985;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .qpcr-privacy-note strong { color: var(--qpcr-ink); }
+
+    .qpcr-template-preview {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .qpcr-template-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .qpcr-template-cell {
+      border: 1px solid var(--qpcr-line);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: #fff;
+      color: var(--qpcr-ink);
+      font-size: 13px;
+      font-weight: 850;
     }
 
     .qpcr-group-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
       gap: 18px;
-      margin-top: 18px;
+      margin-top: 20px;
     }
 
     .qpcr-group-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: #fff;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(14, 165, 233, 0.18);
+      border-radius: 26px;
+      background:
+        linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
       padding: 18px;
-      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 14px 32px rgba(8, 47, 73, 0.07);
       min-width: 0;
+    }
+
+    .qpcr-group-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 5px;
+      background: linear-gradient(90deg, var(--qpcr-cyan), var(--qpcr-teal));
     }
 
     .qpcr-group-name {
       width: 100%;
       border: 0;
-      border-bottom: 2px solid var(--border);
-      padding: 8px 4px 10px;
-      margin-bottom: 12px;
-      font-weight: 900;
+      border-bottom: 2px solid var(--qpcr-line);
+      border-radius: 0;
+      padding: 10px 4px 12px;
+      margin: 4px 0 14px;
+      font-weight: 950;
       font-size: 18px;
-      color: var(--text);
+      color: var(--qpcr-ink);
       outline: none;
       background: transparent;
     }
 
-    .qpcr-group-name:focus { border-color: var(--primary); }
+    .qpcr-group-name:focus {
+      border-color: var(--qpcr-cyan);
+      box-shadow: none;
+    }
 
     .qpcr-sample-row {
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      background: #f8fafc;
-      padding: 12px;
+      border: 1px solid rgba(207, 224, 238, 0.9);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.86);
+      padding: 13px;
       margin-top: 12px;
+      box-shadow: 0 8px 20px rgba(8, 47, 73, 0.04);
     }
 
     .qpcr-sample-head {
@@ -662,18 +899,23 @@
       gap: 12px;
       align-items: center;
       margin-bottom: 10px;
-      color: var(--muted);
+      color: var(--qpcr-ink);
       font-size: 13px;
-      font-weight: 900;
+      font-weight: 950;
     }
 
     .mini-danger {
       border-radius: 999px;
-      padding: 6px 9px;
-      background: #fee2e2;
-      color: #991b1b;
+      padding: 7px 10px;
+      background: #fff1f2;
+      color: #9f1239;
+      border: 1px solid #fecdd3;
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 950;
+    }
+
+    .mini-danger:hover {
+      background: #ffe4e6;
     }
 
     .qpcr-two-col {
@@ -685,67 +927,122 @@
     .qpcr-error {
       display: none;
       margin: 0 0 20px;
-      border-radius: 18px;
+      border-radius: 20px;
       border: 1px solid #fecaca;
       background: #fff1f2;
       color: #991b1b;
-      padding: 14px 16px;
-      font-weight: 800;
+      padding: 15px 17px;
+      font-weight: 850;
+      box-shadow: 0 10px 24px rgba(153, 27, 27, 0.08);
+    }
+
+    .qpcr-results-panel {
+      background:
+        radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.14), transparent 30rem),
+        linear-gradient(180deg, #ffffff, #f8fbff);
     }
 
     .qpcr-results-layout {
       display: grid;
-      grid-template-columns: minmax(0, 0.85fr) minmax(460px, 1.15fr);
+      grid-template-columns: minmax(0, 0.82fr) minmax(500px, 1.18fr);
       gap: 24px;
       align-items: start;
     }
 
     .qpcr-results-layout > * { min-width: 0; }
 
+    .qpcr-section-heading {
+      margin: 0 0 12px;
+      color: var(--qpcr-ink);
+      letter-spacing: -0.035em;
+    }
+
     .qpcr-result-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1px solid rgba(207, 224, 238, 0.95);
+      border-radius: 24px;
       background: #fff;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       overflow: hidden;
+      box-shadow: 0 10px 28px rgba(8, 47, 73, 0.06);
     }
 
     .qpcr-result-header {
       display: grid;
-      grid-template-columns: minmax(130px, 1fr) repeat(3, minmax(110px, auto)) 34px;
+      grid-template-columns: minmax(145px, 1.1fr) repeat(3, minmax(105px, auto)) 34px;
       gap: 12px;
       align-items: center;
-      padding: 16px;
+      padding: 17px;
       cursor: pointer;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
     }
 
-    .qpcr-result-card.control .qpcr-result-header { background: #eef8ff; }
-    .qpcr-result-header:hover { background: #f8fafc; }
+    .qpcr-result-card.control .qpcr-result-header {
+      background:
+        linear-gradient(90deg, rgba(14, 165, 233, 0.15), rgba(20, 184, 166, 0.08)),
+        #ffffff;
+    }
+
+    .qpcr-result-header:hover { background: #f0f9ff; }
     .qpcr-result-header strong { display: block; }
+    .qpcr-result-name { color: var(--qpcr-ink); font-size: 16px; }
+
+    .qpcr-result-metric {
+      display: grid;
+      gap: 3px;
+      color: var(--qpcr-muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .qpcr-result-metric strong {
+      color: var(--qpcr-ink);
+      font-size: 15px;
+    }
+
+    .qpcr-expression-status {
+      justify-self: start;
+      border-radius: 999px;
+      padding: 8px 10px;
+      background: #f8fafc;
+      border: 1px solid var(--qpcr-line);
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
 
     .qpcr-result-detail {
       display: none;
       padding: 16px;
-      background: #f8fafc;
-      border-top: 1px solid var(--border);
+      background: #f8fbff;
+      border-top: 1px solid var(--qpcr-line);
     }
 
     .qpcr-result-card.open .qpcr-result-detail { display: block; }
-    .qpcr-toggle { font-size: 18px; color: var(--muted); transition: 0.18s ease; }
+    .qpcr-toggle { font-size: 20px; color: var(--qpcr-muted); transition: 0.18s ease; }
     .qpcr-result-card.open .qpcr-toggle { transform: rotate(90deg); }
 
     .qpcr-chart-box {
-      min-height: 480px;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      background: #fff;
-      padding: 12px;
+      min-height: 530px;
+      border: 1px solid rgba(207, 224, 238, 0.95);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.10), transparent 20rem),
+        #ffffff;
+      padding: 14px;
       overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.75), 0 12px 30px rgba(8, 47, 73, 0.06);
     }
 
     #qpcr-results-chart {
       width: 100%;
-      min-height: 455px;
+      min-height: 500px;
+    }
+
+    .qpcr-chart-note {
+      margin: 12px 0 0;
+      color: var(--qpcr-muted);
+      line-height: 1.55;
+      font-size: 13px;
     }
 
     .qpcr-customizer {
@@ -754,9 +1051,9 @@
       gap: 14px;
       margin-top: 16px;
       padding: 16px;
-      border-radius: 20px;
-      background: var(--surface-soft);
-      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: #f8fbff;
+      border: 1px solid var(--qpcr-line);
     }
 
     .qpcr-customizer input[type="color"] {
@@ -773,20 +1070,22 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(15, 23, 42, 0.58);
+      background: rgba(8, 47, 73, 0.62);
+      backdrop-filter: blur(10px);
     }
 
     .qpcr-modal-backdrop.active { display: flex; }
 
     .qpcr-modal {
-      width: min(940px, 100%);
-      max-height: min(84vh, 760px);
+      width: min(980px, 100%);
+      max-height: min(84vh, 780px);
       overflow: auto;
-      border-radius: 28px;
-      background: #fff;
-      box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
-      padding: 26px;
-      border: 1px solid var(--border);
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, #ffffff, #f8fbff);
+      box-shadow: 0 30px 86px rgba(8, 47, 73, 0.34);
+      padding: 28px;
+      border: 1px solid var(--qpcr-line);
     }
 
     .qpcr-modal-head {
@@ -798,43 +1097,47 @@
     }
 
     .qpcr-modal-close {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 999px;
-      color: var(--muted);
-      background: var(--surface-soft);
+      color: var(--qpcr-muted);
+      background: #eef8ff;
       font-size: 24px;
       line-height: 1;
     }
 
     .qpcr-stat-box {
-      border-radius: 20px;
-      border: 1px solid var(--border);
+      border-radius: 22px;
+      border: 1px solid var(--qpcr-line);
       background: #fff;
-      padding: 16px;
+      padding: 17px;
       margin-top: 14px;
       line-height: 1.7;
+      box-shadow: 0 10px 24px rgba(8, 47, 73, 0.05);
     }
 
-    .upregulated { color: var(--success); font-weight: 900; }
-    .downregulated { color: var(--danger); font-weight: 900; }
-    .neutral { color: var(--muted); font-weight: 900; }
+    .upregulated { color: #047857; font-weight: 950; }
+    .downregulated { color: #be123c; font-weight: 950; }
+    .neutral { color: #64748b; font-weight: 950; }
 
     @media (max-width: 1180px) {
       .qpcr-grid,
-      .qpcr-results-layout {
+      .qpcr-results-layout,
+      .qpcr-setup-flow {
         grid-template-columns: 1fr;
       }
-      .qpcr-chart-box { min-height: 420px; }
+      .qpcr-chart-box { min-height: 450px; }
+      #qpcr-results-chart { min-height: 425px; }
     }
 
     @media (max-width: 820px) {
-      .qpcr-controls,
       .qpcr-customizer,
-      .qpcr-result-header {
+      .qpcr-result-header,
+      .qpcr-manual-controls {
         grid-template-columns: 1fr;
       }
       .qpcr-two-col { grid-template-columns: 1fr; }
+      #qpcr-calculator .protein-header::before { display: none; }
     }
 
   </style>
@@ -1091,7 +1394,7 @@
         </div>
         <div class="tool-actions">
           <button class="ghost-button" type="button" data-nav="home">← Back to tools</button>
-          <button class="primary-button" type="button" id="qpcr-download-example-button">Download qPCR example</button>
+          <button class="primary-button" type="button" id="qpcr-download-example-button">Download qPCR template</button>
           <button class="ghost-button" type="button" id="qpcr-help-button">Excel format help</button>
         </div>
       </div>
@@ -1100,26 +1403,42 @@
 
       <div class="qpcr-grid">
         <div class="qpcr-stack">
-          <section class="panel">
+          <section class="panel qpcr-step-panel">
             <div class="panel-title">
               <h2>1. Setup experiment</h2>
-              <p>Generate manual groups or upload an Excel file arranged as Target Ct / Reference Ct column pairs.</p>
+              <p>Use the qPCR template for the easiest workflow: download it, enter Ct values in Excel, then upload the same completed template.</p>
             </div>
-            <div class="qpcr-controls" style="margin-top:18px">
-              <label class="input-label">
-                Number of groups
-                <input type="number" id="qpcr-num-groups" min="2" value="2" />
-              </label>
-              <button id="qpcr-generate-groups-button" class="primary-button" type="button">Generate manually</button>
-              <label class="input-label span-2">
-                Upload Excel / CSV
-                <input type="file" id="qpcr-excel-upload" accept=".xlsx,.xls,.csv" />
-              </label>
+
+            <div class="qpcr-setup-flow">
+              <article class="qpcr-action-card primary">
+                <span class="qpcr-step-chip">Recommended template workflow</span>
+                <h3>Download → fill → upload</h3>
+                <p>The template already has the correct group layout: each group has Target Ct and Reference Ct columns. Keep this structure unchanged, fill your Ct values, and upload it here.</p>
+                <div class="qpcr-upload-actions">
+                  <button id="qpcr-download-template-button" class="primary-button" type="button">Download blank template</button>
+                  <button id="qpcr-upload-template-button" class="ghost-button" type="button">Upload completed template</button>
+                  <input type="file" id="qpcr-excel-upload" class="hidden" accept=".xlsx,.xls,.csv" />
+                </div>
+              </article>
+
+              <article class="qpcr-action-card">
+                <span class="qpcr-step-chip muted">Manual entry</span>
+                <h3>Create cards manually</h3>
+                <p>Use this only when you want to type values directly in the browser instead of using Excel.</p>
+                <div class="qpcr-manual-controls">
+                  <label class="input-label">
+                    Number of groups
+                    <input type="number" id="qpcr-num-groups" min="2" value="2" />
+                  </label>
+                  <button id="qpcr-generate-groups-button" class="primary-button" type="button">Generate manual cards</button>
+                </div>
+              </article>
             </div>
-            <p class="helper-note">All calculations are performed locally in the browser. No data is uploaded to a server.</p>
+
+            <p class="qpcr-privacy-note"><strong>Local only:</strong> calculations and workbook parsing run in the browser. No qPCR data is uploaded to a server.</p>
           </section>
 
-          <section class="panel" id="qpcr-data-input-section">
+          <section class="panel qpcr-step-panel" id="qpcr-data-input-section">
             <div class="panel-title">
               <h2>2. Enter Ct values</h2>
               <p>Each sample needs Target Ct and Reference Ct. ΔCt = Target Ct − Reference Ct.</p>
@@ -1127,7 +1446,7 @@
             <div id="qpcr-group-inputs-container" class="qpcr-group-grid"></div>
           </section>
 
-          <section class="panel">
+          <section class="panel qpcr-step-panel">
             <div class="panel-title">
               <h2>3. Configure and calculate</h2>
               <p>Select the control group, gene type, and graph title before calculating fold change.</p>
@@ -1160,7 +1479,7 @@
           <section class="panel">
             <div class="panel-title">
               <h2>qPCR workflow</h2>
-              <p>Formula used by this tool.</p>
+              <p>The calculator converts paired Ct values into ΔCt, ΔΔCt, fold change, summary statistics, and an exportable graph.</p>
             </div>
             <div class="calculation-check mono" style="margin-top:16px">
               ΔCt = Ct<sub>target</sub> − Ct<sub>reference</sub><br>
@@ -1168,15 +1487,29 @@
               Fold change = 2<sup>−ΔΔCt</sup>
             </div>
             <div class="diagnostic-list" style="margin-top:16px">
-              <div class="diagnostic ok">Control group fold change is normalized around 1.</div>
+              <div class="diagnostic ok">Best workflow: download the template, enter Ct values, upload the same file, then calculate.</div>
               <div class="diagnostic warn">Use validated reference genes and comparable amplification efficiencies for reliable ΔΔCt interpretation.</div>
             </div>
           </section>
 
           <section class="panel">
             <div class="panel-title">
-              <h2>Excel input format</h2>
-              <p>Each group uses two adjacent columns.</p>
+              <h2>Template structure</h2>
+              <p>Do not rename the column headers. Add or remove group pairs as needed.</p>
+            </div>
+            <div class="qpcr-template-preview">
+              <div class="qpcr-template-row">
+                <div class="qpcr-template-cell">Row 1: Group name</div>
+                <div class="qpcr-template-cell">Control / Treatment A</div>
+              </div>
+              <div class="qpcr-template-row">
+                <div class="qpcr-template-cell">Row 2: Headers</div>
+                <div class="qpcr-template-cell">Target Ct + Reference Ct</div>
+              </div>
+              <div class="qpcr-template-row">
+                <div class="qpcr-template-cell">Rows 3+</div>
+                <div class="qpcr-template-cell">Replicate Ct values</div>
+              </div>
             </div>
             <div class="table-wrap" style="margin-top:16px">
               <table>
@@ -1199,7 +1532,7 @@
         </aside>
       </div>
 
-      <section id="qpcr-results-section" class="panel results-panel hidden" style="margin-top:26px">
+      <section id="qpcr-results-section" class="panel results-panel qpcr-results-panel hidden" style="margin-top:26px">
         <div class="protein-header">
           <div class="panel-title">
             <h2>qPCR results</h2>
@@ -1214,20 +1547,21 @@
         <div class="qpcr-results-layout" style="margin-top:20px">
           <div class="qpcr-stack">
             <section>
-              <h3 style="margin:0 0 12px">Group summaries</h3>
+              <h3 class="qpcr-section-heading">Group summaries</h3>
               <div id="qpcr-results-container"></div>
             </section>
             <section>
-              <h3 style="margin:0 0 12px">Statistical analysis</h3>
+              <h3 class="qpcr-section-heading">Statistical analysis</h3>
               <div id="qpcr-stats-results-container" class="qpcr-stat-box"></div>
             </section>
           </div>
 
           <section>
-            <h3 style="margin:0 0 12px">Interactive visualization</h3>
+            <h3 class="qpcr-section-heading">Interactive visualization</h3>
             <div class="qpcr-chart-box">
               <div id="qpcr-results-chart"></div>
             </div>
+            <p class="qpcr-chart-note">Click a bar to customize its color. Download the chart as PNG after reviewing labels, colors, and error bars.</p>
             <div id="qpcr-chart-customization-panel" class="qpcr-customizer hidden">
               <label class="input-label hidden" id="qpcr-bar-color-editor">
                 Selected bar color
@@ -1268,8 +1602,8 @@
         <div class="qpcr-modal" role="dialog" aria-modal="true" aria-labelledby="qpcr-help-title">
           <div class="qpcr-modal-head">
             <div>
-              <h2 id="qpcr-help-title" style="margin:0">qPCR Excel format example</h2>
-              <p class="helper-note">Arrange your sheet as pairs of columns for each group: Target Ct and Reference Ct.</p>
+              <h2 id="qpcr-help-title" style="margin:0">qPCR Excel template format</h2>
+              <p class="helper-note">Download the template, fill the qPCR Data sheet, and upload that same workbook. Each group uses a Target Ct / Reference Ct column pair.</p>
             </div>
             <button type="button" class="qpcr-modal-close" id="qpcr-close-help-button" aria-label="Close">&times;</button>
           </div>
@@ -1295,7 +1629,7 @@
             </table>
           </div>
           <div class="row-actions">
-            <button id="qpcr-download-example-button-modal" class="success-button" type="button">Download example (.xlsx)</button>
+            <button id="qpcr-download-example-button-modal" class="success-button" type="button">Download template (.xlsx)</button>
             <button id="qpcr-close-help-button-2" class="ghost-button" type="button">Close</button>
           </div>
         </div>
@@ -2335,7 +2669,9 @@
         reader.onload = evt => {
           try {
             const workbook = XLSX.read(evt.target.result, { type: "array" });
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const preferredSheetName = workbook.SheetNames.find(name => /qpcr\s*data|qpcr\s*template/i.test(name));
+            const sheetName = preferredSheetName || workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
             const data = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
             populateDataFromExcel(data);
           } catch (error) {
@@ -2575,10 +2911,10 @@
           container.insertAdjacentHTML("beforeend", `
             <div class="qpcr-result-card ${isControl ? "control" : ""}">
               <div class="qpcr-result-header">
-                <strong>${escapeHtml(group.name)}</strong>
-                <span>n: <strong>${group.samples.length}</strong></span>
-                <span>Mean FC: <strong>${fmt(avg, 3)} ± ${fmt(error, 3)}</strong></span>
-                <span class="${interpretationClass}">${interpretation}</span>
+                <strong class="qpcr-result-name">${escapeHtml(group.name)}</strong>
+                <span class="qpcr-result-metric">Samples<strong>${group.samples.length}</strong></span>
+                <span class="qpcr-result-metric">Mean FC ± SEM<strong>${fmt(avg, 3)} ± ${fmt(error, 3)}</strong></span>
+                <span class="qpcr-expression-status ${interpretationClass}">${interpretation}</span>
                 <span class="qpcr-toggle">›</span>
               </div>
               <div class="qpcr-result-detail">
@@ -2624,7 +2960,7 @@
         }
 
         const { labels, means, errors } = buildVisualizationData();
-        const defaultColors = ["#0369a1", "#db2777", "#059669", "#d97706", "#7c3aed", "#dc2626", "#0f766e", "#475569"];
+        const defaultColors = ["#2563eb", "#0f766e", "#7c3aed", "#d97706", "#be123c", "#0891b2", "#65a30d", "#475569"];
         const barColors = labels.map((_, index) => defaultColors[index % defaultColors.length]);
         const top = Math.max(...means.map((value, index) => value + (errors[index] || 0)), 1);
         const geneType = byId("qpcr-gene-type-select").value || "miRNA";
@@ -2634,40 +2970,79 @@
         const traces = [{
           x: labels,
           y: means,
+          customdata: errors,
           type: "bar",
-          marker: { color: barColors },
+          text: means.map(value => fmt(value, 2)),
+          textposition: "outside",
+          cliponaxis: false,
+          marker: {
+            color: barColors,
+            line: { color: "rgba(15, 23, 42, 0.18)", width: 1 }
+          },
           error_y: {
             type: "data",
             array: errors,
             visible: true,
-            thickness: 2.2,
-            width: 10,
+            thickness: 2.4,
+            width: 12,
             color: "#334155"
           },
-          hovertemplate: "<b>%{x}</b><br>Mean fold change: %{y:.3f}<extra></extra>"
+          hovertemplate: "<b>%{x}</b><br>Mean fold change: %{y:.3f}<br>SEM: %{customdata:.3f}<extra></extra>"
         }];
 
         const layout = {
-          title: { text: titleText, font: { family: "Inter, Arial, sans-serif", size: 22, color: "#0f172a" } },
-          xaxis: { title: { text: "Groups", font: { family: "Inter", size: 16, color: "#334155" } }, tickfont: { family: "Inter" } },
+          title: {
+            text: titleText,
+            x: 0.02,
+            xanchor: "left",
+            font: { family: "Inter, Arial, sans-serif", size: 24, color: "#082f49" }
+          },
+          xaxis: {
+            title: { text: "Groups", font: { family: "Inter", size: 16, color: "#334155" } },
+            tickfont: { family: "Inter", color: "#475569", size: 13 },
+            automargin: true,
+            zeroline: false
+          },
           yaxis: {
             title: { text: `Relative ${geneType} Expression`, font: { family: "Inter", size: 16, color: "#334155" } },
             rangemode: "tozero",
-            range: [0, top * 1.35],
-            gridcolor: "#e2e8f0",
-            tickfont: { family: "Inter" }
+            range: [0, top * 1.42],
+            gridcolor: "#e5eef6",
+            zerolinecolor: "#cbd5e1",
+            tickfont: { family: "Inter", color: "#475569", size: 13 },
+            automargin: true
           },
-          margin: { l: 74, r: 30, b: 84, t: 84 },
+          bargap: 0.38,
+          margin: { l: 78, r: 34, b: 88, t: 92 },
           showlegend: false,
-          paper_bgcolor: "#ffffff",
+          paper_bgcolor: "rgba(255,255,255,0)",
           plot_bgcolor: "#ffffff",
-          annotations: [],
-          shapes: []
+          annotations: [{
+            xref: "paper",
+            yref: "y",
+            x: 1,
+            y: 1,
+            text: "FC = 1",
+            showarrow: false,
+            xanchor: "right",
+            yanchor: "bottom",
+            font: { size: 12, color: "#64748b" }
+          }],
+          shapes: [{
+            type: "line",
+            xref: "paper",
+            yref: "y",
+            x0: 0,
+            x1: 1,
+            y0: 1,
+            y1: 1,
+            line: { color: "#94a3b8", width: 1.5, dash: "dot" }
+          }]
         };
 
         if (fullResultsData.length === 2 && lastStats && Number.isFinite(lastStats.p) && lastStats.p < 0.05) {
           const stars = lastStats.p < 0.001 ? "***" : lastStats.p < 0.01 ? "**" : "*";
-          const y = top * 1.18;
+          const y = top * 1.20;
           layout.shapes.push({
             type: "line",
             xref: "x",
@@ -2685,7 +3060,7 @@
             y: y * 1.04,
             text: stars,
             showarrow: false,
-            font: { size: 22, color: "#334155" }
+            font: { size: 24, color: "#334155" }
           });
         }
 
@@ -2700,7 +3075,7 @@
           const colorInput = byId("qpcr-bar-color-input");
           if (!editor || !colorInput) return;
           editor.classList.remove("hidden");
-          colorInput.value = currentChart.data[0].marker.color[pointIndex] || "#0369a1";
+          colorInput.value = currentChart.data[0].marker.color[pointIndex] || "#2563eb";
           colorInput.oninput = () => {
             const newColors = [...currentChart.data[0].marker.color];
             newColors[pointIndex] = colorInput.value;
@@ -2786,23 +3161,60 @@
         XLSX.utils.book_append_sheet(workbook, worksheet, name);
       }
 
-      function downloadExampleWorkbook() {
+      function downloadTemplateWorkbook() {
         const workbook = XLSX.utils.book_new();
-        const data = [
+
+        const templateRows = [
+          ["Control", "", "Treatment A", "", "Treatment B", ""],
+          ["Target Ct", "Reference Ct", "Target Ct", "Reference Ct", "Target Ct", "Reference Ct"],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""]
+        ];
+
+        const templateSheet = XLSX.utils.aoa_to_sheet(templateRows);
+        templateSheet["!cols"] = [
+          { wch: 16 }, { wch: 16 },
+          { wch: 18 }, { wch: 16 },
+          { wch: 18 }, { wch: 16 }
+        ];
+        templateSheet["!merges"] = [
+          { s: { r: 0, c: 0 }, e: { r: 0, c: 1 } },
+          { s: { r: 0, c: 2 }, e: { r: 0, c: 3 } },
+          { s: { r: 0, c: 4 }, e: { r: 0, c: 5 } }
+        ];
+        XLSX.utils.book_append_sheet(workbook, templateSheet, "qPCR Data");
+
+        const exampleRows = [
           ["Control", "", "Treatment A", "", "Treatment B", ""],
           ["Target Ct", "Reference Ct", "Target Ct", "Reference Ct", "Target Ct", "Reference Ct"],
           [22.1, 19.5, 25.4, 19.6, 26.1, 19.8],
           [22.3, 19.6, 25.6, 19.5, 26.3, 19.7],
           [22.2, 19.4, 25.5, 19.7, 25.9, 19.6]
         ];
-        const worksheet = XLSX.utils.aoa_to_sheet(data);
-        worksheet["!cols"] = [
-          { wch: 14 }, { wch: 14 },
-          { wch: 16 }, { wch: 14 },
-          { wch: 16 }, { wch: 14 }
+        const exampleSheet = XLSX.utils.aoa_to_sheet(exampleRows);
+        exampleSheet["!cols"] = templateSheet["!cols"];
+        exampleSheet["!merges"] = templateSheet["!merges"];
+        XLSX.utils.book_append_sheet(workbook, exampleSheet, "Example");
+
+        const instructions = [
+          { Step: 1, Instruction: "Open the qPCR Data sheet." },
+          { Step: 2, Instruction: "Rename group names in row 1 if needed. Each group must keep two adjacent columns." },
+          { Step: 3, Instruction: "Do not edit row 2 headers: Target Ct and Reference Ct." },
+          { Step: 4, Instruction: "Enter replicate Ct values from row 3 downward." },
+          { Step: 5, Instruction: "Save the workbook, then upload this same template into the qPCR calculator." },
+          { Step: 6, Instruction: "To add more groups, copy a Target Ct / Reference Ct pair to the right and put the new group name above it." }
         ];
-        XLSX.utils.book_append_sheet(workbook, worksheet, "qPCR Example");
-        XLSX.writeFile(workbook, "qPCR_example_template.xlsx");
+        appendJsonSheet(workbook, instructions, "Instructions");
+
+        XLSX.writeFile(workbook, "qPCR_blank_input_template.xlsx");
       }
 
       function exportResultsToExcel() {
@@ -2881,6 +3293,7 @@
 
         byId("qpcr-generate-groups-button")?.addEventListener("click", generateGroupInputs);
         byId("qpcr-excel-upload")?.addEventListener("change", handleFileUpload);
+        byId("qpcr-upload-template-button")?.addEventListener("click", () => byId("qpcr-excel-upload")?.click());
         byId("qpcr-group-inputs-container")?.addEventListener("click", handleGroupContainerClick);
         byId("qpcr-group-inputs-container")?.addEventListener("input", event => {
           if (event.target.classList.contains("qpcr-group-name")) updateControlSelectOptions();
@@ -2913,8 +3326,9 @@
         byId("qpcr-help-modal")?.addEventListener("click", event => {
           if (event.target.id === "qpcr-help-modal") closeHelp();
         });
-        byId("qpcr-download-example-button")?.addEventListener("click", downloadExampleWorkbook);
-        byId("qpcr-download-example-button-modal")?.addEventListener("click", downloadExampleWorkbook);
+        byId("qpcr-download-example-button")?.addEventListener("click", downloadTemplateWorkbook);
+        byId("qpcr-download-template-button")?.addEventListener("click", downloadTemplateWorkbook);
+        byId("qpcr-download-example-button-modal")?.addEventListener("click", downloadTemplateWorkbook);
 
         generateGroupInputs();
       }
