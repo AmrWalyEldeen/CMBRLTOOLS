@@ -1001,12 +1001,23 @@
 
     .qpcr-results-layout {
       display: grid;
-      grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1.14fr);
-      gap: 24px;
-      align-items: start;
+      grid-template-columns: 1fr;
+      gap: 26px;
+      align-items: stretch;
     }
 
     .qpcr-results-layout > * { min-width: 0; max-width: 100%; }
+
+    .qpcr-results-main,
+    .qpcr-visualization-section {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .qpcr-visualization-section {
+      display: block;
+      clear: both;
+    }
 
     .qpcr-section-heading {
       margin: 0 0 12px;
@@ -1081,20 +1092,20 @@
     .qpcr-chart-box {
       width: 100%;
       max-width: 100%;
-      min-height: 530px;
+      min-height: 560px;
       border: 1px solid rgba(207, 224, 238, 0.95);
       border-radius: 28px;
       background:
         radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.10), transparent 20rem),
         #ffffff;
-      padding: 14px;
+      padding: 16px;
       overflow: hidden;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.75), 0 12px 30px rgba(8, 47, 73, 0.06);
     }
 
     #qpcr-results-chart {
       width: 100%;
-      min-height: 500px;
+      min-height: 530px;
     }
 
     .qpcr-chart-note {
@@ -1615,7 +1626,7 @@
         <div class="protein-header">
           <div class="panel-title">
             <h2>qPCR results</h2>
-            <p>Summary cards, detailed sample calculations, statistics, and interactive visualization.</p>
+            <p>Summary cards, detailed sample calculations, statistics, then the final interactive visualization below the calculations.</p>
           </div>
           <div class="tool-actions">
             <button id="qpcr-export-excel-button" class="success-button" type="button">Download all results (.xlsx)</button>
@@ -1624,7 +1635,7 @@
         </div>
 
         <div class="qpcr-results-layout" style="margin-top:20px">
-          <div class="qpcr-stack">
+          <div class="qpcr-stack qpcr-results-main">
             <section>
               <h3 class="qpcr-section-heading">Group summaries</h3>
               <div id="qpcr-results-container"></div>
@@ -1635,7 +1646,7 @@
             </section>
           </div>
 
-          <section>
+          <section class="qpcr-visualization-section">
             <h3 class="qpcr-section-heading">Interactive visualization</h3>
             <div class="qpcr-chart-box">
               <div id="qpcr-results-chart"></div>
