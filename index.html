@@ -7,6 +7,8 @@
   <title>Biology Tools | CMBRL</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
   <style>
     :root {
       --bg: #f5f8fc;
@@ -50,9 +52,9 @@
     button:disabled { cursor: not-allowed; opacity: 0.55; }
 
     .site-shell {
-      max-width: 1680px;
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 32px;
+      padding: 28px;
     }
 
     .topbar {
@@ -385,44 +387,28 @@
 
     .protein-workspace {
       display: grid;
-      grid-template-columns: minmax(0, 1.12fr) minmax(500px, 0.88fr);
-      gap: 36px;
+      grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
+      gap: 28px;
       align-items: start;
     }
 
-    /* Prevent grid/table overflow. This fixes the visual overlap between the
-       data-entry panels and the curve-monitoring panel on laptop screens. */
-    .protein-workspace > *,
-    .stack,
-    .visual-column,
-    .panel,
-    .table-wrap {
-      min-width: 0;
-      max-width: 100%;
-    }
-
-    .stack { display: grid; gap: 32px; }
+    .stack { display: grid; gap: 28px; }
 
     .visual-column {
       position: sticky;
       top: 110px;
       align-self: start;
-      z-index: 1;
     }
 
     .table-wrap {
-      width: 100%;
-      max-width: 100%;
       overflow-x: auto;
       border: 1px solid var(--border);
       border-radius: 20px;
       background: #fff;
-      -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
-      min-width: 760px;
       border-collapse: collapse;
       font-size: 14px;
     }
@@ -472,20 +458,11 @@
     .icon-button:hover { color: var(--danger); background: #fff1f2; border-color: #fecdd3; }
 
     .chart-box {
-      height: 540px;
-      width: 100%;
-      max-width: 100%;
+      height: 500px;
       border-radius: 24px;
       border: 1px solid var(--border);
       background: linear-gradient(180deg, #ffffff, #f8fbff);
       padding: 22px;
-      overflow: hidden;
-    }
-
-    #curve-chart {
-      display: block;
-      width: 100% !important;
-      height: 100% !important;
     }
 
     .fit-caption {
@@ -598,12 +575,9 @@
     .footer a { color: var(--primary-dark); font-weight: 900; text-decoration: none; }
     .hidden { display: none; }
 
-    @media (max-width: 1400px) {
+    @media (max-width: 1180px) {
       .hero-content, .protein-workspace { grid-template-columns: 1fr; }
       .visual-column { position: static; }
-    }
-
-    @media (max-width: 1180px) {
       .control-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .control-grid .span-2 { grid-column: span 1; }
     }
@@ -620,6 +594,249 @@
       .section-title { align-items: flex-start; flex-direction: column; }
       .chart-box { height: 390px; padding: 14px; }
     }
+  
+    /* =========================================================
+       qPCR FOLD CHANGE TOOL STYLES
+       Edit only this section when changing qPCR layout/visual style.
+       ========================================================= */
+    .qpcr-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+      gap: 26px;
+      align-items: start;
+      margin-top: 26px;
+    }
+
+    .qpcr-grid > * { min-width: 0; }
+    .qpcr-stack { display: grid; gap: 24px; min-width: 0; }
+
+    .qpcr-controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      align-items: end;
+    }
+
+    .qpcr-group-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .qpcr-group-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 18px;
+      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+      min-width: 0;
+    }
+
+    .qpcr-group-name {
+      width: 100%;
+      border: 0;
+      border-bottom: 2px solid var(--border);
+      padding: 8px 4px 10px;
+      margin-bottom: 12px;
+      font-weight: 900;
+      font-size: 18px;
+      color: var(--text);
+      outline: none;
+      background: transparent;
+    }
+
+    .qpcr-group-name:focus { border-color: var(--primary); }
+
+    .qpcr-sample-row {
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #f8fafc;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .qpcr-sample-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .mini-danger {
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .qpcr-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .qpcr-error {
+      display: none;
+      margin: 0 0 20px;
+      border-radius: 18px;
+      border: 1px solid #fecaca;
+      background: #fff1f2;
+      color: #991b1b;
+      padding: 14px 16px;
+      font-weight: 800;
+    }
+
+    .qpcr-results-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(460px, 1.15fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .qpcr-results-layout > * { min-width: 0; }
+
+    .qpcr-result-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fff;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .qpcr-result-header {
+      display: grid;
+      grid-template-columns: minmax(130px, 1fr) repeat(3, minmax(110px, auto)) 34px;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      cursor: pointer;
+    }
+
+    .qpcr-result-card.control .qpcr-result-header { background: #eef8ff; }
+    .qpcr-result-header:hover { background: #f8fafc; }
+    .qpcr-result-header strong { display: block; }
+
+    .qpcr-result-detail {
+      display: none;
+      padding: 16px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+    }
+
+    .qpcr-result-card.open .qpcr-result-detail { display: block; }
+    .qpcr-toggle { font-size: 18px; color: var(--muted); transition: 0.18s ease; }
+    .qpcr-result-card.open .qpcr-toggle { transform: rotate(90deg); }
+
+    .qpcr-chart-box {
+      min-height: 480px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: #fff;
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    #qpcr-results-chart {
+      width: 100%;
+      min-height: 455px;
+    }
+
+    .qpcr-customizer {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 20px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+    }
+
+    .qpcr-customizer input[type="color"] {
+      min-height: 46px;
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .qpcr-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.58);
+    }
+
+    .qpcr-modal-backdrop.active { display: flex; }
+
+    .qpcr-modal {
+      width: min(940px, 100%);
+      max-height: min(84vh, 760px);
+      overflow: auto;
+      border-radius: 28px;
+      background: #fff;
+      box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+      padding: 26px;
+      border: 1px solid var(--border);
+    }
+
+    .qpcr-modal-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .qpcr-modal-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: var(--surface-soft);
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .qpcr-stat-box {
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 16px;
+      margin-top: 14px;
+      line-height: 1.7;
+    }
+
+    .upregulated { color: var(--success); font-weight: 900; }
+    .downregulated { color: var(--danger); font-weight: 900; }
+    .neutral { color: var(--muted); font-weight: 900; }
+
+    @media (max-width: 1180px) {
+      .qpcr-grid,
+      .qpcr-results-layout {
+        grid-template-columns: 1fr;
+      }
+      .qpcr-chart-box { min-height: 420px; }
+    }
+
+    @media (max-width: 820px) {
+      .qpcr-controls,
+      .qpcr-customizer,
+      .qpcr-result-header {
+        grid-template-columns: 1fr;
+      }
+      .qpcr-two-col { grid-template-columns: 1fr; }
+    }
+
   </style>
 </head>
 <body>
@@ -635,6 +852,7 @@
       <div class="nav-actions">
         <a class="nav-link" href="#home" data-nav="home">Tools</a>
         <a class="nav-link" href="#protein-calculator" data-nav="protein-calculator">Protein Calculator</a>
+        <a class="nav-link" href="#qpcr-calculator" data-nav="qpcr-calculator">qPCR Calculator</a>
         <a class="nav-link" href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Amr Ahmed WalyEldeen</a>
         <a class="primary-button" href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL</a>
       </div>
@@ -676,10 +894,10 @@
         </article>
         <article class="tool-card">
           <div class="tool-icon">📈</div>
-          <span class="badge soon">Coming soon</span>
+          <span class="badge live">Live tool</span>
           <h3>qPCR Fold Change Calculator</h3>
-          <p>Reserved for ΔCt, ΔΔCt, fold-change, control group comparison, replicate checking, and exportable qPCR result tables.</p>
-          <button class="ghost-button tool-action" type="button" disabled>Coming soon</button>
+          <p>Calculate ΔCt, ΔΔCt, fold change, control group comparison, replicate summaries, statistics, interactive graphs, and exportable qPCR result tables.</p>
+          <button class="primary-button tool-action" type="button" data-open-tool="qpcr-calculator">Open calculator</button>
         </article>
       </div>
     </section>
@@ -733,8 +951,8 @@
             <input id="standard-blank-input" value="0.050" inputmode="decimal" />
           </label>
           <label class="input-label">
-            Sample blank OD <span class="optional-label">optional</span>
-            <input id="sample-blank-input" value="" placeholder="blank = use standard blank" inputmode="decimal" />
+            Sample blank OD
+            <input id="sample-blank-input" value="0.050" inputmode="decimal" />
           </label>
         </div>
         <p class="helper-note" id="assay-note"></p>
@@ -796,7 +1014,7 @@
           <section class="panel">
             <div class="panel-title">
               <h2>Curve monitoring</h2>
-              <p>The standard curve is built only from standard data and standard blank. Sample blank affects only the interpolated sample positions.</p>
+              <p>Standards, selected fit line, and interpolated sample positions are shown together for easier review.</p>
             </div>
             <div class="chart-box" style="margin-top:18px">
               <canvas id="curve-chart"></canvas>
@@ -857,6 +1075,234 @@
       </section>
     </section>
 
+
+    <section id="qpcr-calculator" class="tool-view" aria-labelledby="qpcr-title">
+      <!-- =========================================================
+           qPCR FOLD CHANGE TOOL HTML
+           Future qPCR interface changes should be made inside this section.
+           ========================================================= -->
+      <div class="panel protein-header">
+        <div class="panel-title">
+          <h2 id="qpcr-title">qPCR Fold Change Calculator</h2>
+          <p>
+            Calculate ΔCt, ΔΔCt, relative fold change, control group comparison, summary statistics,
+            and publication-ready visualization directly in the browser.
+          </p>
+        </div>
+        <div class="tool-actions">
+          <button class="ghost-button" type="button" data-nav="home">← Back to tools</button>
+          <button class="primary-button" type="button" id="qpcr-download-example-button">Download qPCR example</button>
+          <button class="ghost-button" type="button" id="qpcr-help-button">Excel format help</button>
+        </div>
+      </div>
+
+      <div id="qpcr-error-box" class="qpcr-error"></div>
+
+      <div class="qpcr-grid">
+        <div class="qpcr-stack">
+          <section class="panel">
+            <div class="panel-title">
+              <h2>1. Setup experiment</h2>
+              <p>Generate manual groups or upload an Excel file arranged as Target Ct / Reference Ct column pairs.</p>
+            </div>
+            <div class="qpcr-controls" style="margin-top:18px">
+              <label class="input-label">
+                Number of groups
+                <input type="number" id="qpcr-num-groups" min="2" value="2" />
+              </label>
+              <button id="qpcr-generate-groups-button" class="primary-button" type="button">Generate manually</button>
+              <label class="input-label span-2">
+                Upload Excel / CSV
+                <input type="file" id="qpcr-excel-upload" accept=".xlsx,.xls,.csv" />
+              </label>
+            </div>
+            <p class="helper-note">All calculations are performed locally in the browser. No data is uploaded to a server.</p>
+          </section>
+
+          <section class="panel" id="qpcr-data-input-section">
+            <div class="panel-title">
+              <h2>2. Enter Ct values</h2>
+              <p>Each sample needs Target Ct and Reference Ct. ΔCt = Target Ct − Reference Ct.</p>
+            </div>
+            <div id="qpcr-group-inputs-container" class="qpcr-group-grid"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">
+              <h2>3. Configure and calculate</h2>
+              <p>Select the control group, gene type, and graph title before calculating fold change.</p>
+            </div>
+            <div class="control-grid" style="margin-top:18px">
+              <label class="input-label">
+                Control group
+                <select id="qpcr-control-group-select"></select>
+              </label>
+              <label class="input-label">
+                Gene type
+                <select id="qpcr-gene-type-select">
+                  <option value="miRNA" selected>miRNA</option>
+                  <option value="mRNA">mRNA</option>
+                  <option value="lncRNA">lncRNA</option>
+                </select>
+              </label>
+              <label class="input-label span-2">
+                Graph title / gene name
+                <input id="qpcr-chart-title-input" type="text" placeholder="e.g., let-7a / Hs_miR-18a-5p" />
+              </label>
+            </div>
+            <div class="row-actions">
+              <button id="qpcr-calculate-button" class="success-button" type="button">Calculate and analyze</button>
+            </div>
+          </section>
+        </div>
+
+        <aside class="qpcr-stack">
+          <section class="panel">
+            <div class="panel-title">
+              <h2>qPCR workflow</h2>
+              <p>Formula used by this tool.</p>
+            </div>
+            <div class="calculation-check mono" style="margin-top:16px">
+              ΔCt = Ct<sub>target</sub> − Ct<sub>reference</sub><br>
+              ΔΔCt = ΔCt<sub>sample</sub> − mean ΔCt<sub>control</sub><br>
+              Fold change = 2<sup>−ΔΔCt</sup>
+            </div>
+            <div class="diagnostic-list" style="margin-top:16px">
+              <div class="diagnostic ok">Control group fold change is normalized around 1.</div>
+              <div class="diagnostic warn">Use validated reference genes and comparable amplification efficiencies for reliable ΔΔCt interpretation.</div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">
+              <h2>Excel input format</h2>
+              <p>Each group uses two adjacent columns.</p>
+            </div>
+            <div class="table-wrap" style="margin-top:16px">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Control</th><th></th><th>Treatment A</th><th></th>
+                  </tr>
+                  <tr>
+                    <th>Target Ct</th><th>Reference Ct</th><th>Target Ct</th><th>Reference Ct</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>22.1</td><td>19.5</td><td>25.4</td><td>19.6</td></tr>
+                  <tr><td>22.3</td><td>19.6</td><td>25.6</td><td>19.5</td></tr>
+                  <tr><td>22.2</td><td>19.4</td><td>25.5</td><td>19.7</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <section id="qpcr-results-section" class="panel results-panel hidden" style="margin-top:26px">
+        <div class="protein-header">
+          <div class="panel-title">
+            <h2>qPCR results</h2>
+            <p>Summary cards, detailed sample calculations, statistics, and interactive visualization.</p>
+          </div>
+          <div class="tool-actions">
+            <button id="qpcr-export-excel-button" class="success-button" type="button">Download all results (.xlsx)</button>
+            <button id="qpcr-download-chart-button" class="ghost-button" type="button">Download chart PNG</button>
+          </div>
+        </div>
+
+        <div class="qpcr-results-layout" style="margin-top:20px">
+          <div class="qpcr-stack">
+            <section>
+              <h3 style="margin:0 0 12px">Group summaries</h3>
+              <div id="qpcr-results-container"></div>
+            </section>
+            <section>
+              <h3 style="margin:0 0 12px">Statistical analysis</h3>
+              <div id="qpcr-stats-results-container" class="qpcr-stat-box"></div>
+            </section>
+          </div>
+
+          <section>
+            <h3 style="margin:0 0 12px">Interactive visualization</h3>
+            <div class="qpcr-chart-box">
+              <div id="qpcr-results-chart"></div>
+            </div>
+            <div id="qpcr-chart-customization-panel" class="qpcr-customizer hidden">
+              <label class="input-label hidden" id="qpcr-bar-color-editor">
+                Selected bar color
+                <input type="color" id="qpcr-bar-color-input" value="#0369a1" />
+              </label>
+              <label class="input-label">
+                Font family
+                <select id="qpcr-title-font-family">
+                  <option>Inter</option>
+                  <option>Arial</option>
+                  <option>Helvetica</option>
+                  <option>Times New Roman</option>
+                  <option>Courier New</option>
+                </select>
+              </label>
+              <label class="input-label">
+                Font size
+                <input type="number" id="qpcr-title-font-size" value="16" min="8" />
+              </label>
+              <label class="input-label">
+                Font color
+                <input type="color" id="qpcr-title-font-color" value="#334155" />
+              </label>
+              <label class="input-label">
+                Error bar color
+                <input type="color" id="qpcr-error-bar-color" value="#334155" />
+              </label>
+              <label class="input-label">
+                Plot background
+                <input type="color" id="qpcr-plot-bg-color" value="#ffffff" />
+              </label>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div id="qpcr-help-modal" class="qpcr-modal-backdrop" aria-hidden="true">
+        <div class="qpcr-modal" role="dialog" aria-modal="true" aria-labelledby="qpcr-help-title">
+          <div class="qpcr-modal-head">
+            <div>
+              <h2 id="qpcr-help-title" style="margin:0">qPCR Excel format example</h2>
+              <p class="helper-note">Arrange your sheet as pairs of columns for each group: Target Ct and Reference Ct.</p>
+            </div>
+            <button type="button" class="qpcr-modal-close" id="qpcr-close-help-button" aria-label="Close">&times;</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th><th></th>
+                  <th>Treatment A</th><th></th>
+                  <th>Treatment B</th><th></th>
+                </tr>
+                <tr>
+                  <th>Target Ct</th><th>Reference Ct</th>
+                  <th>Target Ct</th><th>Reference Ct</th>
+                  <th>Target Ct</th><th>Reference Ct</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>22.1</td><td>19.5</td><td>25.4</td><td>19.6</td><td>26.1</td><td>19.8</td></tr>
+                <tr><td>22.3</td><td>19.6</td><td>25.6</td><td>19.5</td><td>26.3</td><td>19.7</td></tr>
+                <tr><td>22.2</td><td>19.4</td><td>25.5</td><td>19.7</td><td>25.9</td><td>19.6</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row-actions">
+            <button id="qpcr-download-example-button-modal" class="success-button" type="button">Download example (.xlsx)</button>
+            <button id="qpcr-close-help-button-2" class="ghost-button" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
     <footer class="footer">
       <p>
         Biology tools made by <a href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Amr Ahmed WalyEldeen</a>.
@@ -872,25 +1318,33 @@
        should have its own module below, separate from the hub.
        ========================================================= */
     const ToolHub = (() => {
+      const TOOL_IDS = ["protein-calculator", "qpcr-calculator"];
+
       function byId(id) { return document.getElementById(id); }
 
       function routeTo(target) {
+        const normalizedTarget = TOOL_IDS.includes(target) ? target : "home";
         const toolHome = byId("tools-home");
         const hero = byId("home-hero");
-        const protein = byId("protein-calculator");
-        const view = target === "protein-calculator" ? "protein-calculator" : "home";
 
-        if (view === "protein-calculator") {
-          toolHome.style.display = "none";
-          hero.style.display = "none";
-          protein.classList.add("active");
-          if (location.hash !== "#protein-calculator") location.hash = "protein-calculator";
-          setTimeout(() => ProteinCalculatorTool.resizeChart(), 50);
-        } else {
+        if (normalizedTarget === "home") {
           toolHome.style.display = "block";
           hero.style.display = "block";
-          protein.classList.remove("active");
+          TOOL_IDS.forEach(id => byId(id)?.classList.remove("active"));
           if (location.hash && location.hash !== "#home") location.hash = "home";
+          return;
+        }
+
+        toolHome.style.display = "none";
+        hero.style.display = "none";
+        TOOL_IDS.forEach(id => byId(id)?.classList.toggle("active", id === normalizedTarget));
+        if (location.hash !== `#${normalizedTarget}`) location.hash = normalizedTarget;
+
+        if (normalizedTarget === "protein-calculator") {
+          setTimeout(() => ProteinCalculatorTool.resizeChart(), 80);
+        }
+        if (normalizedTarget === "qpcr-calculator") {
+          setTimeout(() => QpcrFoldChangeTool.resizeChart(), 80);
         }
       }
 
@@ -1211,22 +1665,10 @@
         }
       }
 
-      function getStandardBlankValue() {
-        const value = parseNumber(byId("standard-blank-input").value);
-        return Number.isFinite(value) ? value : 0;
-      }
-
-      function getSampleBlankValue() {
-        const raw = byId("sample-blank-input").value;
-        const parsed = parseNumber(raw);
-        if (String(raw || "").trim() === "" || !Number.isFinite(parsed)) return getStandardBlankValue();
-        return parsed;
-      }
-
       function buildSamples() {
         sampleResults = [];
         if (!currentFit || currentFit.error || !currentFit.inverse || !processedStandards.length) return;
-        const blank = getSampleBlankValue();
+        const blank = parseNumber(byId("sample-blank-input").value) || 0;
         const minY = Math.min(...processedStandards.map(p => p.y));
         const maxY = Math.max(...processedStandards.map(p => p.y));
         const minX = Math.min(...processedStandards.map(p => p.x));
@@ -1358,15 +1800,6 @@
           }
         }
 
-        const xValues = processedStandards.map(p => p.x).filter(Number.isFinite);
-        const yValues = processedStandards.map(p => p.y).filter(Number.isFinite);
-        const xMinData = Math.min(...xValues);
-        const xMaxData = Math.max(...xValues);
-        const yMinData = Math.min(...yValues);
-        const yMaxData = Math.max(...yValues);
-        const xPad = Math.max((xMaxData - xMinData) * 0.06, xMaxData ? Math.abs(xMaxData) * 0.02 : 1);
-        const yPad = Math.max((yMaxData - yMinData) * 0.10, yMaxData ? Math.abs(yMaxData) * 0.03 : 0.05);
-
         if (curveChart) curveChart.destroy();
         curveChart = new Chart(ctx, {
           type: "scatter",
@@ -1424,14 +1857,10 @@
             scales: {
               x: {
                 type: "linear",
-                min: Math.max(0, xMinData - xPad),
-                max: xMaxData + xPad,
                 title: { display: true, text: `Concentration (${unit})`, font: { weight: "bold" } },
                 grid: { color: "rgba(148, 163, 184, 0.25)" }
               },
               y: {
-                min: Math.min(0, yMinData - yPad),
-                max: yMaxData + yPad,
                 title: { display: true, text: "Corrected absorbance", font: { weight: "bold" } },
                 grid: { color: "rgba(148, 163, 184, 0.25)" }
               }
@@ -1655,8 +2084,7 @@
           { Parameter: "RMSE", Value: currentFit.rmse },
           { Parameter: "Concentration unit", Value: unit },
           { Parameter: "Standard blank OD", Value: parseNumber(byId("standard-blank-input").value) || 0 },
-          { Parameter: "Sample blank OD used", Value: getSampleBlankValue() },
-          { Parameter: "Sample blank source", Value: String(byId("sample-blank-input").value || "").trim() === "" ? "Standard blank used because sample blank was empty" : "User-entered sample blank" },
+          { Parameter: "Sample blank OD", Value: parseNumber(byId("sample-blank-input").value) || 0 },
           { Parameter: "Author", Value: "Amr Ahmed WalyEldeen" },
           { Parameter: "Lab", Value: "CMBRL" }
         ];
@@ -1754,16 +2182,746 @@
       return { init, resizeChart };
     })();
 
+
     /* =========================================================
-       qPCR FOLD CHANGE TOOL MODULE PLACEHOLDER
-       This is intentionally separate from the protein calculator.
-       Add the qPCR interface and logic here later without touching
-       the protein calculator module above.
+       qPCR FOLD CHANGE TOOL MODULE
+       Update only this block when changing qPCR calculations,
+       Excel handling, statistics, result cards, or qPCR charts.
+       The matching HTML is <section id="qpcr-calculator"> above.
+       The matching CSS is "qPCR FOLD CHANGE TOOL STYLES" in <style>.
        ========================================================= */
     const QpcrFoldChangeTool = (() => {
-      function init() {}
-      return { init };
+      let fullResultsData = [];
+      let lastStats = null;
+      let lastNormality = [];
+      let currentChart = null;
+      let initialized = false;
+
+      function byId(id) { return document.getElementById(id); }
+      function all(selector, root = document) { return Array.from(root.querySelectorAll(selector)); }
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+      function parseCt(value) {
+        const n = Number(String(value ?? "").replace(",", "."));
+        return Number.isFinite(n) ? n : NaN;
+      }
+      function mean(arr) {
+        return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : NaN;
+      }
+      function sampleVariance(arr) {
+        if (arr.length < 2) return 0;
+        const m = mean(arr);
+        return arr.reduce((sum, value) => sum + (value - m) ** 2, 0) / (arr.length - 1);
+      }
+      function stdev(arr) { return Math.sqrt(sampleVariance(arr)); }
+      function sem(arr) { return arr.length > 1 ? stdev(arr) / Math.sqrt(arr.length) : 0; }
+      function fmt(value, digits = 3) { return Number.isFinite(value) ? Number(value).toFixed(digits) : "—"; }
+      function pText(p) {
+        if (!Number.isFinite(p)) return "N/A";
+        return p < 0.0001 ? p.toExponential(3) : p.toFixed(4);
+      }
+      function showError(message) {
+        const box = byId("qpcr-error-box");
+        if (!box) return;
+        box.textContent = message;
+        box.style.display = "block";
+        byId("qpcr-results-section")?.classList.add("hidden");
+        box.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      function clearError() {
+        const box = byId("qpcr-error-box");
+        if (box) {
+          box.textContent = "";
+          box.style.display = "none";
+        }
+      }
+
+      function createSampleInputHTML(sampleNumber, targetCt = "", refCt = "") {
+        return `
+          <div class="qpcr-sample-row" data-sample-number="${sampleNumber}">
+            <div class="qpcr-sample-head">
+              <span>Sample ${sampleNumber}</span>
+              <button type="button" class="mini-danger qpcr-remove-sample-button">Remove</button>
+            </div>
+            <div class="qpcr-two-col">
+              <label class="input-label">
+                Target Ct
+                <input type="number" step="0.01" class="qpcr-target-ct-input" placeholder="e.g., 22.1" value="${escapeHtml(targetCt)}" />
+              </label>
+              <label class="input-label">
+                Reference Ct
+                <input type="number" step="0.01" class="qpcr-ref-ct-input" placeholder="e.g., 19.5" value="${escapeHtml(refCt)}" />
+              </label>
+            </div>
+          </div>`;
+      }
+
+      function generateGroupInputs() {
+        clearError();
+        byId("qpcr-results-section")?.classList.add("hidden");
+        const count = parseInt(byId("qpcr-num-groups").value, 10);
+        if (!Number.isFinite(count) || count < 2) {
+          showError("Please enter at least 2 groups.");
+          return;
+        }
+        const container = byId("qpcr-group-inputs-container");
+        container.innerHTML = "";
+        for (let i = 1; i <= count; i += 1) {
+          container.insertAdjacentHTML("beforeend", `
+            <div class="qpcr-group-card" data-group-index="${i - 1}">
+              <input type="text" value="Group ${i}" class="qpcr-group-name" placeholder="Enter group name" />
+              <div class="qpcr-samples-container">${createSampleInputHTML(1)}</div>
+              <button type="button" class="ghost-button qpcr-add-sample-button" style="width:100%; margin-top:14px">+ Add sample</button>
+            </div>`);
+        }
+        updateControlSelectOptions();
+      }
+
+      function updateControlSelectOptions() {
+        const select = byId("qpcr-control-group-select");
+        if (!select) return;
+        const previous = select.value;
+        select.innerHTML = "";
+        all(".qpcr-group-card").forEach((card, index) => {
+          const name = card.querySelector(".qpcr-group-name")?.value || `Group ${index + 1}`;
+          select.insertAdjacentHTML("beforeend", `<option value="${index}">${escapeHtml(name)}</option>`);
+        });
+        if (Array.from(select.options).some(option => option.value === previous)) {
+          select.value = previous;
+        }
+      }
+
+      function renumberSamples(container) {
+        all(".qpcr-sample-row", container).forEach((row, index) => {
+          row.dataset.sampleNumber = String(index + 1);
+          const label = row.querySelector(".qpcr-sample-head span");
+          if (label) label.textContent = `Sample ${index + 1}`;
+        });
+      }
+
+      function handleGroupContainerClick(event) {
+        const addButton = event.target.closest(".qpcr-add-sample-button");
+        const removeButton = event.target.closest(".qpcr-remove-sample-button");
+
+        if (addButton) {
+          const card = addButton.closest(".qpcr-group-card");
+          const samplesContainer = card.querySelector(".qpcr-samples-container");
+          const nextNumber = all(".qpcr-sample-row", samplesContainer).length + 1;
+          samplesContainer.insertAdjacentHTML("beforeend", createSampleInputHTML(nextNumber));
+        }
+
+        if (removeButton) {
+          const sampleRow = removeButton.closest(".qpcr-sample-row");
+          const samplesContainer = sampleRow.parentElement;
+          sampleRow.remove();
+          if (!all(".qpcr-sample-row", samplesContainer).length) {
+            samplesContainer.insertAdjacentHTML("beforeend", createSampleInputHTML(1));
+          }
+          renumberSamples(samplesContainer);
+        }
+      }
+
+      function handleFileUpload(event) {
+        clearError();
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = evt => {
+          try {
+            const workbook = XLSX.read(evt.target.result, { type: "array" });
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const data = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+            populateDataFromExcel(data);
+          } catch (error) {
+            console.error(error);
+            showError("Error processing the Excel file. Please check the qPCR Excel format.");
+          } finally {
+            event.target.value = "";
+          }
+        };
+        reader.onerror = () => showError("Failed to read the selected file.");
+        reader.readAsArrayBuffer(file);
+      }
+
+      function populateDataFromExcel(data) {
+        if (!Array.isArray(data) || data.length < 3) {
+          showError("Invalid Excel format. The file needs group names, headers, and at least one sample row.");
+          return;
+        }
+
+        const container = byId("qpcr-group-inputs-container");
+        container.innerHTML = "";
+        const groupNamesRow = data[0] || [];
+        let groupCounter = 0;
+
+        for (let c = 0; c < groupNamesRow.length; c += 2) {
+          const groupName = groupNamesRow[c];
+          if (!String(groupName ?? "").trim()) continue;
+          let samplesHTML = "";
+          let sampleCounter = 0;
+
+          for (let r = 2; r < data.length; r += 1) {
+            const targetCt = data[r]?.[c];
+            const refCt = data[r]?.[c + 1];
+            const targetOk = String(targetCt ?? "").trim() !== "";
+            const refOk = String(refCt ?? "").trim() !== "";
+            if (targetOk && refOk) {
+              sampleCounter += 1;
+              samplesHTML += createSampleInputHTML(sampleCounter, targetCt, refCt);
+            }
+          }
+
+          groupCounter += 1;
+          container.insertAdjacentHTML("beforeend", `
+            <div class="qpcr-group-card" data-group-index="${groupCounter - 1}">
+              <input type="text" value="${escapeHtml(groupName)}" class="qpcr-group-name" placeholder="Enter group name" />
+              <div class="qpcr-samples-container">${samplesHTML || createSampleInputHTML(1)}</div>
+              <button type="button" class="ghost-button qpcr-add-sample-button" style="width:100%; margin-top:14px">+ Add sample</button>
+            </div>`);
+        }
+
+        if (!groupCounter) {
+          showError("No qPCR groups were found. Put group names in row 1, starting at columns A, C, E...");
+          return;
+        }
+
+        byId("qpcr-num-groups").value = String(groupCounter);
+        updateControlSelectOptions();
+      }
+
+      function collectGroupsFromUI() {
+        const groups = [];
+        all(".qpcr-group-card").forEach((card, groupIndex) => {
+          const name = card.querySelector(".qpcr-group-name")?.value?.trim() || `Group ${groupIndex + 1}`;
+          const samples = [];
+          all(".qpcr-sample-row", card).forEach(row => {
+            const targetCt = parseCt(row.querySelector(".qpcr-target-ct-input")?.value);
+            const refCt = parseCt(row.querySelector(".qpcr-ref-ct-input")?.value);
+            if (Number.isFinite(targetCt) && Number.isFinite(refCt)) {
+              samples.push({
+                sampleNumber: Number(row.dataset.sampleNumber || samples.length + 1),
+                targetCt,
+                refCt,
+                deltaCt: targetCt - refCt
+              });
+            }
+          });
+          if (samples.length) groups.push({ name, samples });
+        });
+        return groups;
+      }
+
+      function normalityCheck(values) {
+        if (values.length < 3) {
+          return { method: "Normality not tested", p: NaN, isNormal: null, detail: "n < 3" };
+        }
+        try {
+          if (window.jStat && typeof jStat.shapiroWilk === "function") {
+            const result = jStat.shapiroWilk(values);
+            return {
+              method: "Shapiro–Wilk",
+              p: result.p,
+              isNormal: result.p > 0.05,
+              detail: `p = ${pText(result.p)}`
+            };
+          }
+        } catch (error) {
+          console.warn("Shapiro-Wilk failed", error);
+        }
+        return {
+          method: "Not available in browser library",
+          p: NaN,
+          isNormal: null,
+          detail: "Report parametric test results with biological/statistical judgement"
+        };
+      }
+
+      function welchTTest(a, b) {
+        const na = a.length;
+        const nb = b.length;
+        const ma = mean(a);
+        const mb = mean(b);
+        const va = sampleVariance(a);
+        const vb = sampleVariance(b);
+        const se = Math.sqrt(va / na + vb / nb);
+        if (!Number.isFinite(se) || se === 0) return { t: NaN, df: NaN, p: NaN };
+        const t = (ma - mb) / se;
+        const numerator = (va / na + vb / nb) ** 2;
+        const denominator = ((va / na) ** 2) / Math.max(na - 1, 1) + ((vb / nb) ** 2) / Math.max(nb - 1, 1);
+        const df = numerator / denominator;
+        const p = window.jStat?.studentt?.cdf ? 2 * (1 - jStat.studentt.cdf(Math.abs(t), df)) : NaN;
+        return { t, df, p };
+      }
+
+      function oneWayAnova(groups) {
+        const values = groups.flat();
+        const grandMean = mean(values);
+        const k = groups.length;
+        const N = values.length;
+        const ssBetween = groups.reduce((sum, group) => sum + group.length * (mean(group) - grandMean) ** 2, 0);
+        const ssWithin = groups.reduce((sum, group) => {
+          const m = mean(group);
+          return sum + group.reduce((inner, value) => inner + (value - m) ** 2, 0);
+        }, 0);
+        const dfBetween = k - 1;
+        const dfWithin = N - k;
+        const msBetween = ssBetween / dfBetween;
+        const msWithin = ssWithin / dfWithin;
+        const F = msWithin === 0 ? NaN : msBetween / msWithin;
+        const p = window.jStat?.centralF?.cdf && Number.isFinite(F) ? 1 - jStat.centralF.cdf(F, dfBetween, dfWithin) : NaN;
+        return { F, dfBetween, dfWithin, p };
+      }
+
+      function performStatisticalAnalysis(groups) {
+        const container = byId("qpcr-stats-results-container");
+        const foldGroups = groups.map(group => group.samples.map(sample => sample.foldChange));
+        lastNormality = groups.map((group, index) => ({ name: group.name, ...normalityCheck(foldGroups[index]) }));
+
+        if (groups.length < 2) {
+          container.innerHTML = "Statistical analysis requires at least two groups.";
+          lastStats = null;
+          return null;
+        }
+
+        if (foldGroups.some(group => group.length < 2)) {
+          container.innerHTML = `
+            <strong>Statistics not calculated.</strong><br>
+            Each group needs at least 2 valid samples for variance-based statistical testing.
+            The fold-change summaries and chart are still shown.`;
+          lastStats = null;
+          return null;
+        }
+
+        if (groups.length === 2) {
+          const result = welchTTest(foldGroups[0], foldGroups[1]);
+          lastStats = {
+            testName: "Welch's t-test",
+            statisticName: "t",
+            statisticValue: result.t,
+            df: result.df,
+            p: result.p
+          };
+        } else {
+          const result = oneWayAnova(foldGroups);
+          lastStats = {
+            testName: "One-way ANOVA",
+            statisticName: "F",
+            statisticValue: result.F,
+            df: `${fmt(result.dfBetween, 0)}, ${fmt(result.dfWithin, 0)}`,
+            p: result.p
+          };
+        }
+
+        const normalityHTML = lastNormality.map(item => {
+          const status = item.isNormal === null ? "not determined" : item.isNormal ? "normal" : "not normal";
+          return `<li><strong>${escapeHtml(item.name)}</strong>: ${escapeHtml(item.method)} — ${escapeHtml(item.detail)}; ${status}.</li>`;
+        }).join("");
+
+        const conclusion = Number.isFinite(lastStats.p)
+          ? (lastStats.p < 0.05 ? `<span class="upregulated">Significant (p < 0.05)</span>` : `<span class="neutral">Not significant (p ≥ 0.05)</span>`)
+          : `<span class="neutral">p-value unavailable because the browser statistics library is unavailable or data variance is zero.</span>`;
+
+        container.innerHTML = `
+          <strong>Normality review</strong>
+          <ul style="margin-top:8px">${normalityHTML}</ul>
+          <div style="margin-top:14px">
+            <strong>Significance test:</strong> ${escapeHtml(lastStats.testName)}<br>
+            <strong>${escapeHtml(lastStats.statisticName)}:</strong> ${fmt(lastStats.statisticValue, 4)}<br>
+            <strong>df:</strong> ${escapeHtml(lastStats.df ?? "N/A")}<br>
+            <strong>p-value:</strong> ${pText(lastStats.p)}<br>
+            <strong>Conclusion:</strong> ${conclusion}
+          </div>`;
+        return lastStats;
+      }
+
+      function displaySummaryResults(groups, controlIndex) {
+        const container = byId("qpcr-results-container");
+        container.innerHTML = "";
+        groups.forEach((group, index) => {
+          const foldChanges = group.samples.map(sample => sample.foldChange);
+          const avg = mean(foldChanges);
+          const error = sem(foldChanges);
+          const isControl = index === controlIndex;
+          let interpretation = "Control group";
+          let interpretationClass = "neutral";
+          if (!isControl) {
+            if (avg > 1) {
+              interpretation = "Upregulated";
+              interpretationClass = "upregulated";
+            } else if (avg < 1) {
+              interpretation = "Downregulated";
+              interpretationClass = "downregulated";
+            } else {
+              interpretation = "No change";
+            }
+          }
+
+          const detailRows = group.samples.map(sample => `
+            <tr>
+              <td>${sample.sampleNumber}</td>
+              <td>${fmt(sample.targetCt, 2)}</td>
+              <td>${fmt(sample.refCt, 2)}</td>
+              <td>${fmt(sample.deltaCt, 2)}</td>
+              <td>${fmt(sample.deltaDeltaCt, 2)}</td>
+              <td>${fmt(sample.foldChange, 3)}</td>
+            </tr>`).join("");
+
+          container.insertAdjacentHTML("beforeend", `
+            <div class="qpcr-result-card ${isControl ? "control" : ""}">
+              <div class="qpcr-result-header">
+                <strong>${escapeHtml(group.name)}</strong>
+                <span>n: <strong>${group.samples.length}</strong></span>
+                <span>Mean FC: <strong>${fmt(avg, 3)} ± ${fmt(error, 3)}</strong></span>
+                <span class="${interpretationClass}">${interpretation}</span>
+                <span class="qpcr-toggle">›</span>
+              </div>
+              <div class="qpcr-result-detail">
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Sample #</th>
+                        <th>Target Ct</th>
+                        <th>Reference Ct</th>
+                        <th>ΔCt</th>
+                        <th>ΔΔCt</th>
+                        <th>Fold change</th>
+                      </tr>
+                    </thead>
+                    <tbody>${detailRows}</tbody>
+                  </table>
+                </div>
+              </div>
+            </div>`);
+        });
+      }
+
+      function buildVisualizationData() {
+        const labels = fullResultsData.map(group => group.name);
+        const means = fullResultsData.map(group => mean(group.samples.map(sample => sample.foldChange)));
+        const errors = fullResultsData.map(group => sem(group.samples.map(sample => sample.foldChange)));
+        const rows = labels.map((name, i) => ({
+          Group: name,
+          "Mean Fold Change": means[i],
+          SEM: errors[i]
+        }));
+        return { labels, means, errors, rows };
+      }
+
+      function renderChart() {
+        const panel = byId("qpcr-chart-customization-panel");
+        if (panel) panel.classList.remove("hidden");
+
+        if (!window.Plotly) {
+          byId("qpcr-results-chart").innerHTML = "Plotly could not be loaded. Check your internet connection.";
+          return;
+        }
+
+        const { labels, means, errors } = buildVisualizationData();
+        const defaultColors = ["#0369a1", "#db2777", "#059669", "#d97706", "#7c3aed", "#dc2626", "#0f766e", "#475569"];
+        const barColors = labels.map((_, index) => defaultColors[index % defaultColors.length]);
+        const top = Math.max(...means.map((value, index) => value + (errors[index] || 0)), 1);
+        const geneType = byId("qpcr-gene-type-select").value || "miRNA";
+        const geneName = byId("qpcr-chart-title-input").value.trim() || "Fold Change";
+        const titleText = `${geneType} – ${geneName}`;
+
+        const traces = [{
+          x: labels,
+          y: means,
+          type: "bar",
+          marker: { color: barColors },
+          error_y: {
+            type: "data",
+            array: errors,
+            visible: true,
+            thickness: 2.2,
+            width: 10,
+            color: "#334155"
+          },
+          hovertemplate: "<b>%{x}</b><br>Mean fold change: %{y:.3f}<extra></extra>"
+        }];
+
+        const layout = {
+          title: { text: titleText, font: { family: "Inter, Arial, sans-serif", size: 22, color: "#0f172a" } },
+          xaxis: { title: { text: "Groups", font: { family: "Inter", size: 16, color: "#334155" } }, tickfont: { family: "Inter" } },
+          yaxis: {
+            title: { text: `Relative ${geneType} Expression`, font: { family: "Inter", size: 16, color: "#334155" } },
+            rangemode: "tozero",
+            range: [0, top * 1.35],
+            gridcolor: "#e2e8f0",
+            tickfont: { family: "Inter" }
+          },
+          margin: { l: 74, r: 30, b: 84, t: 84 },
+          showlegend: false,
+          paper_bgcolor: "#ffffff",
+          plot_bgcolor: "#ffffff",
+          annotations: [],
+          shapes: []
+        };
+
+        if (fullResultsData.length === 2 && lastStats && Number.isFinite(lastStats.p) && lastStats.p < 0.05) {
+          const stars = lastStats.p < 0.001 ? "***" : lastStats.p < 0.01 ? "**" : "*";
+          const y = top * 1.18;
+          layout.shapes.push({
+            type: "line",
+            xref: "x",
+            yref: "y",
+            x0: labels[0],
+            x1: labels[1],
+            y0: y,
+            y1: y,
+            line: { color: "#334155", width: 2 }
+          });
+          layout.annotations.push({
+            xref: "paper",
+            yref: "y",
+            x: 0.5,
+            y: y * 1.04,
+            text: stars,
+            showarrow: false,
+            font: { size: 22, color: "#334155" }
+          });
+        }
+
+        Plotly.newPlot("qpcr-results-chart", traces, layout, { responsive: true, editable: true, displaylogo: false });
+        currentChart = byId("qpcr-results-chart");
+
+        currentChart.on("plotly_click", event => {
+          const point = event.points?.[0];
+          if (!point) return;
+          const pointIndex = point.pointNumber;
+          const editor = byId("qpcr-bar-color-editor");
+          const colorInput = byId("qpcr-bar-color-input");
+          if (!editor || !colorInput) return;
+          editor.classList.remove("hidden");
+          colorInput.value = currentChart.data[0].marker.color[pointIndex] || "#0369a1";
+          colorInput.oninput = () => {
+            const newColors = [...currentChart.data[0].marker.color];
+            newColors[pointIndex] = colorInput.value;
+            Plotly.restyle(currentChart, { "marker.color": [newColors] });
+          };
+        });
+      }
+
+      function updateChartStyle() {
+        if (!currentChart || !window.Plotly) return;
+        const fontFamily = byId("qpcr-title-font-family").value;
+        const fontSize = parseInt(byId("qpcr-title-font-size").value, 10) || 16;
+        const fontColor = byId("qpcr-title-font-color").value;
+        const errorBarColor = byId("qpcr-error-bar-color").value;
+        const plotBgColor = byId("qpcr-plot-bg-color").value;
+
+        Plotly.relayout(currentChart, {
+          "title.font.family": fontFamily,
+          "title.font.size": fontSize + 4,
+          "title.font.color": fontColor,
+          "xaxis.title.font.family": fontFamily,
+          "xaxis.title.font.size": fontSize,
+          "xaxis.title.font.color": fontColor,
+          "xaxis.tickfont.family": fontFamily,
+          "yaxis.title.font.family": fontFamily,
+          "yaxis.title.font.size": fontSize,
+          "yaxis.title.font.color": fontColor,
+          "yaxis.tickfont.family": fontFamily,
+          "plot_bgcolor": plotBgColor,
+          "paper_bgcolor": "#ffffff"
+        });
+
+        Plotly.restyle(currentChart, { "error_y.color": errorBarColor });
+      }
+
+      function handleCalculation() {
+        clearError();
+        const groups = collectGroupsFromUI();
+        if (groups.length < 2) {
+          showError("Please enter valid Ct values for at least 2 groups.");
+          return;
+        }
+
+        const controlIndex = parseInt(byId("qpcr-control-group-select").value, 10);
+        if (!Number.isFinite(controlIndex) || !groups[controlIndex]) {
+          showError("Please select a valid control group.");
+          return;
+        }
+
+        const controlDeltaCtMean = mean(groups[controlIndex].samples.map(sample => sample.deltaCt));
+        groups.forEach(group => {
+          group.samples.forEach(sample => {
+            sample.deltaDeltaCt = sample.deltaCt - controlDeltaCtMean;
+            sample.foldChange = 2 ** (-sample.deltaDeltaCt);
+          });
+          const foldChanges = group.samples.map(sample => sample.foldChange);
+          group.avgFoldChange = mean(foldChanges);
+          group.semFoldChange = sem(foldChanges);
+        });
+
+        fullResultsData = groups;
+        displaySummaryResults(groups, controlIndex);
+        performStatisticalAnalysis(groups);
+        byId("qpcr-results-section").classList.remove("hidden");
+        renderChart();
+        byId("qpcr-results-section").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function autoFitColumns(worksheet, rows) {
+        const keys = Array.isArray(rows) && rows.length ? Object.keys(rows[0]) : [];
+        worksheet["!cols"] = keys.map(key => {
+          const max = Math.max(
+            String(key).length,
+            ...rows.map(row => String(row[key] ?? "").length)
+          );
+          return { wch: Math.min(Math.max(max + 2, 12), 42) };
+        });
+      }
+
+      function appendJsonSheet(workbook, rows, name) {
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        autoFitColumns(worksheet, rows);
+        XLSX.utils.book_append_sheet(workbook, worksheet, name);
+      }
+
+      function downloadExampleWorkbook() {
+        const workbook = XLSX.utils.book_new();
+        const data = [
+          ["Control", "", "Treatment A", "", "Treatment B", ""],
+          ["Target Ct", "Reference Ct", "Target Ct", "Reference Ct", "Target Ct", "Reference Ct"],
+          [22.1, 19.5, 25.4, 19.6, 26.1, 19.8],
+          [22.3, 19.6, 25.6, 19.5, 26.3, 19.7],
+          [22.2, 19.4, 25.5, 19.7, 25.9, 19.6]
+        ];
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        worksheet["!cols"] = [
+          { wch: 14 }, { wch: 14 },
+          { wch: 16 }, { wch: 14 },
+          { wch: 16 }, { wch: 14 }
+        ];
+        XLSX.utils.book_append_sheet(workbook, worksheet, "qPCR Example");
+        XLSX.writeFile(workbook, "qPCR_example_template.xlsx");
+      }
+
+      function exportResultsToExcel() {
+        if (!fullResultsData.length) {
+          showError("No qPCR results to export. Calculate first.");
+          return;
+        }
+
+        const workbook = XLSX.utils.book_new();
+
+        const summaryRows = fullResultsData.map(group => ({
+          "Group Name": group.name,
+          "Samples (n)": group.samples.length,
+          "Average Fold Change": group.avgFoldChange,
+          "SEM": group.semFoldChange
+        }));
+
+        const rawRows = [];
+        fullResultsData.forEach(group => {
+          group.samples.forEach(sample => {
+            rawRows.push({
+              Group: group.name,
+              "Sample #": sample.sampleNumber,
+              "Target Ct": sample.targetCt,
+              "Reference Ct": sample.refCt,
+              "ΔCt": sample.deltaCt,
+              "ΔΔCt": sample.deltaDeltaCt,
+              "Fold Change": sample.foldChange
+            });
+          });
+        });
+
+        const normalityRows = lastNormality.map(row => ({
+          Group: row.name,
+          Method: row.method,
+          "p-value": Number.isFinite(row.p) ? row.p : "N/A",
+          "Normal?": row.isNormal === null ? "N/A" : row.isNormal ? "Yes" : "No",
+          Details: row.detail
+        }));
+
+        const statsRows = lastStats ? [{
+          "Test Name": lastStats.testName,
+          "Statistic": lastStats.statisticName,
+          "Statistic Value": Number.isFinite(lastStats.statisticValue) ? lastStats.statisticValue : "N/A",
+          "Degrees of Freedom": lastStats.df ?? "N/A",
+          "p-value": Number.isFinite(lastStats.p) ? lastStats.p : "N/A"
+        }] : [{ "Test Name": "N/A", "Statistic": "N/A", "Statistic Value": "N/A", "Degrees of Freedom": "N/A", "p-value": "N/A" }];
+
+        appendJsonSheet(workbook, summaryRows, "Summary");
+        appendJsonSheet(workbook, rawRows, "Raw Data");
+        appendJsonSheet(workbook, normalityRows, "Normality Review");
+        appendJsonSheet(workbook, statsRows, "Statistics");
+        appendJsonSheet(workbook, buildVisualizationData().rows, "Visualization Data");
+        XLSX.writeFile(workbook, "qPCR_Analysis_Results.xlsx");
+      }
+
+      function openHelp() {
+        const modal = byId("qpcr-help-modal");
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+      }
+
+      function closeHelp() {
+        const modal = byId("qpcr-help-modal");
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+      }
+
+      function resizeChart() {
+        if (currentChart && window.Plotly) Plotly.Plots.resize(currentChart);
+      }
+
+      function init() {
+        if (initialized) return;
+        initialized = true;
+
+        byId("qpcr-generate-groups-button")?.addEventListener("click", generateGroupInputs);
+        byId("qpcr-excel-upload")?.addEventListener("change", handleFileUpload);
+        byId("qpcr-group-inputs-container")?.addEventListener("click", handleGroupContainerClick);
+        byId("qpcr-group-inputs-container")?.addEventListener("input", event => {
+          if (event.target.classList.contains("qpcr-group-name")) updateControlSelectOptions();
+        });
+        byId("qpcr-calculate-button")?.addEventListener("click", handleCalculation);
+        byId("qpcr-export-excel-button")?.addEventListener("click", exportResultsToExcel);
+        byId("qpcr-download-chart-button")?.addEventListener("click", () => {
+          if (!currentChart || !window.Plotly) return;
+          const geneType = byId("qpcr-gene-type-select").value || "miRNA";
+          const geneName = byId("qpcr-chart-title-input").value.trim() || "Fold Change";
+          Plotly.downloadImage(currentChart, {
+            format: "png",
+            width: 1400,
+            height: 760,
+            filename: `${geneType}_${geneName}_qPCR_fold_change`
+          });
+        });
+        byId("qpcr-results-container")?.addEventListener("click", event => {
+          const header = event.target.closest(".qpcr-result-header");
+          if (header) header.parentElement.classList.toggle("open");
+        });
+
+        all("#qpcr-chart-customization-panel select, #qpcr-chart-customization-panel input").forEach(element => {
+          element.addEventListener("input", updateChartStyle);
+        });
+
+        byId("qpcr-help-button")?.addEventListener("click", openHelp);
+        byId("qpcr-close-help-button")?.addEventListener("click", closeHelp);
+        byId("qpcr-close-help-button-2")?.addEventListener("click", closeHelp);
+        byId("qpcr-help-modal")?.addEventListener("click", event => {
+          if (event.target.id === "qpcr-help-modal") closeHelp();
+        });
+        byId("qpcr-download-example-button")?.addEventListener("click", downloadExampleWorkbook);
+        byId("qpcr-download-example-button-modal")?.addEventListener("click", downloadExampleWorkbook);
+
+        generateGroupInputs();
+      }
+
+      return { init, resizeChart };
     })();
+
 
     ProteinCalculatorTool.init();
     QpcrFoldChangeTool.init();
