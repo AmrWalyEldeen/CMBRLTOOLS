@@ -257,8 +257,9 @@
 
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
       gap: 22px;
+      align-items: stretch;
     }
 
     .tool-card {
@@ -309,6 +310,22 @@
 
     .badge.live { color: #047857; background: #ecfdf5; border-color: #bbf7d0; }
     .badge.soon { color: #7c2d12; background: #fff7ed; border-color: #fed7aa; }
+
+    .tool-card.coming-soon {
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,247,237,0.72));
+      border-color: #fed7aa;
+    }
+
+    .tool-card.coming-soon .tool-icon {
+      background: #fff7ed;
+    }
+
+    .tool-card.coming-soon .tool-action {
+      color: #9a3412;
+      background: #fff7ed;
+      border-color: #fed7aa;
+      box-shadow: none;
+    }
 
     .tool-view { display: none; margin-top: 34px; }
     .tool-view.active { display: block; }
@@ -1226,7 +1243,6 @@
       <div class="section-title">
         <div>
           <h2>Choose a tool</h2>
-          <p>Each tool is isolated in its own code module, so future updates can target one calculator without rewriting the whole website.</p>
         </div>
       </div>
       <div class="tool-grid">
@@ -1243,6 +1259,27 @@
           <h3>qPCR Fold Change Calculator</h3>
           <p>Calculate ΔCt, ΔΔCt, fold change, control group comparison, replicate summaries, statistics, interactive graphs, and exportable qPCR result tables.</p>
           <button class="primary-button tool-action" type="button" data-open-tool="qpcr-calculator">Open calculator</button>
+        </article>
+        <article class="tool-card coming-soon">
+          <div class="tool-icon">🧬</div>
+          <span class="badge soon">Coming soon</span>
+          <h3>Primer Quality Check</h3>
+          <p>Review primer sequence length, GC content, melting temperature, self-complementarity, and basic PCR suitability checks.</p>
+          <button class="ghost-button tool-action" type="button" disabled>Coming soon</button>
+        </article>
+        <article class="tool-card coming-soon">
+          <div class="tool-icon">🧫</div>
+          <span class="badge soon">Coming soon</span>
+          <h3>Free Docking Request Tool</h3>
+          <p>Collect ligand, protein target, PDB details, and request information for molecular docking support in a structured form.</p>
+          <button class="ghost-button tool-action" type="button" disabled>Coming soon</button>
+        </article>
+        <article class="tool-card coming-soon">
+          <div class="tool-icon">🔬</div>
+          <span class="badge soon">Coming soon</span>
+          <h3>Cell Culture Cell Counting Tool</h3>
+          <p>Support cell counting, dilution planning, viability percentage, and seeding density calculations for cell culture workflows.</p>
+          <button class="ghost-button tool-action" type="button" disabled>Coming soon</button>
         </article>
       </div>
     </section>
