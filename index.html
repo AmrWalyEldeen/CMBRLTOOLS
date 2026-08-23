@@ -1572,6 +1572,7 @@
     }
 
   </style>
+  <link rel="stylesheet" href="assets/cell-culture.css" />
 </head>
 <body>
   <a class="skip-link" href="#tools-home">Skip to tools</a>
@@ -1588,6 +1589,7 @@
         <a class="nav-link" href="#home" data-nav="home">Tools</a>
         <a class="nav-link" href="#protein-calculator" data-nav="protein-calculator">Protein Calculator</a>
         <a class="nav-link" href="#qpcr-calculator" data-nav="qpcr-calculator">qPCR Calculator</a>
+        <a class="nav-link" href="#cell-calculator" data-nav="cell-calculator">Cell Culture</a>
         <a class="nav-link developer-nav-link" href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener"><img src="assets/amr-ahmed-walyeldeen.png" alt="" />Amr Ahmed WalyEldeen</a>
         <a class="primary-button lab-button" href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL ↗</a>
       </div>
@@ -1604,6 +1606,7 @@
           <div class="hero-actions" aria-label="Featured tools">
             <button class="hero-primary-action" type="button" data-open-tool="protein-calculator">Open Protein Calculator <span aria-hidden="true">→</span></button>
             <button class="hero-secondary-action" type="button" data-open-tool="qpcr-calculator">Open qPCR Calculator <span aria-hidden="true">→</span></button>
+            <button class="hero-secondary-action" type="button" data-open-tool="cell-calculator">Open Cell Culture Tool <span aria-hidden="true">→</span></button>
           </div>
           <div class="hero-benefits" aria-label="Website benefits">
             <span>✓ Browser calculations</span>
@@ -1671,12 +1674,12 @@
           <p>A free web-based docking request tool to collect ligand, protein target, PDB details, and structured molecular docking support information.</p>
           <button class="ghost-button tool-action" type="button" disabled>Free web tool coming soon</button>
         </article>
-        <article class="tool-card coming-soon">
+        <article class="tool-card">
           <div class="tool-icon">🔬</div>
-          <span class="badge soon">Free web-based tool · coming soon</span>
-          <h3>Cell Culture Cell Counting Tool</h3>
-          <p>A free web-based cell culture utility for cell counting, dilution planning, viability percentage, and seeding density calculations.</p>
-          <button class="ghost-button tool-action" type="button" disabled>Free web tool coming soon</button>
+          <span class="badge web">Free web-based tool</span>
+          <h3>Cell Culture &amp; Cell Counting Calculator</h3>
+          <p>Calculate viability, hemocytometer cell concentration, seeding and dilution volumes, multi-vessel batch plans, and growth-area-based seeding density in one integrated workflow.</p>
+          <button class="primary-button tool-action" type="button" data-open-tool="cell-calculator">Open cell culture tool</button>
         </article>
       </div>
     </section>
@@ -2113,6 +2116,188 @@
     </section>
 
 
+    <section id="cell-calculator" class="tool-view" aria-labelledby="cell-title">
+      <div class="cell-tool-header">
+        <div class="cell-tool-heading">
+          <div class="cell-tool-mark" aria-hidden="true">🔬</div>
+          <div>
+            <p class="section-kicker">Cell culture workflow</p>
+            <h2 id="cell-title">Cell Culture &amp; Cell Counting Calculator</h2>
+            <p>Viability, hemocytometer counting, dilution, seeding, multi-vessel planning, and density translation in one browser-based tool.</p>
+          </div>
+        </div>
+        <div class="cell-tool-actions">
+          <button class="ghost-button" type="button" data-nav="home">← Back to tools</button>
+          <button id="printBtn" class="primary-button" type="button">Print / Save PDF</button>
+          <button id="resetBtn" class="ghost-button" type="button">Reset cell tool</button>
+        </div>
+      </div>
+
+      <div class="app-shell">
+<section class="notice-card" role="note">
+      <strong>Planning tool:</strong> Calculations are deterministic, but seeding density and working volume depend on the specific cell line, assay, coating, vessel manufacturer and laboratory SOP. Treat built-in presets as editable starting points and verify them against your validated protocol.
+    </section>
+
+    <nav class="tabs" aria-label="Calculator sections">
+      <button class="tab active" data-tab="dashboard" type="button">Dashboard</button>
+      <button class="tab" data-tab="viability" type="button">Viability</button>
+      <button class="tab" data-tab="counting" type="button">Cell Counting</button>
+      <button class="tab" data-tab="seeding" type="button">Seeding & Dilution</button>
+      <button class="tab" data-tab="batch" type="button">Multi-vessel Planner</button>
+      <button class="tab" data-tab="density" type="button">Density Helper</button>
+    </nav>
+
+    <section id="dashboard" class="tab-panel active">
+      <div class="hero-grid">
+        <article class="hero-card">
+          <span class="eyebrow">Workflow</span>
+          <h2>From cell count to final plate plan</h2>
+          <p>Enter your measured concentration, select a plate or flask, define your target cells and media volume, then get exact stock and media volumes with an overage allowance.</p>
+          <div class="workflow-steps">
+            <div><span>1</span><p><b>Count</b><br />Calculate cells/mL and viability.</p></div>
+            <div><span>2</span><p><b>Plan</b><br />Choose vessel, wells and target density.</p></div>
+            <div><span>3</span><p><b>Prepare</b><br />Get stock volume, media volume and totals.</p></div>
+          </div>
+        </article>
+        <article class="summary-card">
+          <span class="eyebrow">Current session</span>
+          <div class="summary-metric"><span>Last cell concentration</span><strong id="sessionConcentration">—</strong></div>
+          <div class="summary-metric"><span>Last viability</span><strong id="sessionViability">—</strong></div>
+          <div class="summary-metric"><span>Last seeding plan</span><strong id="sessionPlan">—</strong></div>
+        </article>
+      </div>
+
+      <div class="card-grid three">
+        <button class="feature-card jump" data-jump="counting" type="button">
+          <div class="feature-icon">#</div><h3>Cell Counting</h3><p>Average replicate squares, apply dilution factor and calculate viable cells/mL.</p>
+        </button>
+        <button class="feature-card jump" data-jump="seeding" type="button">
+          <div class="feature-icon">⇄</div><h3>Seeding & Dilution</h3><p>Calculate stock volume, media volume, total cells and working suspension.</p>
+        </button>
+        <button class="feature-card jump" data-jump="batch" type="button">
+          <div class="feature-icon">▦</div><h3>Multi-vessel Planner</h3><p>Plan several plates and flasks in one batch and combine requirements.</p>
+        </button>
+      </div>
+    </section>
+
+    <section id="viability" class="tab-panel">
+      <div class="section-heading">
+        <div><span class="eyebrow">Calculator 01</span><h2>Cell Viability</h2></div>
+        <p>Calculate percentage viability from live and dead cell counts.</p>
+      </div>
+      <div class="calculator-grid">
+        <article class="card form-card">
+          <label>Live cells<input id="viableLive" type="number" min="0" step="1" value="90" /></label>
+          <label>Dead cells<input id="viableDead" type="number" min="0" step="1" value="10" /></label>
+          <button id="calcViability" class="btn btn-primary" type="button">Calculate viability</button>
+          <div class="formula">Viability (%) = Live ÷ (Live + Dead) × 100</div>
+        </article>
+        <article class="card result-card" id="viabilityResult">
+          <div class="result-empty">Enter counts and calculate.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="counting" class="tab-panel">
+      <div class="section-heading">
+        <div><span class="eyebrow">Calculator 02</span><h2>Hemocytometer Cell Counting</h2></div>
+        <p>Uses the standard 10⁴ conversion factor for a Neubauer large square. A custom chamber factor can be entered.</p>
+      </div>
+      <div class="calculator-grid">
+        <article class="card form-card">
+          <div class="subheading-row"><h3>Live-cell counts by square</h3><button id="addLiveSquare" class="mini-btn" type="button">+ Add square</button></div>
+          <div id="liveSquares" class="count-grid"></div>
+          <div class="subheading-row"><h3>Dead-cell counts by square</h3><button id="addDeadSquare" class="mini-btn" type="button">+ Add square</button></div>
+          <div id="deadSquares" class="count-grid"></div>
+          <div class="form-grid two">
+            <label>Dilution factor<input id="countDilution" type="number" min="0.0001" step="0.1" value="2" /></label>
+            <label>Chamber factor<input id="chamberFactor" type="number" min="1" step="1" value="10000" /></label>
+            <label>Original suspension volume (mL)<input id="suspensionVolume" type="number" min="0" step="0.1" value="10" /></label>
+          </div>
+          <button id="calcCount" class="btn btn-primary" type="button">Calculate cell concentration</button>
+          <div class="formula">Cells/mL = Average cells per square × Dilution factor × Chamber factor</div>
+        </article>
+        <article class="card result-card" id="countResult">
+          <div class="result-empty">Add replicate counts and calculate.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="seeding" class="tab-panel">
+      <div class="section-heading">
+        <div><span class="eyebrow">Calculator 03</span><h2>Seeding & Dilution</h2></div>
+        <p>Calculate the cell-stock and media volumes required for a plate, flask or custom vessel.</p>
+      </div>
+      <div class="calculator-grid wide-result">
+        <article class="card form-card">
+          <div class="form-grid two">
+            <label>Cell stock concentration (cells/mL)
+              <div class="input-with-action"><input id="seedStockConcentration" type="number" min="1" step="1000" value="1000000" /><button id="useLastCount" type="button" title="Use last calculated concentration">Use count</button></div>
+            </label>
+            <label>Vessel type<select id="seedVessel"></select></label>
+            <label>Number of plates/flasks<input id="seedPlateCount" type="number" min="1" step="1" value="1" /></label>
+            <label>Wells/vessels to seed<input id="seedWells" type="number" min="1" step="1" value="6" /></label>
+            <label>Target cells per well/vessel<input id="seedCellsPerWell" type="number" min="1" step="1000" value="200000" /></label>
+            <label>Final media per well/vessel (mL)<input id="seedMediaPerWell" type="number" min="0.001" step="0.05" value="2" /></label>
+            <label>Preparation overage (%)<input id="seedOverage" type="number" min="0" max="100" step="1" value="10" /></label>
+          </div>
+          <button id="calcSeeding" class="btn btn-primary" type="button">Build seeding plan</button>
+        </article>
+        <article class="card result-card" id="seedingResult"><div class="result-empty">Define your seeding plan and calculate.</div></article>
+      </div>
+    </section>
+
+    <section id="batch" class="tab-panel">
+      <div class="section-heading">
+        <div><span class="eyebrow">Calculator 04</span><h2>Multi-vessel Batch Planner</h2></div>
+        <p>Combine several plate/flask formats into one master preparation plan.</p>
+      </div>
+      <article class="card form-card full-card">
+        <div class="form-grid three compact">
+          <label>Cell stock concentration (cells/mL)<div class="input-with-action"><input id="batchStockConcentration" type="number" min="1" step="1000" value="1000000" /><button id="batchUseLastCount" type="button">Use count</button></div></label>
+          <label>Global overage (%)<input id="batchOverage" type="number" min="0" max="100" step="1" value="10" /></label>
+          <div class="action-field"><button id="addBatchRow" class="btn btn-secondary" type="button">+ Add vessel group</button></div>
+        </div>
+        <div class="table-wrap">
+          <table class="planner-table">
+            <thead><tr><th>Vessel</th><th>Qty</th><th>Positions used</th><th>Cells / position</th><th>mL / position</th><th>Action</th></tr></thead>
+            <tbody id="batchRows"></tbody>
+          </table>
+        </div>
+        <button id="calcBatch" class="btn btn-primary" type="button">Calculate complete batch</button>
+      </article>
+      <article class="card result-card full-card" id="batchResult"><div class="result-empty">Add one or more vessel groups and calculate.</div></article>
+    </section>
+
+    <section id="density" class="tab-panel">
+      <div class="section-heading">
+        <div><span class="eyebrow">Reference helper</span><h2>Seeding Density Helper</h2></div>
+        <p>Translate an editable cells/cm² starting density into cells per well or flask.</p>
+      </div>
+      <div class="calculator-grid">
+        <article class="card form-card">
+          <label>Growth / assay intent
+            <select id="densityPreset">
+              <option value="5000">Low starting density — 5,000 cells/cm²</option>
+              <option value="10000" selected>General starting point — 10,000 cells/cm²</option>
+              <option value="20000">Higher starting density — 20,000 cells/cm²</option>
+              <option value="custom">Custom density</option>
+            </select>
+          </label>
+          <label>Target density (cells/cm²)<input id="densityValue" type="number" min="1" step="500" value="10000" /></label>
+          <label>Vessel type<select id="densityVessel"></select></label>
+          <button id="calcDensity" class="btn btn-primary" type="button">Calculate cells per vessel</button>
+          <div class="formula">Target cells = Growth area (cm²) × Target density (cells/cm²)</div>
+          <div class="helper-note">These presets are intentionally generic. Different cell lines can require substantially different starting densities; replace them with your validated SOP values.</div>
+        </article>
+        <article class="card result-card" id="densityResult"><div class="result-empty">Choose a density and vessel to calculate.</div></article>
+      </div>
+    </section>
+      </div>
+      <p class="cell-tool-footer">Cell Culture Calculator • Runs locally in your browser • Built into the CMBRL Biology Tools suite.</p>
+    </section>
+
+
     <footer class="footer">
       <div class="footer-brand">
         <img src="assets/cmbrl-logo.jpg" alt="CMBRL logo" />
@@ -2128,6 +2313,7 @@
     </footer>
   </div>
 
+  <script src="assets/cell-culture.js"></script>
   <script>
     /* =========================================================
        TOOL HUB MODULE
@@ -2135,7 +2321,7 @@
        should have its own module below, separate from the hub.
        ========================================================= */
     const ToolHub = (() => {
-      const TOOL_IDS = ["protein-calculator", "qpcr-calculator"];
+      const TOOL_IDS = ["protein-calculator", "qpcr-calculator", "cell-calculator"];
 
       function byId(id) { return document.getElementById(id); }
 
@@ -2162,6 +2348,9 @@
         }
         if (normalizedTarget === "qpcr-calculator") {
           setTimeout(() => QpcrFoldChangeTool.resizeChart(), 80);
+        }
+        if (normalizedTarget === "cell-calculator") {
+          setTimeout(() => window.CellCultureTool?.onShow?.(), 40);
         }
       }
 

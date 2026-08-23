@@ -1,38 +1,53 @@
-# CMBRL Online Biology Tools — Enhanced GitHub Pages Package
+# CMBRL Online Biology Tools — GitHub Pages Package
 
 This package is ready to publish as a static GitHub Pages website.
 
-## Included
+## Live tools
 
-- `index.html` — enhanced single-page application with the original calculator logic preserved.
-- `assets/cmbrl-logo.jpg` — CMBRL laboratory logo supplied for the site.
-- `assets/amr-ahmed-walyeldeen.png` — developer photo supplied for the site.
-- `.nojekyll` — prevents GitHub Pages/Jekyll processing from interfering with static assets.
+1. **Protein Concentration Calculator** — standard curves, blank correction, dilution factors, multiple fitting models, diagnostics, and spreadsheet export.
+2. **qPCR Fold Change Calculator** — ΔCt, ΔΔCt, fold change, replicate summaries, statistics, interactive visualization, and spreadsheet/chart export.
+3. **Cell Culture & Cell Counting Calculator** — cell viability, hemocytometer counting, seeding/dilution planning, multi-vessel batch planning, and growth-area-based density translation.
 
-## Main improvements
+## Included files
 
-- CMBRL-branded visual system using blue, teal, and violet tones from the laboratory identity.
-- CMBRL logo in navigation, hero identity card, favicon, and footer.
-- Developer photo placed beside **Amr Ahmed WalyEldeen** in the navigation/hero/footer.
-- Redesigned hero, tool cards, buttons, panels, tables, and status elements.
-- Refined typography using Manrope + Source Serif 4.
-- Updated protein/qPCR chart palettes and chart typography.
-- Responsive/mobile navigation and layout refinements.
-- Accessibility improvements: skip link, focus states, reduced-motion support, clearer contrast.
-- SEO/social metadata and browser theme color.
+- `index.html` — the integrated single-page CMBRL Biology Tools website.
+- `assets/cell-culture.css` — scoped styling for the new cell-culture calculator so it does not interfere with the existing tools.
+- `assets/cell-culture.js` — cell-culture calculation logic and interactions.
+- `assets/cmbrl-logo.jpg` — CMBRL laboratory logo.
+- `assets/amr-ahmed-walyeldeen.png` — developer photo for Amr Ahmed WalyEldeen.
+- `.nojekyll` — keeps GitHub Pages from applying unwanted Jekyll processing.
+- `ENHANCEMENTS.md` — summary of the website improvements.
+
+## Cell-culture calculator modules
+
+- Cell viability from live and dead counts.
+- Hemocytometer cell counting with editable dilution and chamber factors.
+- Seeding and dilution calculations using cell-stock concentration, target cells, working volume, vessel capacity, and preparation overage.
+- Multi-plate / multi-flask batch planning.
+- Editable density helper converting cells/cm² into cells per well or vessel.
+- Plate/flask visualizations.
+- Print / Save PDF for the active result view.
+- Session handoff: the latest viable-cell concentration can be inserted directly into seeding and batch-planning workflows.
+
+## Scientific configuration notes
+
+The cell-culture tool includes editable/common starting values for vessel growth area and working volume. These can vary by manufacturer and laboratory SOP. Edit the `VESSELS` object near the top of `assets/cell-culture.js` when you need to match specific labware.
+
+The density helper uses generic editable starting values (5,000 / 10,000 / 20,000 cells/cm²). These are geometry/planning examples rather than cell-line-specific recommendations.
+
+The default Neubauer large-square chamber factor is `10,000` (10⁴), and the field remains editable for other chamber geometries or counting methods.
 
 ## Publish to GitHub Pages
 
-1. Open the GitHub repository you want to use.
-2. Upload **the contents of this folder** to the repository root (not the enclosing folder itself).
-3. Commit the files.
-4. In GitHub, open **Settings → Pages**.
-5. Under **Build and deployment**, choose **Deploy from a branch**.
-6. Select your publishing branch (usually `main`) and `/ (root)`, then save.
-7. Wait for the GitHub Pages deployment to complete.
+1. Open the GitHub repository you want to publish.
+2. Upload **the contents of this folder** to the repository root.
+3. If an older website already exists, replace the old `index.html` and upload/replace the full `assets` folder.
+4. Commit the changes.
+5. Open **Settings → Pages** in GitHub.
+6. Under **Build and deployment**, choose **Deploy from a branch**.
+7. Select the publishing branch (usually `main`) and `/ (root)`, then save.
+8. Wait for GitHub Pages to finish deployment.
 
-If the repository already contains the old website, replace its old `index.html` with this one and upload the `assets` folder.
+## Technical notes
 
-## Technical note
-
-The calculators continue to use the original browser-side JavaScript logic and existing CDN libraries (Chart.js, SheetJS/XLSX, Plotly, and jStat). The enhancement package focuses on visual design, branding, responsive behavior, accessibility, and presentation without restructuring the calculation modules.
+All three calculators run client-side in the browser. The cell-culture calculator is self-contained in local CSS/JavaScript files and sends no culture data to a server. The existing protein and qPCR tools continue to use their original browser-side logic and CDN libraries (Chart.js, SheetJS/XLSX, Plotly, and jStat).

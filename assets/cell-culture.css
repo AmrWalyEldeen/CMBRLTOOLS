@@ -1,0 +1,309 @@
+#cell-calculator{
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --text: #142033;
+  --muted: #667085;
+  --line: #d9e2ec;
+  --primary: #2251cc;
+  --primary-2: #153ca5;
+  --success: #147d64;
+  --warning: #a05b00;
+  --danger: #b42318;
+  --shadow: 0 14px 38px rgba(18, 37, 63, 0.09);
+  --radius: 18px;
+}
+
+#cell-calculator *{ box-sizing: border-box; }
+#cell-calculator{ scroll-behavior: smooth; }
+#cell-calculator{
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(34,81,204,.08), transparent 26rem),
+    var(--bg);
+}
+#cell-calculator button, #cell-calculator input, #cell-calculator select{ font: inherit; }
+#cell-calculator button{ cursor: pointer; }
+
+#cell-calculator .app-header{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  padding: 18px clamp(18px, 4vw, 56px);
+  background: rgba(255,255,255,.92);
+  border-bottom: 1px solid rgba(217,226,236,.9);
+  backdrop-filter: blur(14px);
+}
+#cell-calculator .brand-wrap{ display: flex; align-items: center; gap: 14px; }
+#cell-calculator .brand-mark{
+  width: 48px; height: 48px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--primary), #5f7de5);
+  color: white; font-weight: 800; letter-spacing: .5px;
+  box-shadow: 0 8px 24px rgba(34,81,204,.25);
+}
+#cell-calculator .brand-wrap h1{ margin: 0 0 2px; font-size: 1.18rem; }
+#cell-calculator .brand-wrap p{ margin: 0; color: var(--muted); font-size: .86rem; }
+#cell-calculator .header-actions{ display: flex; gap: 10px; }
+
+#cell-calculator .app-shell{ width: min(1320px, calc(100% - 32px)); margin: 24px auto 48px; }
+#cell-calculator .notice-card{
+  padding: 14px 18px; margin-bottom: 18px;
+  background: #fff8e8; border: 1px solid #f2d59f;
+  border-radius: 14px; color: #69410b; line-height: 1.5;
+}
+
+#cell-calculator .tabs{
+  display: flex; gap: 8px; overflow-x: auto; padding: 6px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(18,37,63,.04);
+}
+#cell-calculator .tab{
+  border: 0; background: transparent; color: var(--muted); white-space: nowrap;
+  padding: 10px 14px; border-radius: 11px; font-weight: 650;
+}
+#cell-calculator .tab:hover{ background: var(--surface-2); color: var(--text); }
+#cell-calculator .tab.active{ background: var(--primary); color: white; }
+#cell-calculator .tab-panel{ display: none; padding-top: 22px; }
+#cell-calculator .tab-panel.active{ display: block; }
+
+#cell-calculator .hero-grid{ display: grid; grid-template-columns: 1.7fr .8fr; gap: 18px; }
+#cell-calculator .hero-card, #cell-calculator .summary-card, #cell-calculator .card, #cell-calculator .feature-card{
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+#cell-calculator .hero-card{ padding: clamp(24px, 4vw, 42px); background: linear-gradient(145deg, #fff, #f6f8ff); }
+#cell-calculator .hero-card h2{ font-size: clamp(1.7rem, 3vw, 2.7rem); line-height: 1.08; margin: 8px 0 14px; max-width: 760px; }
+#cell-calculator .hero-card > p{ color: var(--muted); font-size: 1.04rem; line-height: 1.65; max-width: 820px; }
+#cell-calculator .eyebrow{ color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; }
+#cell-calculator .workflow-steps{ display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 26px; }
+#cell-calculator .workflow-steps div{ display: flex; align-items: flex-start; gap: 10px; padding: 13px; background: rgba(255,255,255,.7); border: 1px solid var(--line); border-radius: 14px; }
+#cell-calculator .workflow-steps span{ flex: 0 0 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--primary); color: white; font-weight: 800; }
+#cell-calculator .workflow-steps p{ margin: 0; color: var(--muted); line-height: 1.35; }
+#cell-calculator .workflow-steps b{ color: var(--text); }
+#cell-calculator .summary-card{ padding: 22px; }
+#cell-calculator .summary-card .eyebrow{ display: block; margin-bottom: 14px; }
+#cell-calculator .summary-metric{ padding: 16px 0; border-bottom: 1px solid var(--line); }
+#cell-calculator .summary-metric:last-child{ border-bottom: 0; }
+#cell-calculator .summary-metric span{ display: block; color: var(--muted); font-size: .82rem; margin-bottom: 4px; }
+#cell-calculator .summary-metric strong{ font-size: 1.15rem; }
+
+#cell-calculator .card-grid{ display: grid; gap: 18px; margin-top: 18px; }
+#cell-calculator .card-grid.three{ grid-template-columns: repeat(3,1fr); }
+#cell-calculator .feature-card{ text-align: left; padding: 22px; transition: transform .18s ease, box-shadow .18s ease; }
+#cell-calculator .feature-card:hover{ transform: translateY(-2px); box-shadow: 0 18px 42px rgba(18,37,63,.12); }
+#cell-calculator .feature-card h3{ margin: 12px 0 8px; }
+#cell-calculator .feature-card p{ color: var(--muted); line-height: 1.5; margin: 0; }
+#cell-calculator .feature-icon{ width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; background: #eef3ff; color: var(--primary); font-weight: 900; font-size: 1.2rem; }
+
+#cell-calculator .section-heading{ display: flex; justify-content: space-between; gap: 24px; align-items: end; margin: 6px 0 16px; }
+#cell-calculator .section-heading h2{ margin: 5px 0 0; font-size: clamp(1.5rem, 3vw, 2rem); }
+#cell-calculator .section-heading p{ color: var(--muted); max-width: 620px; margin: 0; line-height: 1.5; }
+#cell-calculator .calculator-grid{ display: grid; grid-template-columns: minmax(340px,.9fr) minmax(420px,1.1fr); gap: 18px; align-items: start; }
+#cell-calculator .calculator-grid.wide-result{ grid-template-columns: minmax(380px,.85fr) minmax(520px,1.15fr); }
+#cell-calculator .card{ padding: 22px; }
+#cell-calculator .full-card{ margin-bottom: 18px; }
+#cell-calculator .form-card label{ display: block; font-weight: 700; font-size: .9rem; color: #344054; margin-bottom: 14px; }
+#cell-calculator input, #cell-calculator select{
+  width: 100%; margin-top: 7px; border: 1px solid #cbd5e1; background: white; color: var(--text);
+  border-radius: 11px; padding: 11px 12px; outline: none; transition: border .15s, box-shadow .15s;
+}
+#cell-calculator input:focus, #cell-calculator select:focus{ border-color: var(--primary); box-shadow: 0 0 0 3px rgba(34,81,204,.12); }
+#cell-calculator .form-grid{ display: grid; gap: 12px; }
+#cell-calculator .form-grid.two{ grid-template-columns: repeat(2,1fr); }
+#cell-calculator .form-grid.three{ grid-template-columns: repeat(3,1fr); }
+#cell-calculator .form-grid.compact label{ margin-bottom: 0; }
+#cell-calculator .input-with-action{ display: flex; gap: 7px; margin-top: 7px; }
+#cell-calculator .input-with-action input{ margin-top: 0; }
+#cell-calculator .input-with-action button{ border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 0 10px; white-space: nowrap; font-size: .82rem; font-weight: 700; color: var(--primary); }
+#cell-calculator .action-field{ display: flex; align-items: end; padding-bottom: 1px; }
+
+#cell-calculator .btn{ border: 0; border-radius: 11px; padding: 11px 15px; font-weight: 750; }
+#cell-calculator .btn-primary{ background: var(--primary); color: white; box-shadow: 0 7px 18px rgba(34,81,204,.2); }
+#cell-calculator .btn-primary:hover{ background: var(--primary-2); }
+#cell-calculator .btn-secondary{ background: #eef3ff; color: var(--primary); border: 1px solid #cad7ff; }
+#cell-calculator .btn-ghost{ background: white; color: var(--muted); border: 1px solid var(--line); }
+#cell-calculator .form-card > .btn-primary, #cell-calculator .full-card > .btn-primary{ margin-top: 4px; }
+#cell-calculator .mini-btn{ border: 1px solid var(--line); background: white; color: var(--primary); border-radius: 9px; padding: 7px 9px; font-size: .78rem; font-weight: 700; }
+
+#cell-calculator .formula, #cell-calculator .helper-note{ margin-top: 14px; padding: 11px 12px; border-radius: 10px; background: var(--surface-2); color: var(--muted); font-size: .82rem; line-height: 1.5; border: 1px solid var(--line); }
+#cell-calculator .helper-note{ background: #fff8e8; border-color: #f2d59f; color: #69410b; }
+#cell-calculator .subheading-row{ display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 4px 0 8px; }
+#cell-calculator .subheading-row h3{ margin: 0; font-size: .95rem; }
+#cell-calculator .count-grid{ display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-bottom: 16px; }
+#cell-calculator .count-box{ position: relative; }
+#cell-calculator .count-box input{ margin-top: 0; padding-right: 26px; }
+#cell-calculator .count-box button{ position: absolute; right: 4px; top: 5px; width: 22px; height: 22px; border: 0; background: transparent; color: #98a2b3; font-size: 14px; }
+
+#cell-calculator .result-card{ min-height: 300px; }
+#cell-calculator .result-empty{ min-height: 250px; display: grid; place-items: center; color: var(--muted); text-align: center; border: 1px dashed var(--line); border-radius: 14px; }
+#cell-calculator .result-top{ display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+#cell-calculator .result-top h3{ margin: 0 0 5px; font-size: 1.25rem; }
+#cell-calculator .result-top p{ margin: 0; color: var(--muted); font-size: .88rem; }
+#cell-calculator .metric-grid{ display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+#cell-calculator .metric{ background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 13px; }
+#cell-calculator .metric .label{ color: var(--muted); font-size: .76rem; margin-bottom: 4px; }
+#cell-calculator .metric .value{ font-size: 1.2rem; font-weight: 850; word-break: break-word; }
+#cell-calculator .metric .sub{ color: var(--muted); font-size: .75rem; margin-top: 4px; }
+#cell-calculator .badge{ display: inline-flex; align-items: center; padding: 6px 9px; border-radius: 999px; font-size: .76rem; font-weight: 800; }
+#cell-calculator .badge.good{ background: #eaf8f3; color: var(--success); }
+#cell-calculator .badge.warn{ background: #fff3da; color: var(--warning); }
+#cell-calculator .badge.bad{ background: #ffebe9; color: var(--danger); }
+
+#cell-calculator .progress-wrap{ margin: 18px 0; }
+#cell-calculator .progress-label{ display: flex; justify-content: space-between; font-size: .82rem; color: var(--muted); margin-bottom: 7px; }
+#cell-calculator .progress{ height: 12px; border-radius: 999px; background: #e9eef5; overflow: hidden; }
+#cell-calculator .progress > div{ height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--primary), #6d87e9); }
+
+#cell-calculator .steps-box{ margin-top: 16px; border-top: 1px solid var(--line); padding-top: 16px; }
+#cell-calculator .steps-box h4{ margin: 0 0 10px; }
+#cell-calculator .steps-list{ list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
+#cell-calculator .steps-list li{ display: grid; grid-template-columns: 28px 1fr; gap: 9px; align-items: start; color: #475467; line-height: 1.45; }
+#cell-calculator .steps-list span{ width: 25px; height: 25px; border-radius: 50%; background: #eef3ff; color: var(--primary); display: grid; place-items: center; font-size: .75rem; font-weight: 850; }
+
+#cell-calculator .vessel-visual{ margin: 18px 0; background: #f8fafc; border: 1px solid var(--line); border-radius: 14px; padding: 15px; }
+#cell-calculator .plate{ display: grid; gap: 5px; max-width: 460px; margin: 0 auto; aspect-ratio: 1.45/1; padding: 12px; background: white; border: 2px solid #cfd8e3; border-radius: 18px; }
+#cell-calculator .well{ border: 1.5px solid #8ea4bb; background: #eef4fb; border-radius: 50%; min-width: 0; min-height: 0; }
+#cell-calculator .flask{ max-width: 420px; margin: 0 auto; height: 190px; position: relative; border: 2px solid #aab8c8; background: linear-gradient(135deg,#fff,#eef4fb); border-radius: 42px 22px 22px 42px; }
+#cell-calculator .flask:after{ content: ""; position: absolute; right: -44px; top: 54px; width: 46px; height: 76px; border: 2px solid #aab8c8; border-left: 0; border-radius: 0 13px 13px 0; background: #fff; }
+#cell-calculator .flask-label{ position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--muted); font-weight: 800; }
+#cell-calculator .vessel-caption{ text-align: center; margin-top: 10px; color: var(--muted); font-size: .82rem; }
+
+#cell-calculator .table-wrap{ overflow-x: auto; margin: 16px 0; }
+#cell-calculator .planner-table{ width: 100%; border-collapse: collapse; min-width: 820px; }
+#cell-calculator .planner-table th, #cell-calculator .planner-table td{ border-bottom: 1px solid var(--line); padding: 9px; text-align: left; font-size: .86rem; }
+#cell-calculator .planner-table th{ color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
+#cell-calculator .planner-table input, #cell-calculator .planner-table select{ margin: 0; min-width: 105px; }
+#cell-calculator .remove-row{ border: 0; background: #fff1f0; color: var(--danger); padding: 8px 10px; border-radius: 9px; font-weight: 750; }
+
+#cell-calculator .batch-summary{ display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+#cell-calculator .batch-breakdown{ display: grid; gap: 10px; }
+#cell-calculator .batch-item{ border: 1px solid var(--line); border-radius: 12px; padding: 13px; background: #fbfcfe; }
+#cell-calculator .batch-item strong{ display: block; margin-bottom: 5px; }
+#cell-calculator .batch-item div{ color: var(--muted); font-size: .84rem; line-height: 1.5; }
+
+#cell-calculator .warning-box{ margin-top: 14px; padding: 12px 13px; border-radius: 11px; background: #fff1f0; color: #8b1a12; border: 1px solid #ffc8c2; font-size: .85rem; line-height: 1.5; }
+#cell-calculator .success-box{ margin-top: 14px; padding: 12px 13px; border-radius: 11px; background: #ecf8f4; color: #11644f; border: 1px solid #bce7d8; font-size: .85rem; line-height: 1.5; }
+#cell-calculator .cell-tool-footer{ text-align: center; color: var(--muted); padding: 10px 20px 34px; font-size: .82rem; }
+
+@media (max-width: 960px) {
+  #cell-calculator .hero-grid, #cell-calculator .calculator-grid, #cell-calculator .calculator-grid.wide-result{ grid-template-columns: 1fr; }
+  #cell-calculator .card-grid.three{ grid-template-columns: 1fr; }
+  #cell-calculator .batch-summary{ grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 680px) {
+  #cell-calculator .app-header{ align-items: flex-start; }
+  #cell-calculator .header-actions{ display: none; }
+  #cell-calculator .app-shell{ width: min(100% - 20px, 1320px); margin-top: 14px; }
+  #cell-calculator .workflow-steps, #cell-calculator .form-grid.two, #cell-calculator .form-grid.three, #cell-calculator .metric-grid{ grid-template-columns: 1fr; }
+  #cell-calculator .section-heading{ display: block; }
+  #cell-calculator .section-heading p{ margin-top: 8px; }
+  #cell-calculator .count-grid{ grid-template-columns: repeat(3,1fr); }
+  #cell-calculator .batch-summary{ grid-template-columns: 1fr; }
+}
+
+@media print {
+  #cell-calculator .app-header, #cell-calculator .tabs, #cell-calculator .notice-card, #cell-calculator .cell-tool-footer, #cell-calculator .form-card, #cell-calculator .section-heading p{ display: none !important; }
+  #cell-calculator{ background: white; }
+  #cell-calculator .app-shell{ width: 100%; margin: 0; }
+  #cell-calculator .tab-panel{ display: none !important; }
+  #cell-calculator .tab-panel.active{ display: block !important; }
+  #cell-calculator .calculator-grid, #cell-calculator .calculator-grid.wide-result{ grid-template-columns: 1fr; }
+  #cell-calculator .result-card{ box-shadow: none; border: 1px solid #aaa; }
+}
+
+
+/* CMBRL integration refinements */
+#cell-calculator {
+  --bg: #f4f7fc;
+  --surface: #ffffff;
+  --surface-2: #f7f9fd;
+  --text: #101a33;
+  --muted: #61708a;
+  --line: #dce4f0;
+  --primary: #123f92;
+  --primary-2: #0b2f70;
+  --success: #087f70;
+  --warning: #a15c08;
+  --danger: #b4233f;
+  --shadow: 0 16px 44px rgba(11,47,112,.08);
+  --radius: 20px;
+  color: var(--text);
+  font-family: var(--font, "Manrope", Inter, ui-sans-serif, system-ui, sans-serif);
+}
+#cell-calculator .cell-tool-header {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 26px;
+  border: 1px solid #dce4f0;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(109,40,217,.10), transparent 20rem),
+    radial-gradient(circle at 0% 0%, rgba(15,155,142,.10), transparent 22rem),
+    linear-gradient(180deg,#fff,#f8fbff);
+  box-shadow: 0 14px 38px rgba(11,47,112,.07);
+}
+#cell-calculator .cell-tool-heading { display:flex; align-items:center; gap:16px; min-width:0; }
+#cell-calculator .cell-tool-mark {
+  width: 58px; height: 58px; flex:0 0 auto; display:grid; place-items:center;
+  border-radius:18px; color:#fff; font-size:28px;
+  background:linear-gradient(135deg,#123f92,#6d28d9 58%,#0f9b8e);
+  box-shadow:0 12px 26px rgba(18,63,146,.20);
+}
+#cell-calculator .cell-tool-header h2 { margin:0; color:#122244; font-size:clamp(26px,3vw,36px); letter-spacing:-.045em; }
+#cell-calculator .cell-tool-header p { margin:6px 0 0; color:var(--muted); line-height:1.6; }
+#cell-calculator .cell-tool-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:9px; }
+#cell-calculator .app-shell { width:100%; margin:0 0 42px; }
+#cell-calculator .notice-card { margin-bottom:16px; border-radius:16px; }
+#cell-calculator .tabs { position:sticky; top:96px; z-index:12; border-radius:16px; background:rgba(255,255,255,.94); backdrop-filter:blur(14px); }
+#cell-calculator .tab { border-radius:11px; }
+#cell-calculator .tab.active { background:linear-gradient(135deg,#123f92,#245bc2); box-shadow:0 7px 18px rgba(18,63,146,.18); }
+#cell-calculator .hero-card { background:linear-gradient(145deg,#fff,#f4f7ff); }
+#cell-calculator .hero-card h2, #cell-calculator .section-heading h2 { color:#14264c; letter-spacing:-.035em; }
+#cell-calculator .feature-card:hover { border-color:#c8d6eb; }
+#cell-calculator .feature-icon { background:linear-gradient(145deg,#edf3ff,#f4edff); color:#123f92; }
+#cell-calculator .btn-primary { background:linear-gradient(135deg,#123f92,#245bc2); box-shadow:0 8px 20px rgba(18,63,146,.20); }
+#cell-calculator .btn-primary:hover { background:linear-gradient(135deg,#0b2f70,#174aab); }
+#cell-calculator .btn-secondary { background:#edf3ff; color:#123f92; border-color:#cfddf6; }
+#cell-calculator .progress > div { background:linear-gradient(90deg,#123f92,#6d28d9,#0f9b8e); }
+#cell-calculator .workflow-steps span, #cell-calculator .steps-list span { background:#edf3ff; color:#123f92; }
+#cell-calculator .workflow-steps span { background:linear-gradient(135deg,#123f92,#245bc2); color:#fff; }
+#cell-calculator .formula { background:#f5f8ff; }
+#cell-calculator .vessel-visual { background:linear-gradient(180deg,#f9fbff,#f4f7fc); }
+#cell-calculator .well { background:#edf3ff; border-color:#8da5ca; }
+#cell-calculator .cell-tool-footer { margin-top:18px; text-align:center; color:var(--muted); font-size:12px; }
+
+@media (max-width: 820px) {
+  #cell-calculator .cell-tool-header { grid-template-columns:1fr; padding:20px; }
+  #cell-calculator .cell-tool-actions { justify-content:flex-start; }
+  #cell-calculator .tabs { position:static; }
+}
+@media (max-width: 560px) {
+  #cell-calculator .cell-tool-heading { align-items:flex-start; }
+  #cell-calculator .cell-tool-mark { width:48px; height:48px; border-radius:15px; font-size:23px; }
+  #cell-calculator .cell-tool-actions > * { flex:1 1 150px; }
+}
+
+@media print {
+  body.cc-print-mode .topbar,
+  body.cc-print-mode #home-hero,
+  body.cc-print-mode #tools-home,
+  body.cc-print-mode #protein-calculator,
+  body.cc-print-mode #qpcr-calculator,
+  body.cc-print-mode .footer,
+  body.cc-print-mode #cell-calculator .cell-tool-header,
+  body.cc-print-mode #cell-calculator .notice-card,
+  body.cc-print-mode #cell-calculator .tabs,
+  body.cc-print-mode #cell-calculator .form-card,
+  body.cc-print-mode #cell-calculator .section-heading p { display:none !important; }
+  body.cc-print-mode #cell-calculator { display:block !important; margin:0 !important; }
+  body.cc-print-mode .site-shell { max-width:none; padding:0; }
+}
