@@ -189,6 +189,14 @@
 
 #cell-calculator .warning-box{ margin-top: 14px; padding: 12px 13px; border-radius: 11px; background: #fff1f0; color: #8b1a12; border: 1px solid #ffc8c2; font-size: .85rem; line-height: 1.5; }
 #cell-calculator .success-box{ margin-top: 14px; padding: 12px 13px; border-radius: 11px; background: #ecf8f4; color: #11644f; border: 1px solid #bce7d8; font-size: .85rem; line-height: 1.5; }
+
+#cell-calculator .stock-withdrawal{ margin-top: 16px; padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(135deg, #f7fbff, #f4fffb); box-shadow: 0 10px 26px rgba(18,63,146,.06); }
+#cell-calculator .stock-withdrawal-head{ display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+#cell-calculator .stock-withdrawal-head h4{ margin: 3px 0 0; font-size: 1rem; color:#14264c; }
+#cell-calculator .withdrawal-volume{ font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1; font-weight: 900; letter-spacing: -.04em; margin: 8px 0; color:#123f92; }
+#cell-calculator .withdrawal-volume small{ font-size: .45em; letter-spacing: 0; color: var(--muted); }
+#cell-calculator .withdrawal-equivalent{ color: var(--muted); font-size: .88rem; margin-bottom: 12px; line-height:1.55; }
+
 #cell-calculator .cell-tool-footer{ text-align: center; color: var(--muted); padding: 10px 20px 34px; font-size: .82rem; }
 
 @media (max-width: 960px) {

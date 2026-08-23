@@ -28,15 +28,20 @@ const $ = (id) => document.getElementById(id);
 
 function fmt(value, digits = 2) {
   if (!Number.isFinite(value)) return "—";
-  const abs = Math.abs(value);
-  if ((abs >= 1e6 || (abs > 0 && abs < 0.001))) {
-    return value.toExponential(2).replace("e+", "e");
-  }
   return value.toLocaleString(undefined, { maximumFractionDigits: digits });
 }
 
 function fmtCells(value) {
   return `${fmt(value, 0)} cells`;
+}
+
+function humanCellCount(value) {
+  if (!Number.isFinite(value)) return "—";
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000_000) return `${fmt(value / 1_000_000_000, 2)} billion`;
+  if (abs >= 1_000_000) return `${fmt(value / 1_000_000, 2)} million`;
+  if (abs >= 1_000) return `${fmt(value / 1_000, 2)} thousand`;
+  return fmt(value, 0);
 }
 
 function fmtVolume(mL) {
@@ -144,8 +149,9 @@ $("calcCount").addEventListener("click", () => {
   const dilution = positiveNumber("countDilution");
   const factor = positiveNumber("chamberFactor");
   const suspension = positiveNumber("suspensionVolume");
-  if (!live.length || !dead.length || dilution <= 0 || factor <= 0 || suspension < 0) {
-    $("countResult").innerHTML = `<div class="warning-box">Check the replicate counts, dilution factor, chamber factor and suspension volume.</div>`;
+  const desiredCells = positiveNumber("desiredStockCells");
+  if (!live.length || !dead.length || dilution <= 0 || factor <= 0 || suspension < 0 || desiredCells < 0) {
+    $("countResult").innerHTML = `<div class="warning-box">Check the replicate counts, dilution factor, chamber factor, suspension volume, and desired viable-cell number.</div>`;
     return;
   }
   const avgLive = live.reduce((a,b)=>a+b,0)/live.length;
@@ -155,21 +161,35 @@ $("calcCount").addEventListener("click", () => {
   const totalConc = liveConc + deadConc;
   const viability = totalConc > 0 ? liveConc / totalConc * 100 : 0;
   const totalLiveCells = liveConc * suspension;
+  const livePerUL = liveConc / 1000;
+  const totalPerUL = totalConc / 1000;
+  const canWithdraw = desiredCells > 0 && liveConc > 0;
+  const desiredStockVolumeML = canWithdraw ? desiredCells / liveConc : 0;
+  const desiredStockVolumeUL = desiredStockVolumeML * 1000;
   state.lastConcentration = liveConc;
   state.lastViability = viability;
   setSession();
   $("countResult").innerHTML = `
     <div class="result-top"><div><h3>Cell count result</h3><p>${live.length} live-count squares • ${dead.length} dead-count squares</p></div>${badgeForViability(viability)}</div>
     <div class="metric-grid">
-      <div class="metric"><div class="label">Viable cells / mL</div><div class="value">${fmt(liveConc)}</div><div class="sub">Based on average live count ${fmt(avgLive,2)}</div></div>
-      <div class="metric"><div class="label">Total cells / mL</div><div class="value">${fmt(totalConc)}</div><div class="sub">Live + dead</div></div>
+      <div class="metric"><div class="label">Viable cells / mL</div><div class="value">${fmt(liveConc,0)}</div><div class="sub">${humanCellCount(liveConc)} viable cells per mL • average live count ${fmt(avgLive,2)}</div></div>
+      <div class="metric"><div class="label">Viable cells / µL</div><div class="value">${fmt(livePerUL,2)}</div><div class="sub">Use this value for direct microliter calculations</div></div>
+      <div class="metric"><div class="label">Total cells / mL</div><div class="value">${fmt(totalConc,0)}</div><div class="sub">${humanCellCount(totalConc)} total cells per mL • live + dead</div></div>
+      <div class="metric"><div class="label">Total cells / µL</div><div class="value">${fmt(totalPerUL,2)}</div><div class="sub">Live + dead cells per microliter</div></div>
       <div class="metric"><div class="label">Viability</div><div class="value">${fmt(viability,1)}%</div></div>
-      <div class="metric"><div class="label">Viable cells in suspension</div><div class="value">${suspension > 0 ? fmt(totalLiveCells) : "—"}</div><div class="sub">${suspension > 0 ? `${fmtVolume(suspension)} entered` : "Enter suspension volume to calculate"}</div></div>
+      <div class="metric"><div class="label">Viable cells in suspension</div><div class="value">${suspension > 0 ? fmt(totalLiveCells,0) : "—"}</div><div class="sub">${suspension > 0 ? `${humanCellCount(totalLiveCells)} cells in ${fmtVolume(suspension)}` : "Enter suspension volume to calculate"}</div></div>
     </div>
+    ${canWithdraw ? `<div class="stock-withdrawal">
+      <div class="stock-withdrawal-head"><div><span class="eyebrow">Stock withdrawal</span><h4>Volume needed for ${fmt(desiredCells,0)} viable cells</h4></div><span class="badge good">From original stock</span></div>
+      <div class="withdrawal-volume">${fmt(desiredStockVolumeUL,2)} <small>µL</small></div>
+      <div class="withdrawal-equivalent">Equivalent to ${fmt(desiredStockVolumeML,4)} mL of the original ${fmt(liveConc,0)} viable cells/mL stock.</div>
+      <div class="formula">Required stock volume = desired viable cells ÷ viable cells/µL = ${fmt(desiredCells,0)} ÷ ${fmt(livePerUL,2)} = ${fmt(desiredStockVolumeUL,2)} µL</div>
+      ${desiredStockVolumeUL < 1 ? `<div class="warning-box">This volume is below 1 µL. Consider preparing an intermediate dilution to improve pipetting accuracy.</div>` : ""}
+    </div>` : desiredCells > 0 ? `<div class="warning-box">The viable-cell concentration is zero, so a viable-cell stock volume cannot be calculated.</div>` : `<div class="helper-note">Enter a desired viable-cell number in the counting form to calculate how many µL to withdraw from this original stock.</div>`}
     <div class="steps-box"><h4>Calculation</h4><ol class="steps-list">
       <li><span>1</span><div>Average live count = <b>${fmt(avgLive,2)}</b> cells/square.</div></li>
       <li><span>2</span><div>Apply dilution × chamber factor: ${fmt(avgLive,2)} × ${fmt(dilution,2)} × ${fmt(factor,0)}.</div></li>
-      <li><span>3</span><div>Viable concentration = <b>${fmt(liveConc)} cells/mL</b>.</div></li>
+      <li><span>3</span><div>Viable concentration = <b>${fmt(liveConc,0)} cells/mL</b> = <b>${fmt(livePerUL,2)} cells/µL</b>.</div></li>
       <li><span>4</span><div>Viability = viable concentration ÷ total concentration = <b>${fmt(viability,1)}%</b>.</div></li>
     </ol></div>`;
 });

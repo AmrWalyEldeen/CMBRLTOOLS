@@ -2213,9 +2213,10 @@
             <label>Dilution factor<input id="countDilution" type="number" min="0.0001" step="0.1" value="2" /></label>
             <label>Chamber factor<input id="chamberFactor" type="number" min="1" step="1" value="10000" /></label>
             <label>Original suspension volume (mL)<input id="suspensionVolume" type="number" min="0" step="0.1" value="10" /></label>
+            <label>Desired viable cells from original stock<input id="desiredStockCells" type="number" min="0" step="1000" value="100000" /></label>
           </div>
-          <button id="calcCount" class="btn btn-primary" type="button">Calculate cell concentration</button>
-          <div class="formula">Cells/mL = Average cells per square × Dilution factor × Chamber factor</div>
+          <button id="calcCount" class="btn btn-primary" type="button">Calculate cell concentration &amp; stock volume</button>
+          <div class="formula">Cells/mL = Average cells per square × Dilution factor × Chamber factor<br>Required stock µL = Desired viable cells ÷ Viable cells/µL</div>
         </article>
         <article class="card result-card" id="countResult">
           <div class="result-empty">Add replicate counts and calculate.</div>

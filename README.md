@@ -21,12 +21,13 @@ This package is ready to publish as a static GitHub Pages website.
 ## Cell-culture calculator modules
 
 - Cell viability from live and dead counts.
-- Hemocytometer cell counting with editable dilution and chamber factors.
+- Hemocytometer cell counting with editable dilution and chamber factors, cells/mL and cells/µL output, plus direct stock-withdrawal volume calculation for a desired viable-cell number.
 - Seeding and dilution calculations using cell-stock concentration, target cells, working volume, vessel capacity, and preparation overage.
 - Multi-plate / multi-flask batch planning.
 - Editable density helper converting cells/cm² into cells per well or vessel.
 - Plate/flask visualizations.
 - Print / Save PDF for the active result view.
+- Direct stock withdrawal: enter a desired viable-cell number and calculate the exact original-stock volume in µL.
 - Session handoff: the latest viable-cell concentration can be inserted directly into seeding and batch-planning workflows.
 
 ## Scientific configuration notes
