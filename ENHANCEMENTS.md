@@ -1,19 +1,24 @@
-# Enhancement summary
+# Integration update
 
-- Integrated the supplied Cell Line Calculator into the existing CMBRL Biology Tools website as a third live tool.
-- Added a Cell Culture navigation link, homepage tool card, and hero shortcut.
-- Added cell viability, hemocytometer counting, seeding/dilution, multi-vessel batch planning, and density-helper interfaces.
-- Added plate/flask visualization and Print / Save PDF support.
-- Preserved the cell tool's editable chamber factor, vessel parameters, density values, and local-browser calculations.
-- Restyled the supplied cell-culture interface to match the existing CMBRL blue/teal/violet visual system.
-- Scoped the new CSS and wrapped the new JavaScript module to prevent interference with the protein and qPCR calculators.
-- Preserved CMBRL laboratory branding and the developer identity/photo for Amr Ahmed WalyEldeen.
-- Kept the package static and GitHub Pages-ready with no build step or backend.
+## Added: Buffer & Solution Preparation Calculator
 
-## Cell counting update — 2026-08-23
+The BioBuffer Lab tool has been integrated as a fourth live CMBRL tool.
 
-- Added a **Desired viable cells from original stock** input to hemocytometer counting.
-- Added viable and total cell concentration output in both **cells/mL** and **cells/µL**.
-- Added an automatic **stock withdrawal volume** result in µL/mL for the requested viable-cell number.
-- Added a warning when the calculated withdrawal volume is below 1 µL.
-- Added human-readable cell-count summaries (thousand / million / billion) while preserving exact numeric output.
+### Functions included
+- Prepare solution from a solid
+- C1V1 = C2V2 stock dilution
+- Find unknown concentration
+- Henderson–Hasselbalch buffer design
+- Multi-component stock mixer
+- Molecular-weight calculator from chemical formulas
+- Concentration and volume converters
+- Common reagent and buffer-system reference data
+- Print / Save PDF
+
+### Integration work
+- Added homepage card, main navigation link, hero action, and ToolHub route
+- Scoped the BioBuffer CSS to prevent collisions with the Protein, qPCR, and Cell Culture interfaces
+- Scoped BioBuffer JavaScript to its own section
+- Prevented BioBuffer internal tabs from overwriting the website route hash
+- Renamed conflicting Print/Reset IDs
+- Kept all calculations browser-local and GitHub Pages compatible

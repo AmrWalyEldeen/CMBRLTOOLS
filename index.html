@@ -1573,6 +1573,7 @@
 
   </style>
   <link rel="stylesheet" href="assets/cell-culture.css" />
+  <link rel="stylesheet" href="assets/buffer-tool.css" />
 </head>
 <body>
   <a class="skip-link" href="#tools-home">Skip to tools</a>
@@ -1590,6 +1591,7 @@
         <a class="nav-link" href="#protein-calculator" data-nav="protein-calculator">Protein Calculator</a>
         <a class="nav-link" href="#qpcr-calculator" data-nav="qpcr-calculator">qPCR Calculator</a>
         <a class="nav-link" href="#cell-calculator" data-nav="cell-calculator">Cell Culture</a>
+        <a class="nav-link" href="#buffer-calculator" data-nav="buffer-calculator">Buffers &amp; Solutions</a>
         <a class="nav-link developer-nav-link" href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener"><img src="assets/amr-ahmed-walyeldeen.png" alt="" />Amr Ahmed WalyEldeen</a>
         <a class="primary-button lab-button" href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL ↗</a>
       </div>
@@ -1601,12 +1603,13 @@
           <p class="eyebrow">CMBRL • Cairo University • Browser-based research utilities</p>
           <h2>Research-ready biology tools, built for the bench.</h2>
           <p class="hero-description">
-            Fast, transparent calculators for routine molecular and cellular biology workflows—designed to keep data review, visualization, and export simple inside your browser.
+            Fast, transparent calculators for routine molecular, cellular, and solution-preparation workflows—designed to keep calculations, data review, visualization, and export simple inside your browser.
           </p>
           <div class="hero-actions" aria-label="Featured tools">
             <button class="hero-primary-action" type="button" data-open-tool="protein-calculator">Open Protein Calculator <span aria-hidden="true">→</span></button>
             <button class="hero-secondary-action" type="button" data-open-tool="qpcr-calculator">Open qPCR Calculator <span aria-hidden="true">→</span></button>
             <button class="hero-secondary-action" type="button" data-open-tool="cell-calculator">Open Cell Culture Tool <span aria-hidden="true">→</span></button>
+            <button class="hero-secondary-action" type="button" data-open-tool="buffer-calculator">Open Buffer &amp; Solution Tool <span aria-hidden="true">→</span></button>
           </div>
           <div class="hero-benefits" aria-label="Website benefits">
             <span>✓ Browser calculations</span>
@@ -1650,36 +1653,43 @@
           <div class="tool-icon">🧪</div>
           <span class="badge web">Free web-based tool</span>
           <h3>Protein Concentration Calculator</h3>
-          <p>A free web-based calculator to build standard curves, interpolate unknown absorbance, apply dilution factors, compare fitting models, validate curve quality, and export results.</p>
-          <button class="primary-button tool-action" type="button" data-open-tool="protein-calculator">Open free web tool</button>
+          <p>Build standard curves, interpolate unknown absorbance, apply dilution factors, compare fitting models, validate curve quality, and export results.</p>
+          <button class="primary-button tool-action" type="button" data-open-tool="protein-calculator">Open protein calculator</button>
         </article>
         <article class="tool-card">
           <div class="tool-icon">📈</div>
           <span class="badge web">Free web-based tool</span>
           <h3>qPCR Fold Change Calculator</h3>
-          <p>A free web-based calculator for ΔCt, ΔΔCt, fold change, control group comparison, replicate summaries, statistics, interactive graphs, and exportable qPCR result tables.</p>
-          <button class="primary-button tool-action" type="button" data-open-tool="qpcr-calculator">Open free web tool</button>
-        </article>
-        <article class="tool-card coming-soon">
-          <div class="tool-icon">🧬</div>
-          <span class="badge soon">Free web-based tool · coming soon</span>
-          <h3>Primer Quality Check</h3>
-          <p>A free web-based primer review tool for sequence length, GC content, melting temperature, self-complementarity, and basic PCR suitability checks.</p>
-          <button class="ghost-button tool-action" type="button" disabled>Free web tool coming soon</button>
-        </article>
-        <article class="tool-card coming-soon">
-          <div class="tool-icon">🧫</div>
-          <span class="badge soon">Free web-based tool · coming soon</span>
-          <h3>Free Docking Request Tool</h3>
-          <p>A free web-based docking request tool to collect ligand, protein target, PDB details, and structured molecular docking support information.</p>
-          <button class="ghost-button tool-action" type="button" disabled>Free web tool coming soon</button>
+          <p>Calculate ΔCt, ΔΔCt, relative fold change, replicate summaries, statistics, control comparisons, interactive graphs, and exportable results.</p>
+          <button class="primary-button tool-action" type="button" data-open-tool="qpcr-calculator">Open qPCR calculator</button>
         </article>
         <article class="tool-card">
           <div class="tool-icon">🔬</div>
           <span class="badge web">Free web-based tool</span>
           <h3>Cell Culture &amp; Cell Counting Calculator</h3>
-          <p>Calculate viability, hemocytometer cell concentration, seeding and dilution volumes, multi-vessel batch plans, and growth-area-based seeding density in one integrated workflow.</p>
+          <p>Calculate viability, hemocytometer concentration, stock withdrawal volume, seeding and dilution volumes, multi-vessel plans, and density conversions.</p>
           <button class="primary-button tool-action" type="button" data-open-tool="cell-calculator">Open cell culture tool</button>
+        </article>
+        <article class="tool-card">
+          <div class="tool-icon">⚗️</div>
+          <span class="badge web">New free web-based tool</span>
+          <h3>Buffer &amp; Solution Preparation Calculator</h3>
+          <p>Prepare solutions from solids, dilute stocks, calculate unknown concentrations and molecular weights, design buffers by pH, and plan multi-component mixes.</p>
+          <button class="primary-button tool-action" type="button" data-open-tool="buffer-calculator">Open buffer &amp; solution tool</button>
+        </article>
+        <article class="tool-card coming-soon">
+          <div class="tool-icon">🧬</div>
+          <span class="badge soon">Free web-based tool · coming soon</span>
+          <h3>Primer Quality Check</h3>
+          <p>A primer review tool for sequence length, GC content, melting temperature, self-complementarity, and basic PCR suitability checks.</p>
+          <button class="ghost-button tool-action" type="button" disabled>Coming soon</button>
+        </article>
+        <article class="tool-card coming-soon">
+          <div class="tool-icon">🧫</div>
+          <span class="badge soon">Free web-based tool · coming soon</span>
+          <h3>Docking Request Tool</h3>
+          <p>A structured request workflow for ligand, protein target, PDB details, and molecular docking support information.</p>
+          <button class="ghost-button tool-action" type="button" disabled>Coming soon</button>
         </article>
       </div>
     </section>
@@ -2299,6 +2309,247 @@
     </section>
 
 
+    <section id="buffer-calculator" class="tool-view" aria-label="Buffer and solution preparation calculator">
+<header class="topbar">
+    <div class="brand-wrap">
+      <div class="brand-mark" aria-hidden="true">B</div>
+      <div>
+        <div class="eyebrow">BIOLOGICAL SOLUTION CALCULATOR</div>
+        <h1>BioBuffer Lab</h1>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn ghost buffer-suite-back" type="button" data-nav="home">← Back to tools</button>
+      <button class="btn ghost" id="bufferPrintBtn">Print / Save PDF</button>
+      <button class="btn ghost" id="bufferResetBtn">Reset calculator</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="hero panel">
+      <div>
+        <span class="pill">GitHub Pages ready · no server required</span>
+        <h2>Prepare buffers, stocks, and dilutions without spreadsheet gymnastics.</h2>
+        <p>Choose what you know. Enter a molecular weight, select a common reagent, or type a chemical formula and let the platform calculate the rest.</p>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="beaker large"><div class="liquid"></div><span>500 mL</span></div>
+        <div class="arrow">→</div>
+        <div class="beaker small"><div class="liquid"></div><span>1×</span></div>
+      </div>
+    </section>
+
+    <nav class="tool-tabs" aria-label="Calculator tools">
+      <button class="tab active" data-tool="solid">Prepare from solid</button>
+      <button class="tab" data-tool="dilution">Dilute a stock</button>
+      <button class="tab" data-tool="unknown">Find concentration</button>
+      <button class="tab" data-tool="buffer">Design a buffer</button>
+      <button class="tab" data-tool="mix">Multi-component mix</button>
+      <button class="tab" data-tool="mw">MW & unit tools</button>
+    </nav>
+
+    <div id="alerts" class="alerts" aria-live="polite"></div>
+
+    <section class="tool panel active" id="tool-solid">
+      <div class="tool-heading">
+        <div><span class="step-index">01</span><h2>Prepare a solution from a solid</h2></div>
+        <p>Calculate how much material to weigh for a target concentration and final volume.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <h3>Target solution</h3>
+          <label>Target concentration
+            <div class="input-row"><input id="solidConc" type="number" min="0" step="any" value="100"><select id="solidConcUnit" class="conc-unit"></select></div>
+          </label>
+          <label>Final volume
+            <div class="input-row"><input id="solidVolume" type="number" min="0" step="any" value="500"><select id="solidVolumeUnit" class="volume-unit"></select></div>
+          </label>
+
+          <div id="solidMwBlock" class="mw-block">
+            <h4>Molecular weight</h4>
+            <div class="segmented" data-target="solidMwMode">
+              <button class="active" data-value="formula">Formula / reagent</button>
+              <button data-value="manual">Enter MW</button>
+            </div>
+            <input type="hidden" id="solidMwMode" value="formula" />
+            <div id="solidFormulaWrap">
+              <label>Common reagent or chemical formula
+                <input id="solidFormula" list="reagentList" value="NaCl" placeholder="e.g. NaCl, Tris, CaCl2·2H2O" />
+              </label>
+              <div class="inline-result" id="solidMwPreview">MW will appear here</div>
+            </div>
+            <label id="solidManualMwWrap" class="hidden">Molecular weight (g/mol)
+              <input id="solidManualMw" type="number" min="0" step="any" placeholder="e.g. 58.44" />
+            </label>
+          </div>
+          <button class="btn primary full" id="solidCalcBtn">Calculate preparation</button>
+        </div>
+
+        <div class="result-card" id="solidResult">
+          <div class="result-placeholder">Enter the target solution details, then calculate.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tool panel" id="tool-dilution">
+      <div class="tool-heading">
+        <div><span class="step-index">02</span><h2>Dilute a stock solution</h2></div>
+        <p>Works for molarity, mass concentration, percentages, and × stocks. It calculates both stock volume and diluent volume.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <h3>C₁V₁ → C₂V₂</h3>
+          <label>Stock concentration (C₁)
+            <div class="input-row"><input id="dilC1" type="number" min="0" step="any" value="10"><select id="dilC1Unit" class="conc-unit"></select></div>
+          </label>
+          <label>Desired concentration (C₂)
+            <div class="input-row"><input id="dilC2" type="number" min="0" step="any" value="1"><select id="dilC2Unit" class="conc-unit"></select></div>
+          </label>
+          <label>Final volume (V₂)
+            <div class="input-row"><input id="dilV2" type="number" min="0" step="any" value="100"><select id="dilV2Unit" class="volume-unit"></select></div>
+          </label>
+          <div class="optional-block">
+            <div><strong>Optional molecular weight</strong><small>Needed only when converting between molar and mass-concentration units.</small></div>
+            <input id="dilMw" type="number" min="0" step="any" placeholder="g/mol" />
+          </div>
+          <button class="btn primary full" id="dilCalcBtn">Calculate dilution</button>
+        </div>
+        <div class="result-card" id="dilResult"><div class="result-placeholder">Your stock aliquot and diluent volume will appear here.</div></div>
+      </div>
+    </section>
+
+    <section class="tool panel" id="tool-unknown">
+      <div class="tool-heading">
+        <div><span class="step-index">03</span><h2>Find an unknown concentration</h2></div>
+        <p>Calculate molarity from mass and volume, or convert molar concentration to mass concentration and back.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <label>Calculation mode
+            <select id="unknownMode">
+              <option value="massToMolar">Mass + MW + volume → molarity</option>
+              <option value="molarToMass">Molarity + MW → mass concentration</option>
+              <option value="massConcToMolar">Mass concentration + MW → molarity</option>
+            </select>
+          </label>
+          <div id="unknownFields"></div>
+          <button class="btn primary full" id="unknownCalcBtn">Calculate concentration</button>
+        </div>
+        <div class="result-card" id="unknownResult"><div class="result-placeholder">Choose a mode and enter the values you know.</div></div>
+      </div>
+    </section>
+
+    <section class="tool panel" id="tool-buffer">
+      <div class="tool-heading">
+        <div><span class="step-index">04</span><h2>Design a buffer by pH</h2></div>
+        <p>Uses the Henderson–Hasselbalch relationship to estimate acid/base proportions. pKa is editable because it varies with chemistry and temperature.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <label>Buffer system
+            <select id="bufferSystem"></select>
+          </label>
+          <div class="input-row">
+            <label>Target pH<input id="bufferPh" type="number" step="0.01" value="7.40" /></label>
+            <label>pKa<input id="bufferPka" type="number" step="0.01" value="7.21" /></label>
+          </div>
+          <div class="hint" id="bufferNote"></div>
+          <label>Total buffer concentration
+            <div class="input-row"><input id="bufferConc" type="number" min="0" step="any" value="50"><select id="bufferConcUnit" class="molar-unit"></select></div>
+          </label>
+          <label>Final volume
+            <div class="input-row"><input id="bufferVolume" type="number" min="0" step="any" value="500"><select id="bufferVolumeUnit" class="volume-unit"></select></div>
+          </label>
+
+          <label>Preparation route
+            <select id="bufferRoute">
+              <option value="stocks">Mix acid-form and base-form stock solutions</option>
+              <option value="solids">Weigh acid and base forms</option>
+            </select>
+          </label>
+          <div id="bufferRouteFields"></div>
+          <button class="btn primary full" id="bufferCalcBtn">Design buffer</button>
+        </div>
+        <div class="result-card" id="bufferResult"><div class="result-placeholder">The acid/base ratio and preparation amounts will appear here.</div></div>
+      </div>
+    </section>
+
+    <section class="tool panel" id="tool-mix">
+      <div class="tool-heading">
+        <div><span class="step-index">05</span><h2>Multi-component stock mixer</h2></div>
+        <p>Plan several stock additions into one final buffer, then calculate exactly how much solvent remains.</p>
+      </div>
+      <div class="card">
+        <div class="mix-topline">
+          <label>Final mixture volume
+            <div class="input-row"><input id="mixFinalVol" type="number" min="0" step="any" value="100"><select id="mixFinalVolUnit" class="volume-unit"></select></div>
+          </label>
+          <button class="btn secondary" id="addMixRowBtn">+ Add component</button>
+        </div>
+        <div class="table-wrap">
+          <table class="mix-table">
+            <thead><tr><th>Component</th><th>Stock</th><th>Target</th><th>MW<br><small>optional</small></th><th></th></tr></thead>
+            <tbody id="mixRows"></tbody>
+          </table>
+        </div>
+        <button class="btn primary" id="mixCalcBtn">Calculate mixture</button>
+      </div>
+      <div class="result-card wide" id="mixResult"><div class="result-placeholder">Component volumes and remaining solvent will appear here.</div></div>
+    </section>
+
+    <section class="tool panel" id="tool-mw">
+      <div class="tool-heading">
+        <div><span class="step-index">06</span><h2>Molecular weight & unit tools</h2></div>
+        <p>Calculate molecular weight directly from a formula and convert concentration or volume units.</p>
+      </div>
+      <div class="grid three">
+        <div class="card">
+          <h3>Molecular weight finder</h3>
+          <label>Reagent or formula
+            <input id="mwFormula" list="reagentList" value="CaCl2·2H2O" placeholder="e.g. C6H12O6" />
+          </label>
+          <button class="btn primary full" id="mwCalcBtn">Calculate MW</button>
+          <div id="mwResult" class="mini-result"></div>
+        </div>
+        <div class="card">
+          <h3>Concentration converter</h3>
+          <label>Value<input id="convValue" type="number" step="any" value="1" /></label>
+          <div class="input-row">
+            <label>From<select id="convFrom" class="conc-unit"></select></label>
+            <label>To<select id="convTo" class="conc-unit"></select></label>
+          </div>
+          <label>MW if required (g/mol)<input id="convMw" type="number" min="0" step="any" placeholder="Only for molar ↔ mass conversion" /></label>
+          <button class="btn secondary full" id="convCalcBtn">Convert</button>
+          <div id="convResult" class="mini-result"></div>
+        </div>
+        <div class="card">
+          <h3>Volume converter</h3>
+          <label>Value<input id="volConvValue" type="number" step="any" value="1" /></label>
+          <div class="input-row">
+            <label>From<select id="volConvFrom" class="volume-unit"></select></label>
+            <label>To<select id="volConvTo" class="volume-unit"></select></label>
+          </div>
+          <button class="btn secondary full" id="volConvBtn">Convert</button>
+          <div id="volConvResult" class="mini-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel safety-note">
+      <h3>Laboratory note</h3>
+      <p>This tool performs mathematical preparation calculations. Actual buffer pH can depend on temperature, ionic strength, hydration state, reagent purity, activity coefficients, and the exact chemical form used. Verify reagent labels/SDS, use the molecular weight for the exact material in hand, and adjust final pH experimentally where the protocol requires it.</p>
+    </section>
+  </main>
+
+  <datalist id="reagentList"></datalist>
+  <footer>BioBuffer Lab · Static HTML/CSS/JavaScript · Designed for GitHub Pages</footer>
+    </section>
+
+
     <footer class="footer">
       <div class="footer-brand">
         <img src="assets/cmbrl-logo.jpg" alt="CMBRL logo" />
@@ -2314,6 +2565,8 @@
     </footer>
   </div>
 
+  <script src="assets/buffer-tool-data.js"></script>
+  <script src="assets/buffer-tool.js"></script>
   <script src="assets/cell-culture.js"></script>
   <script>
     /* =========================================================
@@ -2322,7 +2575,7 @@
        should have its own module below, separate from the hub.
        ========================================================= */
     const ToolHub = (() => {
-      const TOOL_IDS = ["protein-calculator", "qpcr-calculator", "cell-calculator"];
+      const TOOL_IDS = ["protein-calculator", "qpcr-calculator", "cell-calculator", "buffer-calculator"];
 
       function byId(id) { return document.getElementById(id); }
 
@@ -2352,6 +2605,9 @@
         }
         if (normalizedTarget === "cell-calculator") {
           setTimeout(() => window.CellCultureTool?.onShow?.(), 40);
+        }
+        if (normalizedTarget === "buffer-calculator") {
+          setTimeout(() => window.BioBufferTool?.onShow?.(), 40);
         }
       }
 

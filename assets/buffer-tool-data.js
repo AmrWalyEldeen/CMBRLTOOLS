@@ -1,0 +1,76 @@
+// Reference data for the Buffer & Solution Preparation Platform.
+// Atomic weights are conventional average atomic weights, suitable for routine laboratory calculations.
+
+window.BUFFER_CHEM_DATA = {
+  atomicWeights: {
+    H:1.008, He:4.002602, Li:6.94, Be:9.0121831, B:10.81, C:12.011, N:14.007, O:15.999, F:18.998403163, Ne:20.1797,
+    Na:22.98976928, Mg:24.305, Al:26.9815385, Si:28.085, P:30.973761998, S:32.06, Cl:35.45, Ar:39.948, K:39.0983, Ca:40.078,
+    Sc:44.955908, Ti:47.867, V:50.9415, Cr:51.9961, Mn:54.938044, Fe:55.845, Co:58.933194, Ni:58.6934, Cu:63.546, Zn:65.38,
+    Ga:69.723, Ge:72.630, As:74.921595, Se:78.971, Br:79.904, Kr:83.798, Rb:85.4678, Sr:87.62, Y:88.90584, Zr:91.224,
+    Nb:92.90637, Mo:95.95, Tc:98, Ru:101.07, Rh:102.90550, Pd:106.42, Ag:107.8682, Cd:112.414, In:114.818, Sn:118.710,
+    Sb:121.760, Te:127.60, I:126.90447, Xe:131.293, Cs:132.90545196, Ba:137.327, La:138.90547, Ce:140.116, Pr:140.90766,
+    Nd:144.242, Pm:145, Sm:150.36, Eu:151.964, Gd:157.25, Tb:158.92535, Dy:162.500, Ho:164.93033, Er:167.259,
+    Tm:168.93422, Yb:173.045, Lu:174.9668, Hf:178.49, Ta:180.94788, W:183.84, Re:186.207, Os:190.23, Ir:192.217,
+    Pt:195.084, Au:196.966569, Hg:200.592, Tl:204.38, Pb:207.2, Bi:208.98040, Po:209, At:210, Rn:222, Fr:223,
+    Ra:226, Ac:227, Th:232.0377, Pa:231.03588, U:238.02891, Np:237, Pu:244, Am:243, Cm:247, Bk:247, Cf:251,
+    Es:252, Fm:257, Md:258, No:259, Lr:266, Rf:267, Db:268, Sg:269, Bh:270, Hs:269, Mt:278, Ds:281,
+    Rg:282, Cn:285, Nh:286, Fl:289, Mc:290, Lv:293, Ts:294, Og:294
+  },
+
+  commonReagents: [
+    {name:'Sodium chloride', formula:'NaCl', aliases:'NaCl saline'},
+    {name:'Potassium chloride', formula:'KCl', aliases:'KCl'},
+    {name:'Calcium chloride, anhydrous', formula:'CaCl2', aliases:'CaCl2'},
+    {name:'Calcium chloride dihydrate', formula:'CaCl2·2H2O', aliases:'calcium chloride hydrate'},
+    {name:'Magnesium chloride, anhydrous', formula:'MgCl2', aliases:'MgCl2'},
+    {name:'Magnesium chloride hexahydrate', formula:'MgCl2·6H2O', aliases:'magnesium chloride hydrate'},
+    {name:'Sodium phosphate monobasic, anhydrous', formula:'NaH2PO4', aliases:'monosodium phosphate'},
+    {name:'Sodium phosphate monobasic monohydrate', formula:'NaH2PO4·H2O', aliases:'monosodium phosphate hydrate'},
+    {name:'Sodium phosphate dibasic, anhydrous', formula:'Na2HPO4', aliases:'disodium phosphate'},
+    {name:'Sodium phosphate dibasic heptahydrate', formula:'Na2HPO4·7H2O', aliases:'disodium phosphate hydrate'},
+    {name:'Sodium phosphate dibasic dodecahydrate', formula:'Na2HPO4·12H2O', aliases:'disodium phosphate hydrate'},
+    {name:'Potassium phosphate monobasic', formula:'KH2PO4', aliases:'monopotassium phosphate'},
+    {name:'Potassium phosphate dibasic', formula:'K2HPO4', aliases:'dipotassium phosphate'},
+    {name:'Tris base', formula:'C4H11NO3', aliases:'TRIS tris(hydroxymethyl)aminomethane'},
+    {name:'Tris hydrochloride', formula:'C4H12ClNO3', aliases:'Tris-HCl'},
+    {name:'HEPES', formula:'C8H18N2O4S', aliases:'HEPES buffer'},
+    {name:'MOPS', formula:'C7H15NO4S', aliases:'MOPS buffer'},
+    {name:'MES', formula:'C6H13NO4S', aliases:'MES buffer'},
+    {name:'PIPES', formula:'C8H18N2O6S2', aliases:'PIPES buffer'},
+    {name:'Glycine', formula:'C2H5NO2', aliases:'glycine'},
+    {name:'Sodium acetate, anhydrous', formula:'C2H3NaO2', aliases:'sodium acetate'},
+    {name:'Sodium acetate trihydrate', formula:'C2H3NaO2·3H2O', aliases:'sodium acetate hydrate'},
+    {name:'Citric acid, anhydrous', formula:'C6H8O7', aliases:'citric acid'},
+    {name:'Citric acid monohydrate', formula:'C6H8O7·H2O', aliases:'citric acid hydrate'},
+    {name:'Sodium citrate, trisodium dihydrate', formula:'Na3C6H5O7·2H2O', aliases:'trisodium citrate'},
+    {name:'EDTA free acid', formula:'C10H16N2O8', aliases:'EDTA'},
+    {name:'Disodium EDTA dihydrate', formula:'C10H14N2Na2O8·2H2O', aliases:'EDTA disodium'},
+    {name:'D-Glucose', formula:'C6H12O6', aliases:'glucose dextrose'},
+    {name:'Sucrose', formula:'C12H22O11', aliases:'sucrose sugar'},
+    {name:'Sodium bicarbonate', formula:'NaHCO3', aliases:'bicarbonate'},
+    {name:'Sodium carbonate', formula:'Na2CO3', aliases:'carbonate'},
+    {name:'Ammonium chloride', formula:'NH4Cl', aliases:'ammonium chloride'},
+    {name:'Urea', formula:'CH4N2O', aliases:'urea'},
+    {name:'Sodium hydroxide', formula:'NaOH', aliases:'NaOH'},
+    {name:'Potassium hydroxide', formula:'KOH', aliases:'KOH'},
+    {name:'Hydrochloric acid', formula:'HCl', aliases:'HCl'},
+    {name:'Boric acid', formula:'H3BO3', aliases:'boric acid'},
+    {name:'Sodium borate decahydrate (borax)', formula:'Na2B4O7·10H2O', aliases:'borax sodium tetraborate'},
+    {name:'Sodium azide', formula:'NaN3', aliases:'sodium azide'},
+    {name:'Tween 20', formula:'', mw:null, aliases:'polysorbate 20', note:'Mixture; use supplier MW/specification if needed.'}
+  ],
+
+  bufferSystems: [
+    {name:'Custom', pKa:7.00, note:'Enter the pKa appropriate to your buffer pair and temperature.'},
+    {name:'Acetate / acetic acid', pKa:4.76, note:'Approximate pKa at room temperature.'},
+    {name:'Citrate (second dissociation)', pKa:4.76, note:'Approximate; citrate has multiple pKa values.'},
+    {name:'MES', pKa:6.15, note:'Approximate at 25 °C.'},
+    {name:'PIPES', pKa:6.76, note:'Approximate at 25 °C.'},
+    {name:'Phosphate (H2PO4− / HPO4²−)', pKa:7.21, note:'Approximate pKa2 near room temperature.'},
+    {name:'MOPS', pKa:7.20, note:'Approximate at 25 °C.'},
+    {name:'HEPES', pKa:7.55, note:'Approximate at 25 °C.'},
+    {name:'Tris / Tris-HCl', pKa:8.06, note:'Approximate at 25 °C; Tris pKa changes appreciably with temperature.'},
+    {name:'Boric acid / borate', pKa:9.24, note:'Approximate at room temperature.'},
+    {name:'Carbonate / bicarbonate', pKa:10.33, note:'Approximate second dissociation near room temperature.'}
+  ]
+};
