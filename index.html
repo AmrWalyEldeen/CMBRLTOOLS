@@ -3,8 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Free online web-based biology tools by Amr Ahmed WalyEldeen for CMBRL." />
-  <title>Free Online Web-Based Biology Tools | CMBRL</title>
+  <meta name="description" content="Free browser-based biology calculators and research utilities developed by Amr Ahmed WalyEldeen for the Cellular & Molecular Biosciences Research Laboratory (CMBRL), Cairo University." />
+  <meta name="theme-color" content="#0b2f70" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="CMBRL Online Biology Tools" />
+  <meta property="og:description" content="Research-ready browser tools for protein concentration and qPCR workflows." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/cmbrl-logo.jpg" />
+  <link rel="icon" type="image/jpeg" href="assets/cmbrl-logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet" />
+  <title>CMBRL Online Biology Tools | Amr Ahmed WalyEldeen</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -1211,42 +1221,415 @@
       #qpcr-calculator .protein-header::before { display: none; }
     }
 
+
+
+    /* =========================================================
+       CMBRL BRAND & UX ENHANCEMENT LAYER
+       Visual overrides only; calculator logic remains unchanged.
+       ========================================================= */
+    :root {
+      --bg: #f4f7fc;
+      --surface: #ffffff;
+      --surface-soft: #f4f7fb;
+      --surface-blue: #eef4ff;
+      --text: #101a33;
+      --muted: #61708a;
+      --border: #dce4f0;
+      --primary: #123f92;
+      --primary-dark: #0b2f70;
+      --primary-soft: #eaf1ff;
+      --accent: #0f9b8e;
+      --accent-soft: #e7fbf7;
+      --violet: #6d28d9;
+      --success: #087f70;
+      --warning: #a15c08;
+      --danger: #b4233f;
+      --shadow: 0 26px 70px rgba(11, 47, 112, 0.13);
+      --soft-shadow: 0 12px 34px rgba(16, 26, 51, 0.07);
+      --radius-lg: 26px;
+      --radius: 19px;
+      --radius-sm: 13px;
+      --font: "Manrope", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Source Serif 4", Georgia, serif;
+    }
+
+    html { scroll-padding-top: 108px; }
+    body {
+      background:
+        radial-gradient(circle at 4% -5%, rgba(18, 63, 146, 0.14), transparent 31rem),
+        radial-gradient(circle at 96% 3%, rgba(109, 40, 217, 0.10), transparent 33rem),
+        radial-gradient(circle at 88% 34%, rgba(15, 155, 142, 0.09), transparent 28rem),
+        linear-gradient(180deg, #fbfcff 0%, #f4f7fc 48%, #f8faff 100%);
+      font-feature-settings: "kern" 1, "liga" 1;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: #d9e5ff; color: #0b2f70; }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 999;
+      transform: translateY(-160%);
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--primary-dark);
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform .18s ease;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, .34);
+      outline-offset: 3px;
+    }
+
+    .site-shell { max-width: 1500px; padding: 24px 28px 34px; }
+
+    .topbar {
+      margin-bottom: 24px;
+      padding: 10px 12px;
+      border-color: rgba(219, 228, 241, .84);
+      background: rgba(255, 255, 255, .88);
+      box-shadow: 0 12px 34px rgba(16, 26, 51, .08);
+    }
+
+    .brand { gap: 11px; }
+    .brand-mark {
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      border-radius: 14px;
+      padding: 3px;
+      background: #fff;
+      border: 1px solid #dde6f2;
+      box-shadow: 0 7px 18px rgba(11, 47, 112, .13);
+    }
+    .brand-mark img { width: 100%; height: 100%; object-fit: cover; border-radius: 11px; }
+    .brand-copy { min-width: 0; }
+    .brand h1 { color: var(--primary-dark); font-size: 15px; font-weight: 800; letter-spacing: -.025em; }
+    .brand p { max-width: 330px; font-size: 11px; color: #6d7b93; }
+
+    .nav-actions { gap: 8px; }
+    .nav-link, .ghost-button, .primary-button, .success-button, .danger-button {
+      border-radius: 13px;
+      padding: 10px 14px;
+      font-weight: 750;
+      letter-spacing: -.01em;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease, color .16s ease;
+    }
+    .nav-link:hover, .ghost-button:hover { transform: translateY(-1px); }
+    .primary-button:hover, .success-button:hover { transform: translateY(-1px); }
+    .primary-button {
+      background: linear-gradient(135deg, #123f92, #245bc2);
+      box-shadow: 0 10px 22px rgba(18, 63, 146, .20);
+    }
+    .primary-button:hover { background: linear-gradient(135deg, #0b2f70, #174aab); }
+    .lab-button { padding-inline: 16px; }
+    .developer-nav-link { gap: 8px; }
+    .developer-nav-link img {
+      width: 27px;
+      height: 27px;
+      border-radius: 999px;
+      object-fit: cover;
+      object-position: 50% 32%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px #cbd6e5;
+    }
+
+    .hero {
+      min-height: 520px;
+      border-radius: 34px;
+      padding: clamp(34px, 5vw, 68px);
+      background:
+        radial-gradient(circle at 12% 2%, rgba(74, 129, 255, .34), transparent 24rem),
+        radial-gradient(circle at 93% 8%, rgba(124, 58, 237, .28), transparent 27rem),
+        radial-gradient(circle at 74% 92%, rgba(13, 148, 136, .25), transparent 28rem),
+        linear-gradient(132deg, #081d4a 0%, #0c347d 44%, #17469a 72%, #10285d 100%);
+      box-shadow: 0 30px 85px rgba(8, 29, 74, .24);
+      isolation: isolate;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), transparent 92%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .hero::after { right: -11rem; bottom: -15rem; width: 34rem; height: 34rem; }
+    .hero-content { grid-template-columns: minmax(0, 1.35fr) minmax(330px, .65fr); gap: clamp(28px, 4vw, 56px); align-items: center; }
+    .hero-copy { max-width: 890px; }
+    .eyebrow { color: #c8ddff; font-size: 11px; letter-spacing: .14em; }
+    .hero h2 {
+      max-width: 920px;
+      font-family: var(--serif);
+      font-size: clamp(42px, 5.6vw, 72px);
+      line-height: .98;
+      letter-spacing: -.052em;
+      text-wrap: balance;
+    }
+    .hero-description { max-width: 790px; margin-top: 24px; color: #deebff; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.72; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 28px; }
+    .hero-primary-action, .hero-secondary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .hero-primary-action { color: #0b2f70; background: #fff; box-shadow: 0 12px 28px rgba(0,0,0,.16); }
+    .hero-primary-action:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(0,0,0,.20); }
+    .hero-secondary-action { color: #fff; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.26); }
+    .hero-secondary-action:hover { transform: translateY(-2px); background: rgba(255,255,255,.16); }
+    .hero-benefits { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px; color: #cfe2ff; font-size: 12px; font-weight: 700; }
+
+    .credit-card.identity-card {
+      padding: 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.23);
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.17), 0 18px 44px rgba(0,0,0,.15);
+    }
+    .lab-identity, .developer-identity { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 16px; }
+    .hero-lab-logo {
+      width: 82px;
+      height: 82px;
+      object-fit: cover;
+      border-radius: 19px;
+      background: #fff;
+      padding: 4px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.18);
+    }
+    .identity-label { display: block; margin-bottom: 4px; color: #bcd6ff; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .identity-card strong { margin: 0; font-size: 18px; line-height: 1.25; }
+    .identity-card p { margin-top: 5px; color: #d7e5fb; font-size: 12px; line-height: 1.55; }
+    .identity-divider { height: 1px; margin: 18px 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.24), transparent); }
+    .developer-photo {
+      width: 82px;
+      height: 82px;
+      object-fit: cover;
+      object-position: 50% 30%;
+      border-radius: 999px;
+      border: 3px solid rgba(255,255,255,.88);
+      box-shadow: 0 10px 28px rgba(0,0,0,.22);
+    }
+    .developer-identity a { display: inline-block; margin-top: 8px; color: #fff; font-size: 12px; font-weight: 800; text-underline-offset: 3px; }
+
+    .section-title { margin-top: 50px; }
+    .section-title h2, .panel-title h2 { color: #122244; font-weight: 800; letter-spacing: -.045em; }
+    .section-kicker { margin: 0 0 6px !important; color: var(--primary) !important; font-size: 11px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+
+    .tool-grid { gap: 20px; }
+    .tool-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 276px;
+      border-color: #dfe6f0;
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(250,252,255,.96));
+      box-shadow: 0 10px 30px rgba(16, 26, 51, .06);
+    }
+    .tool-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--violet), var(--accent));
+      opacity: .84;
+    }
+    .tool-card:hover { transform: translateY(-5px); border-color: #c6d5ea; box-shadow: 0 22px 52px rgba(11, 47, 112, .12); }
+    .tool-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #edf3ff, #f6f1ff);
+      border: 1px solid #dce6f7;
+      box-shadow: inset 0 1px 0 #fff;
+    }
+    .tool-card h3 { color: #14264c; font-size: 22px; }
+    .badge { font-weight: 800; letter-spacing: .01em; }
+    .badge.web { color: #123f92; background: #edf3ff; border-color: #cfddf6; }
+    .badge.soon { color: #6d28d9; background: #f6f1ff; border-color: #e4d7ff; }
+    .tool-card.coming-soon { background: linear-gradient(180deg, #fff, #fbf9ff); border-color: #e7def7; }
+    .tool-card.coming-soon::before { background: linear-gradient(90deg, #6d28d9, #9f67f8); }
+    .tool-card.coming-soon .tool-icon { background: #f6f1ff; }
+    .tool-card.coming-soon .tool-action { color: #5b21b6; background: #f7f3ff; border-color: #e4d7ff; }
+
+    .panel {
+      border-color: #dfe6f0;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 12px 34px rgba(16, 26, 51, .055);
+    }
+    .protein-header { background: linear-gradient(135deg, #fff 0%, #f3f7ff 62%, #f7f2ff 100%); border-color: #d8e2f1; }
+    .tool-control-panel { background: linear-gradient(180deg, #fff, #f5f8ff); }
+    input, select { border-color: #d8e1ed; background: #fff; }
+    input:hover, select:hover { border-color: #c5d2e4; }
+    input:focus, select:focus { border-color: #4b73c4; box-shadow: 0 0 0 4px rgba(18, 63, 146, .11); }
+    label.input-label { color: #4c5f7e; }
+    .helper-note { color: #123f92; background: #f0f5ff; border-color: #cfddf6; }
+
+    .table-wrap { border-color: #dce4ef; box-shadow: inset 0 1px 0 rgba(255,255,255,.9); }
+    th { color: #52617a; background: #f3f6fb; }
+    tbody tr:nth-child(even) { background: #fbfcfe; }
+    tbody tr:hover { background: #f5f8ff; }
+
+    .chart-box, .qpcr-chart-box {
+      border-color: #dbe4f0;
+      background: radial-gradient(circle at 90% 0%, rgba(109,40,217,.055), transparent 22rem), linear-gradient(180deg, #fff, #fbfcff);
+    }
+    .metric { background: #f5f8fc; border-color: #dfe6f0; }
+    .equation, .calculation-check { background: linear-gradient(135deg, #101b38, #0b2f70); }
+
+    #qpcr-calculator {
+      --qpcr-ink: #122244;
+      --qpcr-muted: #61708a;
+      --qpcr-line: #d7e1ee;
+      --qpcr-soft: #eef4ff;
+      --qpcr-soft-2: #f8faff;
+      --qpcr-cyan: #2563eb;
+      --qpcr-blue: #123f92;
+      --qpcr-teal: #0f9b8e;
+      --qpcr-violet: #6d28d9;
+      --qpcr-rose: #b4233f;
+      --qpcr-amber: #a15c08;
+    }
+    #qpcr-calculator .primary-button { background: linear-gradient(135deg, #123f92, #2563eb); }
+    #qpcr-calculator .success-button { background: linear-gradient(135deg, #087f70, #0f9b8e); }
+    #qpcr-calculator .protein-header { background: radial-gradient(circle at 0 0, rgba(37,99,235,.12), transparent 28rem), radial-gradient(circle at 100% 15%, rgba(109,40,217,.09), transparent 26rem), linear-gradient(135deg, #fff, #f5f8ff 60%, #f8f5ff); }
+    #qpcr-calculator .protein-header::before { color: rgba(18,63,146,.07); }
+    .qpcr-step-panel::after, .qpcr-group-card::before { background: linear-gradient(180deg, #123f92, #0f9b8e); }
+    .qpcr-action-card.primary { background: radial-gradient(circle at 100% 0%, rgba(255,255,255,.18), transparent 16rem), linear-gradient(135deg, #0b2f70, #123f92 56%, #0b756e); }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      margin-top: 54px;
+      padding: 22px 24px;
+      border: 1px solid #dfe6f0;
+      border-radius: 24px;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 10px 30px rgba(16, 26, 51, .05);
+      text-align: left;
+    }
+    .footer-brand, .footer-developer { display: flex; align-items: center; gap: 12px; }
+    .footer-brand img { width: 48px; height: 48px; object-fit: cover; border-radius: 12px; border: 1px solid #dfe6f0; }
+    .footer-brand strong { display: block; color: #14264c; }
+    .footer-brand p, .footer-developer p { margin: 3px 0 0; font-size: 12px; line-height: 1.55; }
+    .footer-developer img { width: 42px; height: 42px; object-fit: cover; object-position: 50% 30%; border-radius: 999px; border: 2px solid #fff; box-shadow: 0 0 0 1px #d6dfeb; }
+
+    @media (max-width: 1180px) {
+      .hero-content { grid-template-columns: 1fr; }
+      .identity-card { max-width: 720px; }
+      .topbar { border-radius: 24px; }
+      .nav-actions { max-width: 58%; }
+    }
+
+    @media (max-width: 900px) {
+      .topbar { position: static; align-items: flex-start; flex-direction: column; }
+      .nav-actions { width: 100%; max-width: none; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 2px; }
+      .nav-actions > * { flex: 0 0 auto; }
+      .brand p { max-width: min(72vw, 430px); }
+      .footer { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 620px) {
+      .site-shell { padding: 12px 12px 24px; }
+      .topbar { padding: 10px; margin-bottom: 14px; }
+      .brand-mark { width: 44px; height: 44px; }
+      .brand h1 { font-size: 14px; }
+      .brand p { font-size: 10px; }
+      .hero { min-height: 0; padding: 30px 20px; border-radius: 26px; }
+      .hero h2 { font-size: clamp(38px, 12vw, 52px); }
+      .hero-description { font-size: 16px; }
+      .hero-actions > * { width: 100%; }
+      .hero-benefits { display: grid; gap: 7px; }
+      .credit-card.identity-card { padding: 17px; }
+      .lab-identity, .developer-identity { grid-template-columns: 60px 1fr; gap: 12px; }
+      .hero-lab-logo, .developer-photo { width: 60px; height: 60px; }
+      .identity-card strong { font-size: 15px; }
+      .section-title { margin-top: 36px; }
+      .tool-card { padding: 22px; border-radius: 22px; }
+      .panel { padding: 20px; border-radius: 22px; }
+      .footer { padding: 18px; border-radius: 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+    }
+
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#tools-home">Skip to tools</a>
   <div class="site-shell">
     <nav class="topbar" aria-label="Main navigation">
-      <a class="brand" href="#home" data-nav="home" aria-label="Free Online Web-Based Tools home">
-        <span class="brand-mark">🧬</span>
-        <span>
-          <h1>Free Online Web-Based Tools</h1>
-          <p>Free web-based biology calculators and utilities</p>
+      <a class="brand" href="#home" data-nav="home" aria-label="CMBRL Online Biology Tools home">
+        <span class="brand-mark"><img src="assets/cmbrl-logo.jpg" alt="CMBRL laboratory logo" /></span>
+        <span class="brand-copy">
+          <h1>CMBRL Biology Tools</h1>
+          <p>Cellular &amp; Molecular Biosciences Research Laboratory</p>
         </span>
       </a>
       <div class="nav-actions">
         <a class="nav-link" href="#home" data-nav="home">Tools</a>
         <a class="nav-link" href="#protein-calculator" data-nav="protein-calculator">Protein Calculator</a>
         <a class="nav-link" href="#qpcr-calculator" data-nav="qpcr-calculator">qPCR Calculator</a>
-        <a class="nav-link" href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Amr Ahmed WalyEldeen</a>
-        <a class="primary-button" href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL</a>
+        <a class="nav-link developer-nav-link" href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener"><img src="assets/amr-ahmed-walyeldeen.png" alt="" />Amr Ahmed WalyEldeen</a>
+        <a class="primary-button lab-button" href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL ↗</a>
       </div>
     </nav>
 
     <section class="hero" id="home-hero">
       <div class="hero-content">
-        <div>
-          <p class="eyebrow">Free • Online • Web-Based</p>
-          <h2>Free online web-based tools for routine biology workflows.</h2>
+        <div class="hero-copy">
+          <p class="eyebrow">CMBRL • Cairo University • Browser-based research utilities</p>
+          <h2>Research-ready biology tools, built for the bench.</h2>
           <p class="hero-description">
-            Use fully web-based and free biology tools with clear calculators, clean result tables, downloadable templates, and export-ready reports. Everything runs directly in the browser for routine laboratory workflows.
+            Fast, transparent calculators for routine molecular and cellular biology workflows—designed to keep data review, visualization, and export simple inside your browser.
           </p>
+          <div class="hero-actions" aria-label="Featured tools">
+            <button class="hero-primary-action" type="button" data-open-tool="protein-calculator">Open Protein Calculator <span aria-hidden="true">→</span></button>
+            <button class="hero-secondary-action" type="button" data-open-tool="qpcr-calculator">Open qPCR Calculator <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="hero-benefits" aria-label="Website benefits">
+            <span>✓ Browser calculations</span>
+            <span>✓ Export-ready results</span>
+            <span>✓ Responsive interface</span>
+          </div>
         </div>
-        <aside class="credit-card">
-          <strong>Made by Amr Ahmed WalyEldeen</strong>
-          <p>
-            Free online web-based tools by <a href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">amrwalyeldeen.github.io</a>.
-            Part of <a href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL</a>.
-          </p>
+        <aside class="credit-card identity-card" aria-label="Developer and laboratory">
+          <div class="lab-identity">
+            <img class="hero-lab-logo" src="assets/cmbrl-logo.jpg" alt="Cellular &amp; Molecular Biosciences Research Laboratory logo" />
+            <div>
+              <span class="identity-label">Research laboratory</span>
+              <strong>CMBRL</strong>
+              <p>Cellular &amp; Molecular Biosciences Research Laboratory<br />Cairo University</p>
+            </div>
+          </div>
+          <div class="identity-divider"></div>
+          <div class="developer-identity">
+            <img class="developer-photo" src="assets/amr-ahmed-walyeldeen.png" alt="Amr Ahmed WalyEldeen" />
+            <div>
+              <span class="identity-label">Developer</span>
+              <strong>Amr Ahmed WalyEldeen</strong>
+              <p>Creator of the CMBRL online biology tools.</p>
+              <a href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Developer website ↗</a>
+            </div>
+          </div>
         </aside>
       </div>
     </section>
@@ -1254,7 +1637,9 @@
     <section id="tools-home">
       <div class="section-title">
         <div>
-          <h2>Choose a free web-based tool</h2>
+          <p class="section-kicker">Available tools</p>
+          <h2>Choose a research workflow</h2>
+          <p>Start with a live calculator or explore the utilities currently in development.</p>
         </div>
       </div>
       <div class="tool-grid">
@@ -1729,10 +2114,17 @@
 
 
     <footer class="footer">
-      <p>
-        Free online web-based tools made by <a href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Amr Ahmed WalyEldeen</a>.
-        Part of <a href="https://cmbrl.github.io" target="_blank" rel="noopener">CMBRL</a>.
-      </p>
+      <div class="footer-brand">
+        <img src="assets/cmbrl-logo.jpg" alt="CMBRL logo" />
+        <div>
+          <strong>CMBRL Online Biology Tools</strong>
+          <p>Cellular &amp; Molecular Biosciences Research Laboratory • Cairo University</p>
+        </div>
+      </div>
+      <div class="footer-developer">
+        <img src="assets/amr-ahmed-walyeldeen.png" alt="Amr Ahmed WalyEldeen" />
+        <p>Developed by <a href="https://amrwalyeldeen.github.io" target="_blank" rel="noopener">Amr Ahmed WalyEldeen</a> · <a href="https://cmbrl.github.io" target="_blank" rel="noopener">Visit CMBRL</a></p>
+      </div>
     </footer>
   </div>
 
@@ -2235,8 +2627,8 @@
                 data: standardPoints,
                 pointRadius: 6,
                 pointHoverRadius: 8,
-                backgroundColor: "#0369a1",
-                borderColor: "#075985"
+                backgroundColor: "#123f92",
+                borderColor: "#082f6b"
               },
               {
                 label: "Selected curve fit",
@@ -2244,7 +2636,7 @@
                 type: "line",
                 pointRadius: 0,
                 borderWidth: 3,
-                borderColor: "#be123c",
+                borderColor: "#6d28d9",
                 backgroundColor: "transparent",
                 tension: currentFit && currentFit.type === "fourPL" ? 0.25 : 0
               },
@@ -2254,8 +2646,8 @@
                 pointRadius: 7,
                 pointHoverRadius: 9,
                 pointStyle: "triangle",
-                backgroundColor: "#0f766e",
-                borderColor: "#115e59"
+                backgroundColor: "#0f9b8e",
+                borderColor: "#0b6f68"
               }
             ]
           },
@@ -2267,7 +2659,7 @@
             plugins: {
               legend: {
                 position: "bottom",
-                labels: { usePointStyle: true, padding: 18, boxWidth: 10 }
+                labels: { usePointStyle: true, padding: 18, boxWidth: 10, font: { family: "Manrope, Inter, sans-serif", weight: 600 } }
               },
               tooltip: {
                 callbacks: {
@@ -3051,7 +3443,7 @@
         }
 
         const { labels, means, errors } = buildVisualizationData();
-        const defaultColors = ["#2563eb", "#0f766e", "#7c3aed", "#d97706", "#be123c", "#0891b2", "#65a30d", "#475569"];
+        const defaultColors = ["#123f92", "#0f9b8e", "#6d28d9", "#2563eb", "#b45309", "#0891b2", "#7c3aed", "#475569"];
         const barColors = labels.map((_, index) => defaultColors[index % defaultColors.length]);
         const top = Math.max(...means.map((value, index) => value + (errors[index] || 0)), 1);
         const geneType = byId("qpcr-gene-type-select").value || "miRNA";
@@ -3086,21 +3478,21 @@
             text: titleText,
             x: 0.02,
             xanchor: "left",
-            font: { family: "Inter, Arial, sans-serif", size: 24, color: "#082f49" }
+            font: { family: "Manrope, Inter, Arial, sans-serif", size: 24, color: "#0b2f70" }
           },
           xaxis: {
-            title: { text: "Groups", font: { family: "Inter", size: 16, color: "#334155" } },
-            tickfont: { family: "Inter", color: "#475569", size: 13 },
+            title: { text: "Groups", font: { family: "Manrope, Inter, sans-serif", size: 16, color: "#334155" } },
+            tickfont: { family: "Manrope, Inter, sans-serif", color: "#475569", size: 13 },
             automargin: true,
             zeroline: false
           },
           yaxis: {
-            title: { text: `Relative ${geneType} Expression`, font: { family: "Inter", size: 16, color: "#334155" } },
+            title: { text: `Relative ${geneType} Expression`, font: { family: "Manrope, Inter, sans-serif", size: 16, color: "#334155" } },
             rangemode: "tozero",
             range: [0, top * 1.42],
             gridcolor: "#e5eef6",
             zerolinecolor: "#cbd5e1",
-            tickfont: { family: "Inter", color: "#475569", size: 13 },
+            tickfont: { family: "Manrope, Inter, sans-serif", color: "#475569", size: 13 },
             automargin: true
           },
           bargap: 0.38,
@@ -3166,7 +3558,7 @@
           const colorInput = byId("qpcr-bar-color-input");
           if (!editor || !colorInput) return;
           editor.classList.remove("hidden");
-          colorInput.value = currentChart.data[0].marker.color[pointIndex] || "#2563eb";
+          colorInput.value = currentChart.data[0].marker.color[pointIndex] || "#123f92";
           colorInput.oninput = () => {
             const newColors = [...currentChart.data[0].marker.color];
             newColors[pointIndex] = colorInput.value;

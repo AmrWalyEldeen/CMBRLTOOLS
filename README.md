@@ -1,41 +1,38 @@
-# Biology Tools Website
+# CMBRL Online Biology Tools — Enhanced GitHub Pages Package
 
-GitHub Pages-ready static website for laboratory biology tools.
+This package is ready to publish as a static GitHub Pages website.
 
-## Current tool
+## Included
 
-- Protein Concentration Calculator for Bradford, BCA, and ELISA-style workflows.
-- Supports manual data entry.
-- Supports Excel template download and workbook upload.
-- Supports linear, quadratic, and 4PL curve fitting.
-- Exports curve metadata, standard data, and sample results to Excel.
+- `index.html` — enhanced single-page application with the original calculator logic preserved.
+- `assets/cmbrl-logo.jpg` — CMBRL laboratory logo supplied for the site.
+- `assets/amr-ahmed-walyeldeen.png` — developer photo supplied for the site.
+- `.nojekyll` — prevents GitHub Pages/Jekyll processing from interfering with static assets.
 
-## Credits
+## Main improvements
 
-Biology tools made by **Amr Ahmed WalyEldeen**: https://amrwalyeldeen.github.io  
-Part of **CMBRL** laboratory resources: https://cmbrl.github.io
+- CMBRL-branded visual system using blue, teal, and violet tones from the laboratory identity.
+- CMBRL logo in navigation, hero identity card, favicon, and footer.
+- Developer photo placed beside **Amr Ahmed WalyEldeen** in the navigation/hero/footer.
+- Redesigned hero, tool cards, buttons, panels, tables, and status elements.
+- Refined typography using Manrope + Source Serif 4.
+- Updated protein/qPCR chart palettes and chart typography.
+- Responsive/mobile navigation and layout refinements.
+- Accessibility improvements: skip link, focus states, reduced-motion support, clearer contrast.
+- SEO/social metadata and browser theme color.
 
-## How to publish with GitHub Pages
+## Publish to GitHub Pages
 
-1. Create a GitHub repository, for example `biology-tools` or use the repository that will host the tools.
-2. Upload these files to the root of the repository:
-   - `index.html`
-   - `README.md`
-3. In GitHub, open **Settings → Pages**.
-4. Under **Build and deployment**, choose:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/root`
-5. Save.
+1. Open the GitHub repository you want to use.
+2. Upload **the contents of this folder** to the repository root (not the enclosing folder itself).
+3. Commit the files.
+4. In GitHub, open **Settings → Pages**.
+5. Under **Build and deployment**, choose **Deploy from a branch**.
+6. Select your publishing branch (usually `main`) and `/ (root)`, then save.
+7. Wait for the GitHub Pages deployment to complete.
 
-The website is a static single-page app, so no build command or server is required.
+If the repository already contains the old website, replace its old `index.html` with this one and upload the `assets` folder.
 
-## Adding more tools later
+## Technical note
 
-The homepage already has placeholder cards for future tools. To add a new tool:
-
-1. Add a new tool card in the `#tools-home` section.
-2. Add a new `<section class="tool-view" id="your-tool-id">`.
-3. Add a navigation button or card button with `data-open-tool="your-tool-id"`.
-4. Add the JavaScript logic for that tool below the existing script.
-
+The calculators continue to use the original browser-side JavaScript logic and existing CDN libraries (Chart.js, SheetJS/XLSX, Plotly, and jStat). The enhancement package focuses on visual design, branding, responsive behavior, accessibility, and presentation without restructuring the calculation modules.
